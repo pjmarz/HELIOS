@@ -152,38 +152,7 @@ services:
       - ${ROOT}/tmp:/tmp
     labels:
       - com.centurylinklabs.watchtower.enable=true
-
-  stash:
-    image: stashapp/stash:latest
-    container_name: stash
-    restart: unless-stopped
-    ports:
-      - "9999:9999"
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "10"
-        max-size: "2m"
-    environment:
-      - STASH_STASH=/data/
-      - STASH_GENERATED=/generated/
-      - STASH_METADATA=/metadata/
-      - STASH_CACHE=/cache/
-      - STASH_PORT=9999
-      - PUID=1000
-      - PGID=1000
-      - TZ=${TZ}
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${ROOT}/config/stash:/root/.stash
-      - /mnt/LOAS/logs.msc:/data
-      - ${ROOT}/config/stash/metadata:/metadata
-      - ${ROOT}/config/stash/cache:/cache
-      - ${ROOT}/config/stash/blobs:/blobs
-      - ${ROOT}/config/stash/generated:/generated
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
+      
 networks:
   agent_network:
   monitoring:
