@@ -7,35 +7,22 @@ check_status() {
     fi
 }
 
-# Stop all running containers
-docker stop $(docker ps -a -q)
-check_status "docker stop"
+# Navigate to the directory containing your docker-compose.yml file
+cd /home/peter/Documents/dev/HELIOS/
 
-# Remove all stopped containers
-docker rm $(docker ps -a -q)
-check_status "docker rm"
+# Stop the containers defined in docker-compose.yml
+docker compose down
+check_status "docker compose down"
 
 # Pull down the latest images
 docker compose pull
 check_status "docker compose pull"
 
-# Clean up any leftovers
-docker rmi $(docker images -q -f dangling=true)
-check_status "docker rmi"
-
-docker volume rm $(docker volume ls -qf dangling=true)
-check_status "docker volume rm"
-
-docker network prune -f
-check_status "docker network prune"
-
-docker builder prune -f
-check_status "docker builder prune"
-
+# Clean up any unused images, containers, networks, and volumes
 docker system prune -af
 check_status "docker system prune"
 
-# Run docker compose up in detached mode
+# Start the containers in detached mode
 docker compose up -d
 check_status "docker compose up"
 
