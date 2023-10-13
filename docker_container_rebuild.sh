@@ -26,7 +26,7 @@ check_status "docker system prune"
 docker compose up -d
 check_status "docker compose up"
 
-# Check if docker-compose up was successful
+# Check if docker compose up was successful
 if [ $? -eq 0 ]; then
     echo "Update successful!"
 else
