@@ -20,8 +20,6 @@ progress_bar() {
     echo ""
 }
 
-echo "Starting the Docker restart process..."
-
 # Check Docker service status
 echo "Checking Docker service status..." | tee -a $LOGFILE
 if systemctl is-active --quiet docker; then
@@ -33,16 +31,28 @@ fi
 # Restart Docker service
 echo "Restarting Docker service..." | tee -a $LOGFILE
 sudo service docker restart
+if [ $? -ne 0 ]; then
+    echo "Error restarting Docker service. Exiting." | tee -a $LOGFILE
+    exit 1
+fi
 progress_bar 5
 
-# Navigate to your docker-compose directory
-echo "Navigating to docker-compose directory..." | tee -a $LOGFILE
+# Navigate to your docker compose directory
+echo "Navigating to docker compose directory..." | tee -a $LOGFILE
 cd /home/peter/Documents/dev/HELIOS
+if [ $? -ne 0 ]; then
+    echo "Error navigating to docker compose directory. Exiting." | tee -a $LOGFILE
+    exit 1
+fi
 progress_bar 2
 
 # Run docker compose up in detached mode
 echo "Running docker compose up in detached mode..." | tee -a $LOGFILE
 docker compose up -d
+if [ $? -ne 0 ]; then
+    echo "Error running docker compose up. Exiting." | tee -a $LOGFILE
+    exit 1
+fi
 progress_bar 5
 
 # Check Docker Compose services status
