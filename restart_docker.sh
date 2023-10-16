@@ -3,7 +3,7 @@
 # Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
 
-LOGFILE="/home/peter/Documents/dev/HELIOS/docker_restart.log"
+LOGFILE="/home/peter/Documents/dev/HELIOS/script logs/docker_restart.log"
 
 echo "$(date) - Starting the Docker restart process..." | tee -a $LOGFILE
 

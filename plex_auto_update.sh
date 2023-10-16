@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOGFILE="/home/peter/Documents/dev/HELIOS/plex_auto_update.log"
+LOGFILE="/home/peter/Documents/dev/HELIOS/script logs/plex_auto_update.log"
 PLEX_URL="http://192.168.1.45:32400"
 TOKEN="reKFC-C828Gqv6aJ2ehG"
 
