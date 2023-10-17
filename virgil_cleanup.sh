@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Source the environment variables
+source /home/peter/Documents/dev/HELIOS/env.sh
+
+LOGFILE="/home/peter/Documents/dev/HELIOS/script logs/virgil_cleanup.log"
+
+# Redirect all output and errors to LOGFILE
+exec > >(tee -a "$LOGFILE") 2>&1
+
 # Function to check the status of the last command and display an error
 check_status() {
     if [ $? -ne 0 ]; then
@@ -12,31 +20,31 @@ sudo ua refresh
 check_status "sudo ua refresh"
 
 # Update package lists
-sudo apt update
-check_status "sudo apt update"
+sudo apt-get update
+check_status "sudo apt-get update"
 
 # Upgrade installed packages
-sudo apt upgrade -y
-check_status "sudo apt upgrade"
+sudo apt-get upgrade -y
+check_status "sudo apt-get upgrade"
 
 # Force upgrade of packages that are held back
-UPGRADES=$(sudo apt list --upgradable 2>/dev/null | grep -v Listing | grep upgradable | awk -F/ '{print $1}')
+UPGRADES=$(sudo apt-get list --upgradable 2>/dev/null | grep -v Listing | grep upgradable | awk -F/ '{print $1}')
 if [ -n "$UPGRADES" ]; then
-    sudo apt install -y $UPGRADES
-    check_status "sudo apt install specific packages"
+    sudo apt-get install -y $UPGRADES
+    check_status "sudo apt-get install specific packages"
 fi
 
 # Remove unused packages and dependencies
-sudo apt autoremove -y
-check_status "sudo apt autoremove"
+sudo apt-get autoremove -y
+check_status "sudo apt-get autoremove"
 
 # Clean the package cache
-sudo apt clean
-check_status "sudo apt clean"
+sudo apt-get clean
+check_status "sudo apt-get clean"
 
 # Remove old kernels (if any)
-sudo apt --purge autoremove -y
-check_status "sudo apt --purge autoremove"
+sudo apt-get --purge autoremove -y
+check_status "sudo apt-get --purge autoremove"
 
 # Remove orphaned packages
 sudo deborphan | xargs sudo apt-get -y remove --purge
