@@ -7,6 +7,8 @@ TOKEN="reKFC-C828Gqv6aJ2ehG"
 # Redirect all output (stdout and stderr) to the LOGFILE
 exec > "$LOGFILE" 2>&1
 
+echo "$(date) - Starting plex_auto_update..." | tee -a "$LOGFILE"
+
 # Function to display a countdown timer
 countdown() {
     local duration=$1

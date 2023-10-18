@@ -5,8 +5,10 @@ source /home/peter/Documents/dev/HELIOS/env.sh
 
 LOGFILE="/home/peter/Documents/dev/HELIOS/script logs/virgil_cleanup.log"
 
-# Redirect all output and errors to LOGFILE
-exec > >(tee -a "$LOGFILE") 2>&1
+# Redirect all output (stdout and stderr) to the LOGFILE
+exec > "$LOGFILE" 2>&1
+
+echo "$(date) - Starting virgil_cleanup process..." | tee -a "$LOGFILE"
 
 # Function to check the status of the last command and display an error
 check_status() {

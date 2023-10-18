@@ -5,6 +5,9 @@ source /home/peter/Documents/dev/HELIOS/env.sh
 
 LOGFILE="/home/peter/Documents/dev/HELIOS/script logs/restart_docker.log"
 
+# Redirect all output (stdout and stderr) to the LOGFILE
+exec > "$LOGFILE" 2>&1
+
 echo "$(date) - Starting the Docker restart process..." | tee -a "$LOGFILE"
 
 # Function to display a progress bar
