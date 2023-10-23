@@ -156,6 +156,7 @@ services:
   stash:
     image: stashapp/stash:latest
     container_name: stash
+    runtime: nvidia
     restart: unless-stopped
     ports:
       - "9999:9999"
@@ -173,6 +174,8 @@ services:
       - TZ=${TZ}
       - PUID=${PUID}
       - PGID=${PGID}
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${ROOT}/config/stash:/root/.stash
@@ -181,6 +184,8 @@ services:
       - ${ROOT}/config/stash/cache:/cache
       - ${ROOT}/config/stash/blobs:/blobs
       - ${ROOT}/config/stash/generated:/generated
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
 
 networks:
   agent_network:

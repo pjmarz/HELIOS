@@ -1,19 +1,24 @@
-Fri Oct 20 08:05:04 PM EDT 2023 - Starting virgil_cleanup process...
+Mon Oct 23 03:51:31 PM EDT 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
-Hit:1 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
-Hit:3 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Hit:4 http://packages.microsoft.com/repos/code stable InRelease
+Hit:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:2 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
+Hit:3 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:4 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
 Hit:5 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Hit:6 https://download.docker.com/linux/ubuntu jammy InRelease
-Hit:7 https://packages.microsoft.com/repos/edge stable InRelease
-Hit:8 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease
-Hit:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease
-Hit:10 http://security.ubuntu.com/ubuntu jammy-security InRelease
-Hit:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease
-Hit:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease
+Get:6 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
+Hit:7 https://download.docker.com/linux/ubuntu jammy InRelease
+Get:8 https://packages.microsoft.com/repos/edge stable InRelease [3,569 B]
+Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
+Get:10 http://packages.microsoft.com/repos/code stable/main arm64 Packages [82.9 kB]
+Get:11 http://packages.microsoft.com/repos/code stable/main amd64 Packages [82.4 kB]
+Get:12 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
+Get:13 http://packages.microsoft.com/repos/code stable/main armhf Packages [83.4 kB]
+Get:14 https://packages.microsoft.com/repos/edge stable/main amd64 Packages [8,874 B]
+Get:15 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
+Get:16 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
+Fetched 295 kB in 1s (237 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
