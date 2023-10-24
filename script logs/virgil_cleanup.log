@@ -1,43 +1,51 @@
-Mon Oct 23 03:51:31 PM EDT 2023 - Starting virgil_cleanup process...
+Tue Oct 24 11:17:56 AM EDT 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
-Hit:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
 Hit:2 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Hit:3 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Hit:4 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
-Hit:5 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Get:6 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
+Hit:3 http://packages.microsoft.com/repos/code stable InRelease
+Hit:4 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Get:5 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+Hit:6 https://packages.microsoft.com/repos/edge stable InRelease
 Hit:7 https://download.docker.com/linux/ubuntu jammy InRelease
-Get:8 https://packages.microsoft.com/repos/edge stable InRelease [3,569 B]
+Get:8 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease [109 kB]
 Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
-Get:10 http://packages.microsoft.com/repos/code stable/main arm64 Packages [82.9 kB]
-Get:11 http://packages.microsoft.com/repos/code stable/main amd64 Packages [82.4 kB]
-Get:12 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
-Get:13 http://packages.microsoft.com/repos/code stable/main armhf Packages [83.4 kB]
-Get:14 https://packages.microsoft.com/repos/edge stable/main amd64 Packages [8,874 B]
-Get:15 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
-Get:16 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
-Fetched 295 kB in 1s (237 kB/s)
+Get:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
+Get:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
+Get:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
+Get:13 http://security.ubuntu.com/ubuntu jammy-security/main amd64 DEP-11 Metadata [43.0 kB]
+Get:14 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 DEP-11 Metadata [55.1 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu jammy-updates/main i386 Packages [515 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1,103 kB]
+Get:17 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 DEP-11 Metadata [101 kB]
+Get:18 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 DEP-11 Metadata [305 kB]
+Get:19 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 c-n-f Metadata [22.0 kB]
+Get:20 http://us.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 DEP-11 Metadata [940 B]
+Get:21 http://us.archive.ubuntu.com/ubuntu jammy-backports/main amd64 DEP-11 Metadata [4,924 B]
+Get:22 http://us.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 DEP-11 Metadata [17.6 kB]
+Fetched 2,535 kB in 2s (1,397 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
 Reading state information...
 Calculating upgrade...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+The following packages have been kept back:
+  distro-info-data
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
 Reading package lists...
 Building dependency tree...
 Reading state information...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
 Reading package lists...
 Building dependency tree...
 Reading state information...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
 Reading package lists...
 Building dependency tree...
 Reading state information...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
 Vacuuming done, freed 0B of archived journals from /var/log/journal.
-Vacuuming done, freed 0B of archived journals from /run/log/journal.
 Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
 System cleanup complete!
