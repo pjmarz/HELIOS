@@ -25,16 +25,9 @@ check_status "sudo ua refresh"
 sudo apt-get update
 check_status "sudo apt-get update"
 
-# Upgrade installed packages
-sudo apt-get upgrade -y
-check_status "sudo apt-get upgrade"
-
-# Force upgrade of packages that are held back
-UPGRADES=$(sudo apt-get list --upgradable 2>/dev/null | grep -v Listing | grep upgradable | awk -F/ '{print $1}')
-if [ -n "$UPGRADES" ]; then
-    sudo apt-get install -y $UPGRADES
-    check_status "sudo apt-get install specific packages"
-fi
+# Upgrade installed packages more aggressively
+sudo apt-get full-upgrade -y
+check_status "sudo apt-get full-upgrade"
 
 # Remove unused packages and dependencies
 sudo apt-get autoremove -y
