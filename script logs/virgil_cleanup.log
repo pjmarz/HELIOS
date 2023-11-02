@@ -1,32 +1,43 @@
-Wed Nov  1 11:18:06 AM EDT 2023 - Starting virgil_cleanup process...
+Thu Nov  2 04:51:45 PM EDT 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
-Hit:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Hit:3 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Hit:4 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
-Hit:5 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Hit:6 https://download.docker.com/linux/ubuntu jammy InRelease
-Get:7 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
-Hit:8 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease
-Hit:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease
-Hit:10 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease
-Hit:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease
-Ign:12 https://packages.microsoft.com/repos/edge stable InRelease
-Ign:12 https://packages.microsoft.com/repos/edge stable InRelease
-Ign:12 https://packages.microsoft.com/repos/edge stable InRelease
-Err:12 https://packages.microsoft.com/repos/edge stable InRelease
-  Could not connect to packages.microsoft.com:443 (40.117.131.251), connection timed out
-Fetched 3,569 B in 38s (95 B/s)
+Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
+Get:2 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
+Hit:3 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Get:4 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+Get:5 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
+Get:6 https://packages.microsoft.com/repos/edge stable InRelease [3,569 B]
+Hit:7 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Hit:8 https://download.docker.com/linux/ubuntu jammy InRelease
+Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
+Get:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
+Get:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
+Get:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
+Get:13 https://packages.microsoft.com/repos/edge stable/main amd64 Packages [8,708 B]
+Get:14 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 c-n-f Metadata [520 B]
+Get:15 http://us.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 c-n-f Metadata [472 B]
+Fetched 276 kB in 1s (277 kB/s)
 Reading package lists...
-W: Failed to fetch https://packages.microsoft.com/repos/edge/dists/stable/InRelease  Could not connect to packages.microsoft.com:443 (40.117.131.251), connection timed out
-W: Some index files failed to download. They have been ignored, or old ones used instead.
 Reading package lists...
 Building dependency tree...
 Reading state information...
 Calculating upgrade...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+The following packages will be upgraded:
+  microsoft-edge-stable
+1 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Need to get 165 MB of archives.
+After this operation, 4,802 kB of additional disk space will be used.
+Get:1 https://packages.microsoft.com/repos/edge stable/main amd64 microsoft-edge-stable amd64 119.0.2151.44-1 [165 MB]
+Fetched 165 MB in 6s (29.9 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 213190 files and directories currently installed.)
+Preparing to unpack .../microsoft-edge-stable_119.0.2151.44-1_amd64.deb ...
+Unpacking microsoft-edge-stable (119.0.2151.44-1) over (118.0.2088.76-1) ...
+Setting up microsoft-edge-stable (119.0.2151.44-1) ...
+Processing triggers for gnome-menus (3.36.0-1ubuntu3) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for mailcap (3.70+nmu1ubuntu1) ...
+Processing triggers for desktop-file-utils (0.26-1ubuntu3) ...
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -39,7 +50,7 @@ Reading package lists...
 Building dependency tree...
 Reading state information...
 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
 Vacuuming done, freed 0B of archived journals from /var/log/journal.
+Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
 Vacuuming done, freed 0B of archived journals from /run/log/journal.
 System cleanup complete!
