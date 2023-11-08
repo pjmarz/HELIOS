@@ -1,38 +1,32 @@
-Sun Nov  5 04:05:01 AM EST 2023 - Starting the Docker restart process...
+Wed Nov  8 04:05:01 AM EST 2023 - Starting the Docker restart process...
 Checking Docker service status...
 Docker is active.
 Restarting Docker service...
 Navigating to docker compose directory...
 Running docker compose up in detached mode...
- Container portainer  Running
+ Container portaineragent  Running
  Container plex  Running
  Container homarr  Running
- Container portaineragent  Running
- Container whisparr  Running
  Container watchtower  Running
- Container prowlarr  Running
+ Container portainer  Running
  Container pihole  Running
+ Container whisparr  Running
  Container nzbget  Running
+ Container prowlarr  Recreate
+ Container prowlarr  Recreated
+ Container prowlarr  Starting
+ Container prowlarr  Started
 Checking Docker Compose services status...
-NAME             IMAGE                                 COMMAND                                                                   SERVICE      CREATED        STATUS                                     PORTS
-homarr           ghcr.io/ajnart/homarr:latest          "docker-entrypoint.sh node server.js"                                     homarr       36 hours ago   Up Less than a second                      0.0.0.0:7575->7575/tcp, :::7575->7575/tcp
-nzbget           linuxserver/nzbget:latest             "/init"                                                                   nzbget       36 hours ago   Up Less than a second                      0.0.0.0:6789->6789/tcp, :::6789->6789/tcp
-pihole           pihole/pihole:latest                  "/s6-init"                                                                pihole       36 hours ago   Up Less than a second (health: starting)   0.0.0.0:53->53/tcp, 0.0.0.0:53->53/udp, :::53->53/tcp, :::53->53/udp, 67/udp, 0.0.0.0:8081->80/tcp, :::8081->80/tcp
-plex             linuxserver/plex:latest               "/init"                                                                   plex         36 hours ago   Up 1 second                                
-portainer        portainer/portainer-ce:latest         "/portainer -H tcp://agent:9001 --tlsskipverify"                          portainer    36 hours ago   Up 1 second                                0.0.0.0:8000->8000/tcp, :::8000->8000/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp, 9000/tcp
-portaineragent   portainer/agent:latest                "./agent"                                                                 agent        36 hours ago   Up 1 second                                
-prowlarr         lscr.io/linuxserver/prowlarr:latest   "/init"                                                                   prowlarr     36 hours ago   Up Less than a second                      0.0.0.0:9696->9696/tcp, :::9696->9696/tcp
-watchtower       containrrr/watchtower:latest          "/watchtower --interval 3600 --label-enable --cleanup --remove-volumes"   watchtower   36 hours ago   Up Less than a second (health: starting)   8080/tcp
-whisparr         hotio/whisparr:latest                 "/init"                                                                   whisparr     36 hours ago   Up Less than a second                      0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
+NAME             IMAGE                           COMMAND                                                                   SERVICE      CREATED         STATUS                            PORTS
+homarr           ghcr.io/ajnart/homarr:latest    "docker-entrypoint.sh node server.js"                                     homarr       16 hours ago    Up 8 seconds                      0.0.0.0:7575->7575/tcp, :::7575->7575/tcp
+nzbget           linuxserver/nzbget:latest       "/init"                                                                   nzbget       16 hours ago    Up 8 seconds                      0.0.0.0:6789->6789/tcp, :::6789->6789/tcp
+pihole           pihole/pihole:latest            "/s6-init"                                                                pihole       16 hours ago    Up 7 seconds (health: starting)   0.0.0.0:53->53/tcp, 0.0.0.0:53->53/udp, :::53->53/tcp, :::53->53/udp, 67/udp, 0.0.0.0:8081->80/tcp, :::8081->80/tcp
+plex             linuxserver/plex:latest         "/init"                                                                   plex         16 hours ago    Up 8 seconds                      
+portainer        portainer/portainer-ce:latest   "/portainer -H tcp://agent:9001 --tlsskipverify"                          portainer    16 hours ago    Up 8 seconds                      0.0.0.0:8000->8000/tcp, :::8000->8000/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp, 9000/tcp
+portaineragent   portainer/agent:latest          "./agent"                                                                 agent        16 hours ago    Up 8 seconds                      
+prowlarr         linuxserver/prowlarr:latest     "/init"                                                                   prowlarr     7 seconds ago   Up Less than a second             0.0.0.0:9696->9696/tcp, :::9696->9696/tcp
+watchtower       containrrr/watchtower:latest    "/watchtower --interval 3600 --label-enable --cleanup --remove-volumes"   watchtower   16 hours ago    Up 8 seconds (health: starting)   8080/tcp
+whisparr         ghcr.io/hotio/whisparr:latest   "/init"                                                                   whisparr     16 hours ago    Up 7 seconds                      0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
 Process completed!
-AGE                                 COMMAND                                                                   SERVICE      CREATED        STATUS                                     PORTS
-homarr           ghcr.io/ajnart/homarr:latest          "docker-entrypoint.sh node server.js"                                     homarr       36 hours ago   Up Less than a second                      0.0.0.0:7575->7575/tcp, :::7575->7575/tcp
-nzbget           linuxserver/nzbget:latest             "/init"                                                                   nzbget       36 hours ago   Up Less than a second                      0.0.0.0:6789->6789/tcp, :::6789->6789/tcp
-pihole           pihole/pihole:latest                  "/s6-init"                                                                pihole       36 hours ago   Up Less than a second (health: starting)   0.0.0.0:53->53/tcp, 0.0.0.0:53->53/udp, :::53->53/tcp, :::53->53/udp, 67/udp, 0.0.0.0:8081->80/tcp, :::8081->80/tcp
-plex             linuxserver/plex:latest               "/init"                                                                   plex         36 hours ago   Up 1 second                                
-portainer        portainer/portainer-ce:latest         "/portainer -H tcp://agent:9001 --tlsskipverify"                          portainer    36 hours ago   Up 1 second                                0.0.0.0:8000->8000/tcp, :::8000->8000/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp, 9000/tcp
-portaineragent   portainer/agent:latest                "./agent"                                                                 agent        36 hours ago   Up 1 second                                
-prowlarr         lscr.io/linuxserver/prowlarr:latest   "/init"                                                                   prowlarr     36 hours ago   Up Less than a second                      0.0.0.0:9696->9696/tcp, :::9696->9696/tcp
-watchtower       containrrr/watchtower:latest          "/watchtower --interval 3600 --label-enable --cleanup --remove-volumes"   watchtower   36 hours ago   Up Less than a second (health: starting)   8080/tcp
-whisparr         hotio/whisparr:latest                 "/init"                                                                   whisparr     36 hours ago   Up Less than a second                      0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
+                                                                   whisparr     16 hours ago    Up 7 seconds                      0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
 Process completed!

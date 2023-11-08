@@ -77,7 +77,7 @@ services:
 
   whisparr:
     container_name: whisparr
-    image: hotio/whisparr:latest
+    image: ghcr.io/hotio/whisparr:latest
     environment:
       - PUID=1000
       - PGID=1000
@@ -94,7 +94,7 @@ services:
 
   prowlarr:
     container_name: prowlarr
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: linuxserver/prowlarr:latest
     ports:
       - "9696:9696"
     environment:
