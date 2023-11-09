@@ -3,7 +3,7 @@
 # Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
 
-LOGFILE="/home/peter/Documents/dev/HELIOS/script logs/restart_docker.log"
+LOGFILE="/home/peter/Documents/dev/HELIOS/script_logs/restart_docker.log"
 
 # Redirect all output (stdout and stderr) to the LOGFILE
 exec > "$LOGFILE" 2>&1

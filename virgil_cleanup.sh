@@ -3,7 +3,7 @@
 # Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
 
-LOGFILE="/home/peter/Documents/dev/HELIOS/script logs/virgil_cleanup.log"
+LOGFILE="/home/peter/Documents/dev/HELIOS/script_logs/virgil_cleanup.log"
 
 # Redirect all output (stdout and stderr) to the LOGFILE
 exec > "$LOGFILE" 2>&1
