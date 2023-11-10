@@ -1,8 +1,8 @@
-Wed Nov  8 11:06:50 PM EST 2023 - Starting Plex library update...
+Thu Nov  9 08:12:39 AM EST 2023 - Starting Plex library update...
 Starting Plex library scan...
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    85  100    85    0     0  71548      0 --:--:-- --:--:-- --:--:-- 85000
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    85  100    85    0     0  68603      0 --:--:-- --:--:-- --:--:-- 85000
 <html><head><title>Not Found</title></head><body><h1>404 Not Found</h1></body></html>Starting Plex media analysis...
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
@@ -10,5 +10,5 @@ Starting Plex library scan...
 Starting Plex metadata refresh...
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    85  100    85    0     0  81339      0 --:--:-- --:--:-- --:--:-- 85000
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    85  100    85    0     0  72463      0 --:--:-- --:--:-- --:--:-- 85000
 <html><head><title>Not Found</title></head><body><h1>404 Not Found</h1></body></html>Plex library update tasks completed!

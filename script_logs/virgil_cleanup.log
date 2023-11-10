@@ -1,26 +1,65 @@
-Wed Nov  8 10:43:21 PM EST 2023 - Starting virgil_cleanup process...
+Thu Nov  9 09:15:20 PM EST 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
 Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Get:2 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
+Get:2 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
 Hit:3 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Hit:4 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
-Hit:5 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Hit:6 https://packages.microsoft.com/repos/edge stable InRelease
-Hit:7 https://download.docker.com/linux/ubuntu jammy InRelease
-Hit:8 http://security.ubuntu.com/ubuntu jammy-security InRelease
-Hit:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease
-Hit:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease
-Hit:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease
-Hit:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease
-Fetched 3,569 B in 1s (3,453 B/s)
+Hit:4 https://download.docker.com/linux/ubuntu jammy InRelease
+Get:5 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+Get:6 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
+Get:7 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
+Get:8 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease [109 kB]
+Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
+Get:10 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
+Get:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
+Get:12 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [946 kB]
+Get:13 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [187 kB]
+Get:14 http://security.ubuntu.com/ubuntu jammy-security/main amd64 DEP-11 Metadata [43.0 kB]
+Get:15 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 DEP-11 Metadata [55.0 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu jammy-updates/main i386 Packages [525 kB]
+Get:17 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1,158 kB]
+Get:18 http://us.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [246 kB]
+Get:19 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 DEP-11 Metadata [101 kB]
+Get:20 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [1,106 kB]
+Get:21 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted Translation-en [179 kB]
+Get:22 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe i386 Packages [661 kB]
+Get:23 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [995 kB]
+Get:24 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 DEP-11 Metadata [305 kB]
+Get:25 http://packages.microsoft.com/repos/code stable/main arm64 Packages [21.1 kB]
+Get:26 http://us.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 DEP-11 Metadata [940 B]
+Get:27 http://us.archive.ubuntu.com/ubuntu jammy-backports/main amd64 DEP-11 Metadata [4,924 B]
+Get:28 http://us.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 DEP-11 Metadata [18.9 kB]
+Get:29 http://packages.microsoft.com/repos/code stable/main armhf Packages [21.2 kB]
+Get:30 http://packages.microsoft.com/repos/code stable/main amd64 Packages [21.0 kB]
+Get:31 https://packages.microsoft.com/repos/edge stable InRelease [3,569 B]
+Get:32 https://packages.microsoft.com/repos/edge stable/main amd64 Packages [8,734 B]
+Fetched 6,978 kB in 1s (5,427 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
 Reading state information...
 Calculating upgrade...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+The following packages will be upgraded:
+  code microsoft-edge-stable
+2 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Need to get 261 MB of archives.
+After this operation, 336 kB of additional disk space will be used.
+Get:1 http://packages.microsoft.com/repos/code stable/main amd64 code amd64 1.84.2-1699528352 [95.6 MB]
+Get:2 https://packages.microsoft.com/repos/edge stable/main amd64 microsoft-edge-stable amd64 119.0.2151.58-1 [165 MB]
+Fetched 261 MB in 6s (45.3 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 176350 files and directories currently installed.)
+Preparing to unpack .../microsoft-edge-stable_119.0.2151.58-1_amd64.deb ...
+Unpacking microsoft-edge-stable (119.0.2151.58-1) over (119.0.2151.44-1) ...
+Preparing to unpack .../code_1.84.2-1699528352_amd64.deb ...
+Unpacking code (1.84.2-1699528352) over (1.84.1-1699275408) ...
+Setting up microsoft-edge-stable (119.0.2151.58-1) ...
+Setting up code (1.84.2-1699528352) ...
+Processing triggers for gnome-menus (3.36.0-1ubuntu3) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for shared-mime-info (2.1-2) ...
+Processing triggers for mailcap (3.70+nmu1ubuntu1) ...
+Processing triggers for desktop-file-utils (0.26-1ubuntu3) ...
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -34,6 +73,6 @@ Building dependency tree...
 Reading state information...
 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
 Vacuuming done, freed 0B of archived journals from /run/log/journal.
-Vacuuming done, freed 0B of archived journals from /var/log/journal.
 Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
+Vacuuming done, freed 0B of archived journals from /var/log/journal.
 System cleanup complete!
