@@ -1,20 +1,27 @@
-Fri Nov 10 09:25:57 AM EST 2023 - Starting virgil_cleanup process...
+Fri Nov 10 07:01:31 PM EST 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
-Hit:1 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Hit:2 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
-Get:4 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
-Get:5 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
-Hit:6 https://download.docker.com/linux/ubuntu jammy InRelease
-Hit:7 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Hit:8 https://packages.microsoft.com/repos/edge stable InRelease
+Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Get:3 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
+Hit:4 https://download.docker.com/linux/ubuntu jammy InRelease
+Get:5 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+Hit:6 https://packages.microsoft.com/repos/edge stable InRelease
+Get:7 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease [109 kB]
+Get:8 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
 Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
-Get:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
-Get:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
-Get:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
-Fetched 263 kB in 1s (265 kB/s)
+Get:10 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 DEP-11 Metadata [101 kB]
+Get:11 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
+Get:12 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 DEP-11 Metadata [305 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 DEP-11 Metadata [940 B]
+Get:14 http://us.archive.ubuntu.com/ubuntu jammy-backports/main amd64 DEP-11 Metadata [4,948 B]
+Get:15 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
+Get:16 http://us.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 DEP-11 Metadata [18.8 kB]
+Get:17 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
+Get:18 http://security.ubuntu.com/ubuntu jammy-security/main amd64 DEP-11 Metadata [43.0 kB]
+Get:19 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 DEP-11 Metadata [55.1 kB]
+Fetched 899 kB in 1s (907 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -33,7 +40,9 @@ Reading package lists...
 Building dependency tree...
 Reading state information...
 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Vacuuming done, freed 0B of archived journals from /run/log/journal.
 Vacuuming done, freed 0B of archived journals from /var/log/journal.
-Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
+Deleted archived journal /var/log/journal/82e268de51b24ed9acee5520ce915203/system@d150ffadd7024114ba406980c924a437-000000000008cdf6-000608cd0ca7f100.journal (80.0M).
+Deleted archived journal /var/log/journal/82e268de51b24ed9acee5520ce915203/user-1000@381ed425340f4c91a1badfcbbf1bcafd-000000000008cdf8-000608cd11794ddc.journal (64.0M).
+Vacuuming done, freed 144.0M of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
 System cleanup complete!
