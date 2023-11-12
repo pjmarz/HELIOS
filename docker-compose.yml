@@ -125,12 +125,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
 
   plex:
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities:
-              - gpu
     runtime: nvidia
     privileged: true
     container_name: plex
