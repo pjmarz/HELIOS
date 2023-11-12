@@ -15,13 +15,13 @@ echo "$(date) - Starting Plex library update..."
 echo "Starting Plex library scan..."
 curl -k -L -X GET "${PLEX_URL}/library/sections/${LIBRARY_SECTION_ID}/refresh" -H "X-Plex-Token: ${TOKEN}"
 
-sleep 5
+sleep 600
 
 # Analyze media files in the library section
 echo "Starting Plex media analysis..."
 curl -k -L -X PUT "${PLEX_URL}/library/sections/${LIBRARY_SECTION_ID}/analyze" -H "X-Plex-Token: ${TOKEN}"
 
-sleep 900
+sleep 1800
 
 # Refresh all metadata for the library section
 echo "Starting Plex metadata refresh..."
