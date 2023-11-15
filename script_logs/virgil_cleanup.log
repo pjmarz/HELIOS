@@ -1,46 +1,30 @@
-Mon Nov 13 11:11:18 PM EST 2023 - Starting virgil_cleanup process...
+Tue Nov 14 07:00:01 AM EST 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
-Hit:1 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
-Hit:3 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Get:4 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
-Hit:5 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Get:6 https://download.docker.com/linux/ubuntu jammy InRelease [48.8 kB]
-Get:7 http://packages.microsoft.com/repos/code stable InRelease [3,569 B]
-Get:8 https://packages.microsoft.com/repos/edge stable InRelease [3,569 B]
-Get:9 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1,158 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [246 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted i386 Packages [32.8 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [1,106 kB]
-Get:13 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
-Get:14 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [947 kB]
-Get:15 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
-Get:16 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [187 kB]
-Get:17 http://packages.microsoft.com/repos/code stable/main amd64 Packages [21.4 kB]
-Get:18 http://packages.microsoft.com/repos/code stable/main arm64 Packages [21.5 kB]
-Get:19 http://packages.microsoft.com/repos/code stable/main armhf Packages [21.7 kB]
-Get:20 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
-Get:21 https://packages.microsoft.com/repos/edge stable/main amd64 Packages [8,902 B]
-Get:22 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
-Fetched 4,065 kB in 1s (4,009 kB/s)
+Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
+Hit:2 http://packages.microsoft.com/repos/code stable InRelease
+Hit:3 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Get:4 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+Hit:5 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:6 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Get:7 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1,159 kB]
+Get:8 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
+Get:9 http://us.archive.ubuntu.com/ubuntu jammy-updates/main i386 Packages [526 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [247 kB]
+Get:11 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
+Get:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
+Get:13 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
+Get:14 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security/main amd64 Packages [58.6 kB]
+Hit:15 https://packages.microsoft.com/repos/edge stable InRelease
+Get:16 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
+Fetched 2,249 kB in 4s (630 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
 Reading state information...
 Calculating upgrade...
-The following packages will be upgraded:
-  firmware-sof-signed
-1 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Need to get 821 kB of archives.
-After this operation, 519 kB of additional disk space will be used.
-Get:1 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 firmware-sof-signed all 2.0-1ubuntu4.2 [821 kB]
-Fetched 821 kB in 0s (6,012 kB/s)
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 176350 files and directories currently installed.)
-Preparing to unpack .../firmware-sof-signed_2.0-1ubuntu4.2_all.deb ...
-Unpacking firmware-sof-signed (2.0-1ubuntu4.2) over (2.0-1ubuntu4.1) ...
-Setting up firmware-sof-signed (2.0-1ubuntu4.2) ...
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -53,7 +37,7 @@ Reading package lists...
 Building dependency tree...
 Reading state information...
 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Vacuuming done, freed 0B of archived journals from /run/log/journal.
 Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
 Vacuuming done, freed 0B of archived journals from /var/log/journal.
 System cleanup complete!
