@@ -56,37 +56,6 @@ services:
       - NET_ADMIN
     restart: unless-stopped
 
-  pgadmin:
-      image: dpage/pgadmin4
-      container_name: pgadmin
-      restart: unless-stopped
-      ports:
-        - "8888:80"
-      environment:
-        PGADMIN_DEFAULT_EMAIL: petermarino2@gmail.com
-        PGADMIN_DEFAULT_PASSWORD: Arrowleaf
-      volumes:
-        - pgadmin_data:/var/lib/pgadmin
-      labels:
-      - com.centurylinklabs.watchtower.enable=true
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    environment:
-      POSTGRES_DB: Columbia
-      POSTGRES_USER: pjmarz
-      POSTGRES_PASSWORD: Arrowleaf
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
-    networks:
-      - agent_network
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
   homarr:
     container_name: homarr
     image: ghcr.io/ajnart/homarr:latest
