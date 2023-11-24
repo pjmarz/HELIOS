@@ -1,14 +1,17 @@
-Wed Nov 15 04:30:01 AM EST 2023 - Starting Plex library update...
+Fri Nov 24 04:30:01 AM EST 2023 - Starting Plex library update...
 Starting Plex library scan...
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to 192.168.1.45 port 32400 after 0 ms: Connection refused
 Starting Plex media analysis...
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to 192.168.1.45 port 32400 after 0 ms: Connection refused
 Starting Plex metadata refresh...
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to 192.168.1.45 port 32400 after 0 ms: Connection refused
 Plex library update tasks completed!
