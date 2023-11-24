@@ -190,8 +190,6 @@ services:
 
 networks:
   agent_network:
-  monitoring:
-    driver: bridge
 
 volumes:
   portainer_data:

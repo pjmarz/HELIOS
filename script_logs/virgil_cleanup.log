@@ -1,20 +1,20 @@
-Fri Nov 24 01:52:07 PM EST 2023 - Starting virgil_cleanup process...
+Fri Nov 24 04:38:02 PM EST 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
-Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Hit:2 http://packages.microsoft.com/repos/code stable InRelease
-Hit:3 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Get:4 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
-Hit:5 https://packages.microsoft.com/repos/edge stable InRelease
+Hit:1 http://packages.microsoft.com/repos/code stable InRelease
+Hit:2 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
+Hit:3 https://packages.microsoft.com/repos/edge stable InRelease
+Hit:4 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:5 http://us.archive.ubuntu.com/ubuntu jammy InRelease
 Get:6 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
-Hit:7 https://download.docker.com/linux/ubuntu jammy InRelease
+Get:7 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
 Hit:8 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
 Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
 Get:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
 Get:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
 Get:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
-Fetched 259 kB in 2s (119 kB/s)
+Fetched 259 kB in 1s (235 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
