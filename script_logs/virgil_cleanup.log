@@ -1,20 +1,19 @@
-Sat Nov 25 11:02:41 AM EST 2023 - Starting virgil_cleanup process...
+Sat Nov 25 05:30:03 PM EST 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
 Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Hit:2 http://security.ubuntu.com/ubuntu jammy-security InRelease
-Hit:3 http://packages.microsoft.com/repos/code stable InRelease
-Hit:4 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Hit:5 https://download.docker.com/linux/ubuntu jammy InRelease
-Hit:6 https://packages.microsoft.com/repos/edge stable InRelease
-Hit:7 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
-Hit:8 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
-Get:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
-Get:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
-Get:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
-Fetched 29.9 kB in 1s (30.6 kB/s)
+Hit:2 http://packages.microsoft.com/repos/code stable InRelease
+Hit:3 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:4 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:5 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:6 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:7 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Hit:8 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease
+Hit:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease
+Hit:10 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease
+Hit:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease
+Hit:12 https://packages.microsoft.com/repos/edge stable InRelease
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -33,7 +32,7 @@ Reading package lists...
 Building dependency tree...
 Reading state information...
 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
 Vacuuming done, freed 0B of archived journals from /run/log/journal.
 Vacuuming done, freed 0B of archived journals from /var/log/journal.
-Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
 System cleanup complete!
