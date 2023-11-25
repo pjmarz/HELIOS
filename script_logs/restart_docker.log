@@ -1,33 +1,31 @@
-Fri Nov 24 04:37:45 PM EST 2023 - Starting the Docker restart process...
+Sat Nov 25 04:15:01 AM EST 2023 - Starting the Docker restart process...
 Checking Docker service status...
 Docker is active.
 Restarting Docker service...
 Navigating to docker compose directory...
 Running docker compose up in detached mode...
- Container nzbget  Running
  Container dockovpn  Running
- Container portainer  Running
- Container jellyfin  Running
  Container homarr  Running
+ Container prowlarr  Running
+ Container nzbget  Running
  Container portaineragent  Running
+ Container portainer  Running
  Container plex  Running
- Container whisparr  Running
  Container pihole  Running
  Container watchtower  Running
- Container prowlarr  Running
+ Container whisparr  Running
 Checking Docker Compose services status...
-NAME             IMAGE                           COMMAND                                                                   SERVICE      CREATED       STATUS                                     PORTS
-dockovpn         alekslitvinenk/openvpn          "dumb-init ./start.sh "                                                   dockovpn     3 hours ago   Up Less than a second                      0.0.0.0:1194->1194/udp, :::1194->1194/udp, 8080/tcp
-homarr           ghcr.io/ajnart/homarr:latest    "sh ./scripts/run.sh"                                                     homarr       4 hours ago   Up Less than a second (health: starting)   0.0.0.0:7575->7575/tcp, :::7575->7575/tcp
-jellyfin         jellyfin/jellyfin:latest        "/jellyfin/jellyfin"                                                      jellyfin     3 hours ago   Up 1 second (health: starting)             
-nzbget           linuxserver/nzbget:latest       "/init"                                                                   nzbget       4 hours ago   Up Less than a second                      0.0.0.0:6789->6789/tcp, :::6789->6789/tcp
-pihole           pihole/pihole:latest            "/s6-init"                                                                pihole       4 hours ago   Up Less than a second (health: starting)   0.0.0.0:53->53/tcp, 0.0.0.0:53->53/udp, :::53->53/tcp, :::53->53/udp, 67/udp, 0.0.0.0:8081->80/tcp, :::8081->80/tcp
-plex             linuxserver/plex:latest         "/init"                                                                   plex         4 hours ago   Up 1 second                                
-portainer        portainer/portainer-ce:latest   "/portainer -H tcp://agent:9001 --tlsskipverify"                          portainer    4 hours ago   Up Less than a second                      0.0.0.0:8000->8000/tcp, :::8000->8000/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp, 9000/tcp
-portaineragent   portainer/agent:latest          "./agent"                                                                 agent        4 hours ago   Up Less than a second                      
-prowlarr         linuxserver/prowlarr:latest     "/init"                                                                   prowlarr     4 hours ago   Up Less than a second                      0.0.0.0:9696->9696/tcp, :::9696->9696/tcp
-watchtower       containrrr/watchtower:latest    "/watchtower --interval 3600 --label-enable --cleanup --remove-volumes"   watchtower   4 hours ago   Up Less than a second (health: starting)   8080/tcp
-whisparr         ghcr.io/hotio/whisparr:latest   "/init"                                                                   whisparr     4 hours ago   Up 1 second                                0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
+NAME             IMAGE                           COMMAND                                                                   SERVICE      CREATED        STATUS                                     PORTS
+dockovpn         alekslitvinenk/openvpn          "dumb-init ./start.sh "                                                   dockovpn     14 hours ago   Up 1 second                                0.0.0.0:1194->1194/udp, :::1194->1194/udp, 8080/tcp
+homarr           ghcr.io/ajnart/homarr:latest    "sh ./scripts/run.sh"                                                     homarr       15 hours ago   Up Less than a second (health: starting)   0.0.0.0:7575->7575/tcp, :::7575->7575/tcp
+nzbget           linuxserver/nzbget:latest       "/init"                                                                   nzbget       15 hours ago   Up 1 second                                0.0.0.0:6789->6789/tcp, :::6789->6789/tcp
+pihole           pihole/pihole:latest            "/s6-init"                                                                pihole       15 hours ago   Up Less than a second (health: starting)   0.0.0.0:53->53/tcp, 0.0.0.0:53->53/udp, :::53->53/tcp, :::53->53/udp, 67/udp, 0.0.0.0:8081->80/tcp, :::8081->80/tcp
+plex             linuxserver/plex:latest         "/init"                                                                   plex         15 hours ago   Up 1 second                                
+portainer        portainer/portainer-ce:latest   "/portainer -H tcp://agent:9001 --tlsskipverify"                          portainer    15 hours ago   Up Less than a second                      0.0.0.0:8000->8000/tcp, :::8000->8000/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp, 9000/tcp
+portaineragent   portainer/agent:latest          "./agent"                                                                 agent        15 hours ago   Up 1 second                                
+prowlarr         linuxserver/prowlarr:latest     "/init"                                                                   prowlarr     15 hours ago   Up Less than a second                      0.0.0.0:9696->9696/tcp, :::9696->9696/tcp
+watchtower       containrrr/watchtower:latest    "/watchtower --interval 3600 --label-enable --cleanup --remove-volumes"   watchtower   15 hours ago   Up Less than a second (health: starting)   8080/tcp
+whisparr         ghcr.io/hotio/whisparr:latest   "/init"                                                                   whisparr     15 hours ago   Up Less than a second                      0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
 Process completed!
-   whisparr     4 hours ago   Up 1 second                                0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
+ours ago   Up Less than a second                      0.0.0.0:6969->6969/tcp, :::6969->6969/tcp
 Process completed!
