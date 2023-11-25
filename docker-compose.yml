@@ -140,30 +140,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  jellyfin:
-    runtime: nvidia
-    privileged: true
-    container_name: jellyfin
-    hostname: jellyfin
-    image: jellyfin/jellyfin:latest
-    restart: unless-stopped
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
-    # - JELLYFIN_PublishedServerUrl=http://your-jellyfin-url.com
-    network_mode: host
-    volumes:
-      - ${ROOT}/config/jellyfin/config:/config
-      - ${ROOT}/config/jellyfin/cache:/cache
-      - ${MEDIA}/LOAS:/data/LOAS
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
   plex:
     runtime: nvidia
     privileged: true
