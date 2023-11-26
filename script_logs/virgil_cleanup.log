@@ -1,22 +1,19 @@
-Sat Nov 25 10:36:27 PM EST 2023 - Starting virgil_cleanup process...
+Sat Nov 25 11:39:46 PM EST 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
-Hit:1 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
-Hit:3 http://packages.microsoft.com/repos/code stable InRelease
-Hit:4 https://packages.microsoft.com/repos/edge stable InRelease
-Hit:5 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
+Hit:2 http://packages.microsoft.com/repos/code stable InRelease
+Hit:3 https://packages.microsoft.com/repos/edge stable InRelease
+Hit:4 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:5 http://security.ubuntu.com/ubuntu jammy-security InRelease
 Hit:6 https://download.docker.com/linux/ubuntu jammy InRelease
-Hit:7 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Get:8 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
-Get:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
-Get:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
-Get:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
-Get:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
-Get:13 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1,200 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu jammy-updates/main i386 Packages [536 kB]
-Fetched 1,995 kB in 1s (1,981 kB/s)
+Hit:7 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:8 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Hit:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease
+Hit:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease
+Hit:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease
+Hit:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -34,8 +31,14 @@ Reading state information...
 Reading package lists...
 Building dependency tree...
 Reading state information...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
+The following packages will be REMOVED:
+  apt-transport-https*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+After this operation, 170 kB disk space will be freed.
+(Reading database ... dpkg: warning: files list file for package 'netdata-repo-edge' missing; assuming package has no files currently installed
+(Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 213601 files and directories currently installed.)
+Removing apt-transport-https (2.4.11) ...
 Vacuuming done, freed 0B of archived journals from /run/log/journal.
 Vacuuming done, freed 0B of archived journals from /var/log/journal.
+Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
 System cleanup complete!
