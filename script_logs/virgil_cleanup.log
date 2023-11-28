@@ -1,25 +1,84 @@
-Sat Nov 25 11:39:46 PM EST 2023 - Starting virgil_cleanup process...
+Tue Nov 28 11:18:34 AM EST 2023 - Starting virgil_cleanup process...
 Successfully processed your pro configuration.
 Successfully refreshed your subscription.
 Successfully updated Ubuntu Pro related APT and MOTD messages.
 Hit:1 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
-Hit:2 http://packages.microsoft.com/repos/code stable InRelease
-Hit:3 https://packages.microsoft.com/repos/edge stable InRelease
-Hit:4 http://us.archive.ubuntu.com/ubuntu jammy InRelease
-Hit:5 http://security.ubuntu.com/ubuntu jammy-security InRelease
-Hit:6 https://download.docker.com/linux/ubuntu jammy InRelease
-Hit:7 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
-Hit:8 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
-Hit:9 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease
-Hit:10 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease
-Hit:11 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease
-Hit:12 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease
+Get:2 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
+Get:3 http://packages.microsoft.com/repos/code stable InRelease [3,589 B]
+Hit:4 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:5 https://packages.microsoft.com/repos/edge stable InRelease
+Get:6 http://packages.microsoft.com/repos/code stable/main arm64 Packages [23.1 kB]
+Get:7 http://packages.microsoft.com/repos/code stable/main amd64 Packages [23.0 kB]
+Get:8 http://packages.microsoft.com/repos/code stable/main armhf Packages [23.3 kB]
+Get:9 http://security.ubuntu.com/ubuntu jammy-security/main i386 Packages [372 kB]
+Get:10 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [989 kB]
+Get:11 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [192 kB]
+Get:12 http://security.ubuntu.com/ubuntu jammy-security/universe i386 Packages [567 kB]
+Get:13 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [799 kB]
+Get:14 http://security.ubuntu.com/ubuntu jammy-security/universe Translation-en [148 kB]
+Get:15 https://esm.ubuntu.com/apps/ubuntu jammy-apps-security InRelease [7,553 B]
+Get:16 https://esm.ubuntu.com/apps/ubuntu jammy-apps-updates InRelease [7,456 B]
+Get:17 https://esm.ubuntu.com/infra/ubuntu jammy-infra-security InRelease [7,450 B]
+Get:18 https://esm.ubuntu.com/infra/ubuntu jammy-infra-updates InRelease [7,449 B]
+Hit:19 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Get:20 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+Hit:21 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Get:22 http://us.archive.ubuntu.com/ubuntu jammy-updates/main i386 Packages [536 kB]
+Get:23 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [1,200 kB]
+Get:24 http://us.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [252 kB]
+Get:25 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [1,167 kB]
+Get:26 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted i386 Packages [32.8 kB]
+Get:27 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1,003 kB]
+Get:28 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe i386 Packages [667 kB]
+Get:29 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [221 kB]
+Fetched 8,479 kB in 2s (4,063 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
 Reading state information...
 Calculating upgrade...
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+The following packages will be upgraded:
+  firmware-sof-signed linux-firmware
+2 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Need to get 261 MB of archives.
+After this operation, 6,896 kB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 firmware-sof-signed all 2.0-1ubuntu4.4 [1,287 kB]
+Get:2 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 linux-firmware all 20220329.git681281e4-0ubuntu3.23 [259 MB]
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend requires a screen at least 13 lines tall and 31 columns wide.)
+debconf: falling back to frontend: Readline
+Fetched 261 MB in 6s (45.2 MB/s)
+(Reading database ... 
+dpkg: warning: files list file for package 'netdata-repo-edge' missing; assuming package has no files currently installed
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 213597 files and directories currently installed.)
+Preparing to unpack .../firmware-sof-signed_2.0-1ubuntu4.4_all.deb ...
+Unpacking firmware-sof-signed (2.0-1ubuntu4.4) over (2.0-1ubuntu4.2) ...
+Preparing to unpack .../linux-firmware_20220329.git681281e4-0ubuntu3.23_all.deb ...
+Unpacking linux-firmware (20220329.git681281e4-0ubuntu3.23) over (20220329.git681281e4-0ubuntu3.22) ...
+Setting up linux-firmware (20220329.git681281e4-0ubuntu3.23) ...
+update-initramfs: Generating /boot/initrd.img-6.2.0-37-generic
+update-initramfs: Generating /boot/initrd.img-6.2.0-36-generic
+Setting up firmware-sof-signed (2.0-1ubuntu4.4) ...
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -31,14 +90,8 @@ Reading state information...
 Reading package lists...
 Building dependency tree...
 Reading state information...
-The following packages will be REMOVED:
-  apt-transport-https*
-0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
-After this operation, 170 kB disk space will be freed.
-(Reading database ... dpkg: warning: files list file for package 'netdata-repo-edge' missing; assuming package has no files currently installed
-(Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 213601 files and directories currently installed.)
-Removing apt-transport-https (2.4.11) ...
-Vacuuming done, freed 0B of archived journals from /run/log/journal.
-Vacuuming done, freed 0B of archived journals from /var/log/journal.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
 Vacuuming done, freed 0B of archived journals from /var/log/journal/82e268de51b24ed9acee5520ce915203.
+Vacuuming done, freed 0B of archived journals from /var/log/journal.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
 System cleanup complete!
