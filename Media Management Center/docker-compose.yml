@@ -1,3 +1,6 @@
+# Below are the services listed that are involved in the MMC or Media Management Center
+# Here you will find: whisparr, prowlarr, nzbget, and plex. 
+
 version: "3.8"
 services:
 

@@ -1,3 +1,6 @@
+# Below are the services listed that are involved in the CCC or Console Command Center
+# Here you will find: dockovpn, portainer, watchtower, pihole, flaresolverr, and homarr. 
+
 version: "3.8"
 services:
 
