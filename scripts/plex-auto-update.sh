@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the logfile and Plex server details
-LOGFILE="/home/peter/Documents/dev/HELIOS/script_logs/plex_auto_update.log"
+LOGFILE="/home/peter/Documents/dev/HELIOS/script_logs/plex-auto-update.log"
 PLEX_URL="https://192.168.1.45:32400"
 TOKEN="kn5myHmFyQy2HgqzWZ4T"
 LIBRARY_SECTION_ID="1"
