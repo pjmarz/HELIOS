@@ -1,0 +1,74 @@
+version: "3.8"
+services:
+
+  whisparr:
+    container_name: whisparr
+    image: ghcr.io/hotio/whisparr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+    volumes:
+      - ${ROOT}/config/whisparr:/config
+      - ${MEDIA}/LOAS:/LOAS
+      - ${CHARON}/nzbget/downloads:/downloads
+    ports:
+      - 6969:6969
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  prowlarr:
+    container_name: prowlarr
+    image: linuxserver/prowlarr:latest
+    ports:
+      - 9696:9696
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=${TZ}
+    volumes:
+      - ${ROOT}/config/prowlarr:/config
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  nzbget:
+    image: linuxserver/nzbget:latest
+    container_name: nzbget
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+    volumes:
+      - ${ROOT}/config/nzbget:/config
+      - ${CHARON}/nzbget/downloads:/downloads
+    ports:
+      - 6789:6789
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  plex:
+    runtime: nvidia
+    privileged: true
+    container_name: plex
+    hostname: plex
+    image: linuxserver/plex:latest
+    restart: unless-stopped
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - VERSION=docker
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - AUTO_UPDATE=true
+    network_mode: host
+    volumes:
+      - ${ROOT}/config/plexdb:/config
+      - ${ROOT}/transcode:/transcode
+      - ${MEDIA}/LOAS:/data/LOAS
+      - ${ROOT}/tmp:/tmp
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
