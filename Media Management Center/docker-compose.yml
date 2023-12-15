@@ -1,6 +1,3 @@
-# Below are the services listed that are involved in the MMC or Media Management Center
-# Here you will find: whisparr, prowlarr, nzbget, and plex. 
-
 version: "3.8"
 services:
 
@@ -13,7 +10,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${ROOT}/config/whisparr:/config
-      - ${MEDIA}/LOAS:/LOAS
+      - ${MEDIA}/xxx:/xxx
       - ${CHARON}/nzbget/downloads:/downloads
     ports:
       - 6969:6969
@@ -71,7 +68,8 @@ services:
     volumes:
       - ${ROOT}/config/plexdb:/config
       - ${ROOT}/transcode:/transcode
-      - ${MEDIA}/LOAS:/data/LOAS
-      - ${ROOT}/tmp:/tmp
+      - ${MEDIA}/movies:/movies
+      - ${MEDIA}/tv:/tv
+      - ${MEDIA}/xxx:/xxx
     labels:
       - com.centurylinklabs.watchtower.enable=true
