@@ -11,10 +11,12 @@ services:
     volumes:
       - ${ROOT}/config/whisparr:/config
       - ${MEDIA}/xxx:/xxx
-      - ${CHARON}/nzbget/downloads:/downloads
+      - ${CHARON}/sabnzbd/downloads:/downloads
     ports:
       - 6969:6969
     restart: unless-stopped
+    networks:
+      - multimediaservices_network
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
@@ -30,22 +32,28 @@ services:
     volumes:
       - ${ROOT}/config/prowlarr:/config
     restart: unless-stopped
+    networks:
+      - multimediaservices_network
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  nzbget:
-    image: linuxserver/nzbget:latest
-    container_name: nzbget
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=${TZ}
     volumes:
-      - ${ROOT}/config/nzbget:/config
-      - ${CHARON}/nzbget/downloads:/downloads
+      - ${ROOT}/config/sabnzbd:/config
+      - ${CHARON}/sabnzbd/downloads:/downloads
+      - ${CHARON}/sabnzbd/downloads/intermediate:/intermediate
+      - ${CHARON}/sabnzbd/downloads/completed:/completed
     ports:
-      - 6789:6789
+      - 8080:8080
     restart: unless-stopped
+    networks:
+      - multimediaservices_network
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
@@ -73,3 +81,7 @@ services:
       - ${MEDIA}/xxx:/xxx
     labels:
       - com.centurylinklabs.watchtower.enable=true
+
+networks:
+  multimediaservices_network:
+    external: true

@@ -107,6 +107,7 @@ services:
 
 networks:
   agent_network:
+  multimediaservices_network:
 
 volumes:
   portainer_data:
