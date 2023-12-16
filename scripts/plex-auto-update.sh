@@ -15,7 +15,7 @@ echo "$(date) - Starting Plex library update..."
 echo "Starting Plex library scan..."
 curl -k -L -X GET "${PLEX_URL}/library/sections/${LIBRARY_SECTION_ID}/refresh" -H "X-Plex-Token: ${TOKEN}"
 
-sleep 600
+sleep 60
 
 # Analyze media files in the library section
 echo "Starting Plex media analysis..."

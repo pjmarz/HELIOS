@@ -1,4 +1,6 @@
 # Ignore NVIDIA driver file
 *.run
-# Ignore the scritp logs
+# Ignore the script logs
 script_logs/
+# Ignore cronjob logs
+cronjob_logs/
