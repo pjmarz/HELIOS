@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# https://github.com/NVIDIA/nvidia-container-toolkit
 # https://www.nvidia.com/en-us/drivers/unix/
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 # sudo ./NVIDIA-Linux-XXXXXXX.run --uninstall
