@@ -113,3 +113,4 @@ volumes:
   portainer_data:
   homarr_data:
   dockovpn_data:
+  mongo_data:
