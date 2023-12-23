@@ -36,7 +36,7 @@ services:
     command: -H tcp://agent:9001 --tlsskipverify
     ports:
       - 9443:9443
-      - 8000:8000
+      - 8001:9000
     volumes:
       - portainer_data:/data
     networks:
