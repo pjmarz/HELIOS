@@ -114,6 +114,29 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    runtime: nvidia
+    privileged: true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+    volumes:
+      - ${ROOT}/config/jellyfin:/config
+      - ${MEDIA}/movies:/movies
+      - ${MEDIA}/tv:/tv
+      - ${MEDIA}/xxx:/xxx
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
   plex:
     runtime: nvidia
     privileged: true
