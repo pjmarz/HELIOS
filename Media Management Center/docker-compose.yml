@@ -131,9 +131,9 @@ services:
       - ${MEDIA}/xxx:/xxx
     ports:
       - 8096:8096
-      - 8920:8920 #optional
-      - 7359:7359/udp #optional
-      - 1900:1900/udp #optional
+      - 8920:8920
+      - 7359:7359/udp
+      - 1900:1900/udp
     network_mode: host
     restart: unless-stopped
     labels:
