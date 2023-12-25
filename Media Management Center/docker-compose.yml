@@ -120,8 +120,8 @@ services:
     runtime: nvidia
     privileged: true
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
     volumes:
       - ${ROOT}/config/jellyfin:/config
