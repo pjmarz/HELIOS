@@ -128,25 +128,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  checkrr:
-    container_name: checkrr
-    image: aetaric/checkrr:latest
-    environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=${TZ}
-    volumes:
-      - ${ROOT}/config/checkrr/checkrr.yaml:/etc/checkrr.yaml
-      - ${ROOT}/config/checkrr/checkrr.db:/checkrr.db
-      - ${MEDIA}/movies:/movies
-      - ${MEDIA}/tv:/tv
-      - ${MEDIA}/xxx:/xxx
-    ports:
-      - 8585:8585
-    restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
 networks:
   agent_network:
   multimediaservices_network:
