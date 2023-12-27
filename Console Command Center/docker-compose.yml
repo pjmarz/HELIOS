@@ -14,8 +14,6 @@ services:
     command: tailscaled 
     privileged: true 
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   dockovpn:
     container_name: dockovpn
@@ -29,8 +27,6 @@ services:
     volumes:
         - dockovpn_data:/opt/Dockovpn_data
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   agent:
     image: portainer/agent:latest
