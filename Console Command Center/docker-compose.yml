@@ -109,6 +109,18 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  dash:
+    image: mauricenino/dashdot:latest
+    container_name: dash
+    privileged: true
+    ports:
+      - '81:3001'
+    volumes:
+      - /:/mnt/host:ro
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
 networks:
   agent_network:
   multimediaservices_network:
