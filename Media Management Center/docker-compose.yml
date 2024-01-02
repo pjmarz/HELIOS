@@ -168,19 +168,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  plexautolanguages:
-    image: remirigal/plex-auto-languages:latest
-    container_name: plexautolanguages
-    environment:
-      - PLEX_URL=http://192.168.1.45:32400
-      - PLEX_TOKEN=reKFC-C828Gqv6aJ2ehG
-      - TZ=${TZ}
-    network_mode: host
-    volumes:
-      - ${ROOT}/config/plexautolanguages:/config
-    restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
 networks:
   multimediaservices_network:
