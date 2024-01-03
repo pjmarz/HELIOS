@@ -177,6 +177,7 @@ services:
       - TZ=${TZ}    
     volumes:
      - ${ROOT}/config/plexautolanguages:/config
+    network_mode: host
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
