@@ -121,6 +121,29 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  scrutiny:
+    container_name: scrutiny
+    image: ghcr.io/analogj/scrutiny:master-omnibus
+    cap_add:
+      - SYS_RAWIO
+    ports:
+      - "8081:8080"
+      - "8086:8086"
+    volumes:
+      - /run/udev:/run/udev:ro
+      - ${ROOT}/config/scrutiny/config:/opt/scrutiny/config
+      - ${ROOT}/config/scrutiny/influxdb:/opt/scrutiny/influxdb
+    devices:
+      - "/dev/sda"
+      - "/dev/sdb"
+      - "/dev/sdc"
+      - "/dev/sdd"
+      - "/dev/sde"
+      - "/dev/nvme0n1"
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
 networks:
   agent_network:
   multimediaservices_network:
