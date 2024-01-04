@@ -1,13 +1,18 @@
 #!/bin/bash
 
+# Source the environment variables
+source /home/peter/Documents/dev/HELIOS/env.sh
+
 # Define the logfile and Plex server details
 LOGFILE="/home/peter/Documents/dev/HELIOS/script_logs/plex-auto-update.log"
 PLEX_URL="https://192.168.1.45:32400"
 TOKEN="reKFC-C828Gqv6aJ2ehG"
 LIBRARY_SECTION_IDS=("1" "2" "3")  # Array of library IDs
 
-# Redirect all output to the logfile
-exec > "$LOGFILE" 2>&1
+# Function to log a message
+log_message() {
+    echo "$(date) - $1" | tee -a "$LOGFILE"
+}
 
 echo "$(date) - Starting Plex library update..."
 

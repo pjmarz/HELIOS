@@ -41,6 +41,7 @@ services:
     volumes:
       - portainer_data:/data
       - /usr/share/hwdata/pci.ids:/usr/share/hwdata/pci.ids
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
