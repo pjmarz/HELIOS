@@ -9,6 +9,8 @@
 
 # docker run --rm --gpus all nvidia/cuda:12.2.2-base-ubuntu22.04 nvidia-smi
 
+# https://blog.delouw.ch/2020/01/29/using-lvm-cache-for-storage-tiering/
+
 sudo apt-get install -y wget
 wget -P ./ https://us.download.nvidia.com/XFree86/Linux-x86_64/535.146.02/NVIDIA-Linux-x86_64-535.146.02.run
 
