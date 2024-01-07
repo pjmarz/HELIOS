@@ -129,7 +129,6 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - AUTO_UPDATE=true
     network_mode: host
     volumes:
       - ${ROOT}/config/plexdb:/config
