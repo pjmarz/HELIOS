@@ -19,8 +19,8 @@ sudo apt-get upgrade -y
 echo "Installing necessary tools and kernel headers..."
 sudo apt-get install -y wget build-essential linux-headers-$(uname -r)
 
-echo "Installing libnvidia encode components..."
-sudo apt-get install libnvidia-encode-535
+# echo "Installing libnvidia encode components..."
+# sudo apt-get install libnvidia-compute-535=535.146.02-0ubuntu0.22.04.1
 
 echo "Disabling the Nouveau driver..."
 echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
