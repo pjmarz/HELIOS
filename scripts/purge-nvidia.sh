@@ -8,6 +8,12 @@ sudo apt-get remove --purge '^nvidia-.*'
 echo "Removing CUDA Toolkit and libnvidia encode components..."
 sudo apt-get remove --purge cuda-toolkit-12-3 libnvidia-encode-535
 
+echo "Stopping any NVIDIA services..."
+sudo systemctl stop nvidia-persistenced
+
+echo "Unloading NVIDIA kernel modules..."
+sudo rmmod nvidia_drm nvidia_modeset nvidia_uvm nvidia
+
 echo "Removing NVIDIA Container Toolkit..."
 sudo apt-get remove --purge nvidia-container-toolkit
 

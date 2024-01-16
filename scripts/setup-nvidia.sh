@@ -19,9 +19,6 @@ sudo apt-get upgrade -y
 echo "Installing necessary tools and kernel headers..."
 sudo apt-get install -y wget build-essential linux-headers-$(uname -r)
 
-# echo "Installing libnvidia encode components..."
-# sudo apt-get install libnvidia-compute-535=535.146.02-0ubuntu0.22.04.1
-
 echo "Disabling the Nouveau driver..."
 echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
 sudo update-initramfs -u
@@ -34,12 +31,15 @@ echo "Installing the CUDA Toolkit..."
 sudo apt-get update
 sudo apt-get install -y cuda-toolkit-12-3
 
+echo "Stopping graphical session to free up NVIDIA modules..."
+sudo systemctl stop gdm # Replace 'gdm' with your display manager if different
+
 echo "Downloading the NVIDIA driver..."
 wget -P ./ https://us.download.nvidia.com/XFree86/Linux-x86_64/535.146.02/NVIDIA-Linux-x86_64-535.146.02.run
 chmod +x ./NVIDIA-Linux-x86_64-535.146.02.run
 
 echo "Installing the NVIDIA driver..."
-sudo ./NVIDIA-Linux-x86_64-535.146.02.run
+sudo ./NVIDIA-Linux-x86_64-535.146.02.run --ui=none --no-questions --disable-nouveau --dkms
 
 echo "Setting up the NVIDIA Container Toolkit..."
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
