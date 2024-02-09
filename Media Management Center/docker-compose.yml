@@ -124,7 +124,6 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - PLEX_CLAIM=claim-U5FJtZyyNyx4sC7Khdss
       - VERSION=docker
       - PUID=${PUID}
       - PGID=${PGID}

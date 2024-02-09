@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Define the base directory
+# Define the base directory for completed downloads
 BASE_DIR="/mnt/CHARON/sabnzbd/downloads/completed"
+
+# Define the intermediate directory
+INTERMEDIATE_DIR="/mnt/CHARON/sabnzbd/downloads/intermediate"
 
 # Define the log directory
 LOG_DIR="/home/peter/Documents/dev/HELIOS/script_logs"
@@ -17,17 +20,21 @@ log() {
     echo "$1" | tee -a "$LOG_FILE"
 }
 
-# List of folders to clear
+# Delete all contents of the intermediate directory
+log "Deleting all contents of $INTERMEDIATE_DIR"
+rm -rf "${INTERMEDIATE_DIR:?}"/* | tee -a "$LOG_FILE"
+
+# List of folders to clear within the completed directory
 FOLDERS=("default" "movies" "tv" "xxx")
 
-# Loop through each folder and delete its contents
+# Loop through each folder in the completed directory and delete its contents
 for folder in "${FOLDERS[@]}"
 do
     log "Deleting contents of $BASE_DIR/$folder"
     rm -rf "${BASE_DIR:?}/${folder:?}"/* | tee -a "$LOG_FILE"
 done
 
-log "All specified folders have been cleared."
+log "All specified folders, including the intermediate directory, have been cleared."
 
 # Notify end of script and log file location
 echo "Script completed. Log file is located at $LOG_FILE"

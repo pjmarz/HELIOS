@@ -35,11 +35,11 @@ echo "Stopping graphical session to free up NVIDIA modules..."
 sudo systemctl stop gdm # Replace 'gdm' with your display manager if different
 
 echo "Downloading the NVIDIA driver..."
-wget -P ./ https://us.download.nvidia.com/XFree86/Linux-x86_64/535.146.02/NVIDIA-Linux-x86_64-535.146.02.run
-chmod +x ./NVIDIA-Linux-x86_64-535.146.02.run
+wget -P ./ https://us.download.nvidia.com/XFree86/Linux-x86_64/535.154.05/NVIDIA-Linux-x86_64-535.154.05.run
+chmod +x ./NVIDIA-Linux-x86_64-535.154.05.run
 
 echo "Installing the NVIDIA driver..."
-sudo ./NVIDIA-Linux-x86_64-535.146.02.run --ui=none --no-questions --disable-nouveau --dkms
+sudo ./NVIDIA-Linux-x86_64-535.154.05.run
 
 echo "Setting up the NVIDIA Container Toolkit..."
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg

@@ -60,22 +60,27 @@ services:
     restart: unless-stopped
     command: --interval 3600 --label-enable --cleanup --remove-volumes
 
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - 80:80/tcp
-    environment:
-      - TZ=${TZ}
-      - WEBPASSWORD=Arrowleaf
+  adguardhome:
+    container_name: adguardhome
+    image: adguard/adguardhome:latest
     volumes:
-      - ${ROOT}/config/pihole/etc-pihole:/etc/pihole/
-      - ${ROOT}/config/pihole/etc-dnsmasq.d:/etc/dnsmasq.d/
-    cap_add:
-      - NET_ADMIN
+        - adguadehome_data:/opt/adguardhome/work
+        - adguadehome_data:/opt/adguardhome/conf
+    ports:
+        - 53:53/tcp
+        - 53:53/udp
+        - 80:80/tcp
+        - 443:443/tcp
+        - 443:443/udp
+        - 3000:3000/tcp
+        - 853:853/tcp
+        - 853:853/udp
+        - 5443:5443/tcp
+        - 5443:5443/udp
+        - 6060:6060/tcp
     restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
 
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -153,3 +158,4 @@ volumes:
   portainer_data:
   homarr_data:
   dockovpn_data:
+  adguadehome_data:
