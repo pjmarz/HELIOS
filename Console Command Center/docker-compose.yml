@@ -63,9 +63,11 @@ services:
   adguardhome:
     container_name: adguardhome
     image: adguard/adguardhome:latest
+    environment:
+        - TZ=${TZ}
     volumes:
-        - adguadehome_data:/opt/adguardhome/work
-        - adguadehome_data:/opt/adguardhome/conf
+        - adguardhome_data:/opt/adguardhome/work
+        - adguardhome_data:/opt/adguardhome/conf
     ports:
         - 53:53/tcp
         - 53:53/udp
@@ -109,6 +111,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${ROOT}/config/homarr/config:/app/data/configs
       - ${ROOT}/config/homarr/icons:/app/public/icons
+      - ${ROOT}/config/homarr/icons:/app/public/imgs/backgrounds
+      - ${ROOT}/config/homarr/icons:/app/public/imgs/logo
       - homarr_data:/data
     ports:
       - 7575:7575
@@ -158,4 +162,4 @@ volumes:
   portainer_data:
   homarr_data:
   dockovpn_data:
-  adguadehome_data:
+  adguardhome_data:
