@@ -30,21 +30,22 @@ update_library_section() {
 
     sleep 60
 
-    echo "Starting Plex media analysis for section ${section_id}..."
-    response=$(curl -k -s -X PUT "${PLEX_URL}/library/sections/${section_id}/analyze" -H "X-Plex-Token: ${TOKEN}")
-    if [[ $? -ne 0 ]]; then
-        echo "Error analyzing media for section ${section_id}: $response"
-        return 1
-    fi
-
-    sleep 3600
-
     echo "Starting Plex metadata refresh for section ${section_id}..."
     response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh?force=1&X-Plex-Token=${TOKEN}")
     if [[ $? -ne 0 ]]; then
         echo "Error refreshing metadata for section ${section_id}: $response"
         return 1
     fi
+
+    sleep 3600
+
+    echo "Starting Plex media analysis for section ${section_id}..."
+    response=$(curl -k -s -X PUT "${PLEX_URL}/library/sections/${section_id}/analyze" -H "X-Plex-Token: ${TOKEN}")
+    if [[ $? -ne 0 ]]; then
+        echo "Error analyzing media for section ${section_id}: $response"
+        return 1
+    fi
+    
 }
 
 # Iterate over each library section and update
