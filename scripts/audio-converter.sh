@@ -1,8 +1,8 @@
 #!/bin/bash
+
 # This script sets the language metadata for audio tracks to English
 # for specified video file types within the root directory and its subdirectories,
 # but only if the current language is set to 'unknown'.
-# It also logs any files that trigger a specific FFmpeg warning or error message.
 
 # Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
@@ -33,12 +33,32 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
                             "m4v" "svi" "3gp" "3g2" "mxf" "roq" "nsv" "flv" "f4v"
                             "f4p" "f4a" "f4b" "mod")
 
-# Function to set metadata, note: 'echo' commands inside this function will not have timestamps
-# Consider logging these internally or ensure this detail is acceptable for your logging requirements
+# Function to set metadata
 set_metadata() {
     local file="$1"
     local extension="$2"
-    ...
+    local ffmpeg_log="/tmp/ffmpeg_$$.log" # Temporary file for FFmpeg logs
+    
+    # Check the current language metadata using ffprobe
+    echo "Checking language for $file"
+    local lang=$(ffprobe -loglevel error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 "$file")
+    
+    # If the language is 'unknown' or not set, then set it to English
+    if [ -z "$lang" ] || [ "$lang" == "und" ]; then
+        echo "Setting language to English for $file"
+        ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$file".tmp 2> "$ffmpeg_log"
+
+        # Replace the original file if ffmpeg succeeded, else report the error
+        if [ $? -eq 0 ]; then
+            mv "$file".tmp "$file"
+            echo "Language set to English for $file"
+        else
+            echo "Failed to set language for $file. Check FFmpeg log: $ffmpeg_log"
+        fi
+    else
+        echo "Skipping $file: language is already set to $lang."
+    fi
+    rm -f "$ffmpeg_log" # Clean up the temporary FFmpeg log file
 }
 
 log "Counting total number of files to process..."
