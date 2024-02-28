@@ -69,7 +69,7 @@ update_library_section() {
 
     sleep 60
 
-        echo "Starting Plex metadata refresh for section ${section_id}..."
+    echo "Starting Plex metadata refresh for section ${section_id}..."
     response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh?force=1&X-Plex-Token=${TOKEN}")
     if [[ $? -ne 0 ]]; then
         echo "Error refreshing metadata for section ${section_id}: $response"
@@ -84,13 +84,30 @@ update_library_section() {
         echo "Error analyzing media for section ${section_id}: $response"
         return 1
     fi
-
 }
 
 # Iterate over each library section and update
 for section_id in "${LIBRARY_SECTION_IDS[@]}"; do
     update_library_section "$section_id" || echo "Update failed for section: $section_id"
 done
+
+# Function to optimize Plex database
+optimize_database() {
+    log "Optimizing Plex database..."
+    docker exec -it "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --optimize --verbose --no-thumbs
+    log "Plex database optimization complete."
+}
+
+# Function to clean Plex bundles
+clean_bundles() {
+    log "Cleaning Plex bundles..."
+    docker exec -it "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --cleanup --verbose
+    log "Plex bundles cleaned."
+}
+
+# Call the optimize database and clean bundles functions
+optimize_database
+clean_bundles
 
 # End of script
 log "Plex metadata refresh complete."
