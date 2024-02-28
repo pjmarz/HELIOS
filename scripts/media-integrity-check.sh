@@ -3,12 +3,25 @@
 # Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
 
-echo "Starting integrity check..."
+# Log file for files that `ffmpeg` cannot process
+LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log"
+
+# Prepare the log file by clearing any previous content
+> "$LOG_FILE"
+
+# Function to prepend the current date and time to log messages
+log() {
+    local msg="$@"
+    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
+}
+
+log "Starting integrity check..."
 
 # Root directory containing the media files
 ROOT_DIRECTORY="/mnt/LOAS"
 
-echo "Root directory set to $ROOT_DIRECTORY"
+log "Root directory set to $ROOT_DIRECTORY"
 
 # Array of video file extensions to process
 declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
@@ -16,17 +29,6 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
                             "mp4" "m4p" "m4v" "mpg" "mp2" "mpeg" "mpe" "mpv"
                             "m4v" "svi" "3gp" "3g2" "mxf" "roq" "nsv" "flv" "f4v"
                             "f4p" "f4a" "f4b" "mod")
-
-# Log file for files that `ffmpeg` cannot process
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log"
-
-# Function to log to file and console
-log() {
-    echo "$@" | tee -a "$LOG_FILE"
-}
-
-# Prepare the log file
-: > "$LOG_FILE" # Empty the log file at the start of the script
 
 # Function to check file integrity
 check_integrity() {
@@ -61,14 +63,14 @@ export -f check_integrity
 
 # Loop over each file type and check the integrity
 for extension in "${FILE_EXTENSIONS[@]}"; do
-    echo "Checking integrity of .$extension files..."
-    find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'file="$1"; echo "Checking integrity for $file"; if ! ffmpeg -v error -i "$file" -f null - 2>&1 | tee -a "/home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log"; then echo "Error found in $file, see /home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log for details."; else echo "$file: OK"; fi' bash {} \;
+    log "Checking integrity of .$extension files..."
+    find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'file="$1"; check_integrity "$file"' bash {} \;
 done
 
 # Final log statements based on the process outcome
 if [ -s "$LOG_FILE" ]; then
     log "The following files had issues during processing. See $LOG_FILE for details:"
-    cat "$LOG_FILE"
+    cat "$LOG_FILE" | while read line; do log "$line"; done
 else
     log "All files processed successfully. No issues found."
 fi

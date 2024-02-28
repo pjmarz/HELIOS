@@ -4,11 +4,16 @@
 source /home/peter/Documents/dev/HELIOS/env.sh
 
 # Define the log file
-LOGFILE="/home/peter/Documents/dev/HELIOS/script_logs/restart-docker.log"
+LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/restart-docker.log"
 
-# Function to log a message
+# Clear the log file at the beginning of the script
+> "$LOG_FILE"
+
+# Function to log a message with a timestamp
 log_message() {
-    echo "$(date) - $1" | tee -a "$LOGFILE"
+    local msg="$1"
+    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
 
 # Start a new log session with a timestamp
@@ -37,22 +42,23 @@ fi
 
 # Function to restart docker-compose in a specific directory
 restart_docker_compose() {
-    log_message "Navigating to $1..."
-    cd "$1"
+    local directory="$1"
+    log_message "Navigating to ${directory}..."
+    cd "$directory"
     if [ $? -ne 0 ]; then
-        log_message "Error navigating to $1. Exiting."
+        log_message "Error navigating to ${directory}. Exiting."
         exit 1
     fi
 
     log_message "Running docker compose up in detached mode..."
     docker compose up -d
     if [ $? -ne 0 ]; then
-        log_message "Error running docker compose up in $1. Exiting."
+        log_message "Error running docker compose up in ${directory}. Exiting."
         exit 1
     fi
 
-    log_message "Checking Docker Compose services status in $1..."
-    docker compose ps | tee -a "$LOGFILE"
+    log_message "Checking Docker Compose services status in ${directory}..."
+    docker compose ps | tee -a "$LOG_FILE"
 }
 
 # Restart docker-compose for Console Command Center

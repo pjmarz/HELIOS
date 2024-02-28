@@ -2,31 +2,43 @@
 
 # Script to uninstall all NVIDIA related components from Ubuntu 22.04
 
-echo "Removing NVIDIA drivers..."
-sudo apt-get remove --purge '^nvidia-.*'
+# Source the environment variables
+source /home/peter/Documents/dev/HELIOS/env.sh
 
-echo "Removing CUDA Toolkit and libnvidia encode components..."
-sudo apt-get remove --purge cuda-toolkit-12-3 libnvidia-encode-535
+# Define paths
+LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/purge-nvidia.log"
 
-echo "Stopping any NVIDIA services..."
-sudo systemctl stop nvidia-persistenced
+# Clear the log file at the beginning of the script
+> "$LOG_FILE"
 
-echo "Unloading NVIDIA kernel modules..."
-sudo rmmod nvidia_drm nvidia_modeset nvidia_uvm nvidia
+# Function to prepend the current date and time to log messages
+log() {
+    local msg="$@"
+    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
+}
 
-echo "Removing NVIDIA Container Toolkit..."
-sudo apt-get remove --purge nvidia-container-toolkit
+# Function to execute a command, log its action, and check for errors
+execute_and_log() {
+    local command="$@"
+    log "Executing: $command"
+    eval $command
+    if [ $? -ne 0 ]; then
+        log "Error executing: $command"
+    fi
+}
 
-echo "Removing NVIDIA CUDA toolkit keyring..."
-sudo apt-get remove --purge cuda-keyring
+log "Starting NVIDIA components removal process."
 
-echo "Re-enabling Nouveau driver (if previously disabled)..."
-sudo rm /etc/modprobe.d/blacklist-nouveau.conf
-sudo update-initramfs -u
+execute_and_log sudo apt-get remove --purge '^nvidia-.*'
+execute_and_log sudo apt-get remove --purge cuda-toolkit-12-3 libnvidia-encode-535
+execute_and_log sudo systemctl stop nvidia-persistenced
+execute_and_log sudo rmmod nvidia_drm nvidia_modeset nvidia_uvm nvidia
+execute_and_log sudo apt-get remove --purge nvidia-container-toolkit
+execute_and_log sudo apt-get remove --purge cuda-keyring
+execute_and_log sudo rm /etc/modprobe.d/blacklist-nouveau.conf
+execute_and_log sudo update-initramfs -u
+execute_and_log sudo apt-get autoremove -y
+execute_and_log sudo apt-get autoclean
 
-echo "Removing unnecessary packages and cleaning up..."
-sudo apt-get autoremove -y
-sudo apt-get autoclean
-
-echo "Rebooting the system..."
-sudo reboot
+log "System needs to be rebooted. Please reboot the system manually."

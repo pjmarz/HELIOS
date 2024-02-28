@@ -8,18 +8,23 @@ console_command_center_path="/home/peter/Documents/dev/HELIOS/Console Command Ce
 media_management_center_path="/home/peter/Documents/dev/HELIOS/Media Management Center"
 
 # Define the log file
-LOGFILE="/home/peter/Documents/dev/HELIOS/script_logs/master-compose-up.log"
+LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/master-compose-up.log"
+
+# Clear the log file at the beginning of the script
+> "$LOG_FILE"
 
 # Function to prepend the current date and time to log messages
-log_with_date() {
-    echo "$(date "+%Y-%m-%d %H:%M:%S") - $1"
+log() {
+    local msg="$1"
+    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
 
 # Function to run docker-compose up in a directory and log the output
 run_docker_compose_up() {
-    log_with_date "Starting docker-compose up in $1..." | tee -a "$LOGFILE"
-    docker compose -f "$1/docker-compose.yml" up -d 2>&1 | tee -a "$LOGFILE"
-    log_with_date "docker-compose up finished in $1" | tee -a "$LOGFILE"
+    log "Starting docker-compose up in $1..."
+    docker compose -f "$1/docker-compose.yml" up -d 2>&1 | tee -a "$LOG_FILE"
+    log "docker-compose up finished in $1"
 }
 
 # Run docker-compose up -d in both directories and log the output
@@ -28,4 +33,4 @@ run_docker_compose_up "$media_management_center_path" &
 
 # Wait for all background processes to finish
 wait
-log_with_date "All docker-compose services are up and running." | tee -a "$LOGFILE"
+log "All docker-compose services are up and running."
