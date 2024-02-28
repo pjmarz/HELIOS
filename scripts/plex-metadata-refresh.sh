@@ -60,12 +60,46 @@ log "Plex Docker container restarted. Waiting for Plex to be fully operational..
 # Wait a bit to ensure Plex is fully up
 sleep 60
 
-log "Initiating refresh of all metadata for specified library sections..."
+# Function to update a single library section
+update_library_section() {
+    local section_id=$1
+    local response
+
+    log "Starting Plex library scan for section ${section_id}..."
+    response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh" -H "X-Plex-Token: ${TOKEN}")
+    if [[ $? -ne 0 ]]; then
+        log "Error updating library section ${section_id}: $response"
+        return 1
+    fi
+
+    sleep 60
+
+    log "Starting Plex metadata refresh for section ${section_id}..."
+    response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh?force=1&X-Plex-Token=${TOKEN}")
+    if [[ $? -ne 0 ]]; then
+        log "Error refreshing metadata for section ${section_id}: $response"
+        return 1
+    fi
+
+    sleep 3600
+
+    log "Starting Plex media analysis for section ${section_id}..."
+    response=$(curl -k -s -X PUT "${PLEX_URL}/library/sections/${section_id}/analyze" -H "X-Plex-Token: ${TOKEN}")
+    if [[ $? -ne 0 ]]; then
+        log "Error analyzing media for section ${section_id}: $response"
+        return 1
+    fi
+    
+    sleep 3600
+
+}
 
 # Iterate over each library section and update
 for section_id in "${LIBRARY_SECTION_IDS[@]}"; do
     update_library_section "$section_id" || log "Update failed for section: $section_id"
 done
+
+log "Plex library update tasks for all sections completed!"
 
 # Function to optimize Plex database
 optimize_database() {

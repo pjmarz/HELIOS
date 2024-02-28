@@ -51,6 +51,8 @@ update_library_section() {
         return 1
     fi
     
+    sleep 3600
+
 }
 
 # Iterate over each library section and update
