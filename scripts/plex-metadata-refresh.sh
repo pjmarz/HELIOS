@@ -94,14 +94,14 @@ done
 # Function to optimize Plex database
 optimize_database() {
     log "Optimizing Plex database..."
-    docker exec -it "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --optimize --verbose --no-thumbs
+    docker exec "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --optimize --verbose --force
     log "Plex database optimization complete."
 }
 
 # Function to clean Plex bundles
 clean_bundles() {
     log "Cleaning Plex bundles..."
-    docker exec -it "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --cleanup --verbose
+    docker exec "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --cleanup --verbose --force
     log "Plex bundles cleaned."
 }
 
