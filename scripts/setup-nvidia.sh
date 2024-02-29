@@ -10,8 +10,22 @@
 
 # -------------------------------------------------------------------------- #
 
-# Define the log file
+#!/bin/bash
+
+# Define variables for versions and URLs
+CUDA_VERSION="cuda-toolkit-12-3"
+NVIDIA_DRIVER_VERSION="550.54.14"
+NVIDIA_DRIVER_URL="https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
+CUDA_KEYRING_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb"
+
+# Define the directory for NVIDIA related downloads
+NVIDIA_DOWNLOAD_DIR="/home/peter/Documents/dev/HELIOS/assets/nvidia"
+
+# Log file path
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/nvidia-setup.log"
+
+# Ensure NVIDIA download directory exists
+mkdir -p "${NVIDIA_DOWNLOAD_DIR}"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
@@ -23,41 +37,53 @@ log() {
     echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
 
+# Function to execute and log commands
+execute_and_log() {
+    local command="$@"
+    log "Executing: $command"
+    eval $command
+    if [ $? -ne 0 ]; then
+        log "Error executing: $command"
+        exit 1
+    fi
+}
+
 log "Updating the system..."
-sudo apt-get update
-sudo apt-get upgrade -y
+execute_and_log "sudo apt-get update"
+execute_and_log "sudo apt-get upgrade -y"
 
 log "Installing necessary tools and kernel headers..."
-sudo apt-get install -y wget build-essential linux-headers-$(uname -r)
+execute_and_log "sudo apt-get install -y wget build-essential linux-headers-$(uname -r)"
 
 log "Disabling the Nouveau driver..."
 echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
-sudo update-initramfs -u
+execute_and_log "sudo update-initramfs -u"
 
 log "Downloading and installing the CUDA toolkit keyring..."
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-sudo dpkg -i cuda-keyring_1.1-1_all.deb
+execute_and_log "wget ${CUDA_KEYRING_URL} -O ${NVIDIA_DOWNLOAD_DIR}/cuda-keyring.deb"
+execute_and_log "sudo dpkg -i ${NVIDIA_DOWNLOAD_DIR}/cuda-keyring.deb"
+execute_and_log "rm -f ${NVIDIA_DOWNLOAD_DIR}/cuda-keyring.deb"
 
 log "Installing the CUDA Toolkit..."
-sudo apt-get update
-sudo apt-get install -y cuda-toolkit-12-3
+execute_and_log "sudo apt-get update"
+execute_and_log "sudo apt-get install -y ${CUDA_VERSION}"
 
 log "Stopping graphical session to free up NVIDIA modules..."
-sudo systemctl stop gdm # Replace 'gdm' with your display manager if different
+DISPLAY_MANAGER=$(cat /etc/X11/default-display-manager)
+execute_and_log "sudo systemctl stop ${DISPLAY_MANAGER##*/}"
 
 log "Downloading the NVIDIA driver..."
-wget -P ./ https://us.download.nvidia.com/XFree86/Linux-x86_64/550.54.14/NVIDIA-Linux-x86_64-550.54.14.run
-chmod +x ./NVIDIA-Linux-x86_64-550.54.14.run
+execute_and_log "wget ${NVIDIA_DRIVER_URL} -O ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run"
+execute_and_log "chmod +x ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run"
 
 log "Installing the NVIDIA driver..."
-sudo ./NVIDIA-Linux-x86_64-550.54.14.run
+execute_and_log "sudo ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run --ui=none --no-questions --silent"
+execute_and_log "rm -f ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run"
 
 log "Setting up the NVIDIA Container Toolkit..."
-curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
-curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
-sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-sudo apt-get update
-sudo apt-get install -y nvidia-container-toolkit
+execute_and_log "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
+execute_and_log "curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list"
+execute_and_log "sudo apt-get update"
+execute_and_log "sudo apt-get install -y nvidia-container-toolkit"
 
 log "System needs to be rebooted for changes to take effect. Please reboot the system manually."

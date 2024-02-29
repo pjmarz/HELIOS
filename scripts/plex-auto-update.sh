@@ -60,4 +60,21 @@ for section_id in "${LIBRARY_SECTION_IDS[@]}"; do
     update_library_section "$section_id" || log "Update failed for section: $section_id"
 done
 
+# Function to optimize Plex database
+optimize_database() {
+    log "Optimizing Plex database..."
+    docker exec "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --optimize --verbose --force
+    log "Plex database optimization complete."
+}
+
+# Function to clean Plex bundles
+clean_bundles() {
+    log "Cleaning Plex bundles..."
+    docker exec "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --cleanup --verbose --force
+    log "Plex bundles cleaned."
+}
+
+optimize_database
+clean_bundles
+
 log "Plex library update tasks for all sections completed!"
