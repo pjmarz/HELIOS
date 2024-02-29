@@ -33,6 +33,7 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
 # Function to check file integrity
 check_integrity() {
     local file="$1"
+
     
     log "Checking integrity for $file"
     if ! ffmpeg -v error -i "$file" -f null - 2>&1 | tee -a "$LOG_FILE"; then
@@ -63,8 +64,8 @@ export -f check_integrity
 
 # Loop over each file type and check the integrity
 for extension in "${FILE_EXTENSIONS[@]}"; do
-    log "Checking integrity of .$extension files..."
-    find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'file="$1"; check_integrity "$file"' bash {} \;
+    echo "Checking integrity of .$extension files..."
+    find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'file="$1"; echo "Checking integrity for $file"; if ! ffmpeg -v error -i "$file" -f null - 2>&1 | tee -a "/home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log"; then echo "Error found in $file, see /home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log for details."; else echo "$file: OK"; fi' bash {} \;
 done
 
 # Final log statements based on the process outcome
