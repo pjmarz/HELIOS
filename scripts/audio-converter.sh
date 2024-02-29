@@ -38,26 +38,28 @@ set_metadata() {
     local file="$1"
     local extension="$2"
     local ffmpeg_log="/tmp/ffmpeg_$$.log" # Temporary file for FFmpeg logs
-    
+
     # Check the current language metadata using ffprobe
-    echo "Checking language for $file"
     local lang=$(ffprobe -loglevel error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 "$file")
     
     # If the language is 'unknown' or not set, then set it to English
     if [ -z "$lang" ] || [ "$lang" == "und" ]; then
         echo "Setting language to English for $file"
-        ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$file".tmp 2> "$ffmpeg_log"
+        ffmpeg -hide_banner -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$file".tmp > "$ffmpeg_log" 2>&1
 
-        # Replace the original file if ffmpeg succeeded, else report the error
-        if [ $? -eq 0 ]; then
+        # Check if FFmpeg log contains any messages
+        if [ -s "$ffmpeg_log" ]; then
+            # Log the FFmpeg output
+            echo "FFmpeg output for $file:" >> "$LOG_FILE"
+            cat "$ffmpeg_log" >> "$LOG_FILE"
+        else
             mv "$file".tmp "$file"
             echo "Language set to English for $file"
-        else
-            echo "Failed to set language for $file. Check FFmpeg log: $ffmpeg_log"
         fi
     else
         echo "Skipping $file: language is already set to $lang."
     fi
+
     rm -f "$ffmpeg_log" # Clean up the temporary FFmpeg log file
 }
 
@@ -86,12 +88,4 @@ for extension in "${FILE_EXTENSIONS[@]}"; do
     find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'set_metadata "$0" "$1"' {} "$extension" \;
 done
 
-# Display the log of files that triggered the specific FFmpeg warning or error
-if [ -s "$LOG_FILE" ]; then
-    log "The following files triggered an FFmpeg warning or error:"
-    cat "$LOG_FILE" # This cat command won't have timestamps per line, consider if this meets your needs
-else
-    log "No files triggered the specific FFmpeg warning or error."
-fi
-
-log "Processing complete."
+log "Audio metadata conversion complete."
