@@ -60,7 +60,7 @@ services:
 
   whisparr:
     container_name: whisparr
-    image: ghcr.io/hotio/whisparr:latest
+    image: ghcr.io/hotio/whisparr:v3
     environment:
       - PUID=1000
       - PGID=1000
@@ -176,7 +176,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${ROOT}/config/stash/config:/root/.stash
       ## Point this at your collection.
-      - ${MEDIA}/xxx:/data
+      - ${MEDIA}/xxx:/xxx
       ## This is where your stash's metadata lives
       - ${ROOT}/config/stash/metadata:/metadata
       ## Any other cache content.
