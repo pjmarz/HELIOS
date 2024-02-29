@@ -62,10 +62,20 @@ fi
 # Export the function so it can be used by find -exec
 export -f check_integrity
 
-# Loop over each file type and check the integrity
+# Loop over each file and check the integrity
 for extension in "${FILE_EXTENSIONS[@]}"; do
-    echo "Checking integrity of .$extension files..."
-    find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'file="$1"; echo "Checking integrity for $file"; if ! ffmpeg -v error -i "$file" -f null - 2>&1 | tee -a "/home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log"; then echo "Error found in $file, see /home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log for details."; else echo "$file: OK"; fi' bash {} \;
+    log "Checking integrity of .$extension files..."
+    find "$ROOT_DIRECTORY" -type f -iname "*.$extension" -exec bash -c '
+        file="$1"
+        LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/media-integrity-check.log"
+        timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+        echo "${timestamp} - Checking integrity for $file" | tee -a "$LOG_FILE"
+        if ! ffmpeg -v error -i "$file" -f null - 2>&1; then
+            echo "${timestamp} - Error found in $file, see $LOG_FILE for details." | tee -a "$LOG_FILE"
+        else
+            echo "${timestamp} - $file: OK" | tee -a "$LOG_FILE"
+        fi
+    ' bash {} \;
 done
 
 # Final log statements based on the process outcome
