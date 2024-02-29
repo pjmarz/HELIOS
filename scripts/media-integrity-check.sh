@@ -33,10 +33,9 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
 # Function to check file integrity
 check_integrity() {
     local file="$1"
-
     
     log "Checking integrity for $file"
-    if ! ffmpeg -v error -i "$file" -f null - 2>&1 | tee -a "$LOG_FILE"; then
+    if ! ffmpeg -hwaccel cuda -i "$file" -f null - 2>&1 | tee -a "$LOG_FILE"; then
         log "Error found in $file, see $LOG_FILE for details."
     else
         log "$file: OK"
