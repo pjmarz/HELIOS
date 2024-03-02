@@ -60,7 +60,7 @@ services:
 
   whisparr:
     container_name: whisparr
-    image: ghcr.io/hotio/whisparr:v3
+    image: ghcr.io/hotio/whisparr:latest
     environment:
       - PUID=1000
       - PGID=1000
@@ -163,6 +163,7 @@ services:
       options:
         max-file: "10"
         max-size: "2m"
+    network_mode: host
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
