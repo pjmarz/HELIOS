@@ -128,7 +128,7 @@ services:
     runtime: nvidia
     privileged: true
     environment:
-      - DASHDOT_WIDGET_LIST=os,cpu,storage,ram,gpu,network
+      - DASHDOT_WIDGET_LIST=os,cpu,storage,ram,network,gpu
     ports:
       - 81:3001
     volumes:
@@ -139,6 +139,7 @@ services:
 
   scrutiny:
     container_name: scrutiny
+    privileged: true
     image: ghcr.io/analogj/scrutiny:master-omnibus
     cap_add:
       - SYS_RAWIO
