@@ -48,7 +48,11 @@ log "Updating the system..."
 execute_and_log "sudo apt-get update && sudo apt-get upgrade -y"
 
 log "Installing necessary tools and kernel headers..."
-execute_and_log "sudo apt-get install -y wget build-essential linux-headers-$(uname -r)"
+execute_and_log "sudo apt-get install -y wget build-essential linux-headers-$(uname -r) gcc-12 g++-12"
+
+log "Ensuring GCC-12 is the default compiler..."
+execute_and_log "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 60 --slave /usr/bin/g++ g++ /usr/bin/g++-12"
+execute_and_log "sudo update-alternatives --set gcc /usr/bin/gcc-12"
 
 log "Disabling the Nouveau driver..."
 echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf > /dev/null
@@ -79,16 +83,14 @@ execute_and_log "wget -q ${NVIDIA_DRIVER_URL} -O ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-D
 execute_and_log "chmod +x ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run"
 
 log "Installing the NVIDIA driver..."
+# Explicitly setting the compiler to GCC-12 for NVIDIA driver installation
+export CC=/usr/bin/gcc-12
 execute_and_log "sudo ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run --dkms --ui=none --no-questions --silent"
+unset CC # Unsetting CC to avoid affecting subsequent commands
 
 log "Setting up the NVIDIA Container Toolkit..."
 execute_and_log "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
 execute_and_log "curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list > /dev/null"
 execute_and_log "sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit"
-
-# Clean up downloaded files at the very end
-log "Cleaning up downloaded files..."
-execute_and_log "rm -f ${NVIDIA_DOWNLOAD_DIR}/cuda-keyring.deb"
-execute_and_log "rm -f ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run"
 
 log "System needs to be rebooted for changes to take effect. Please reboot the system manually."
