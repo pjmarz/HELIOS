@@ -68,9 +68,12 @@ services:
     volumes:
         - adguardhome_data:/opt/adguardhome/work
         - adguardhome_data:/opt/adguardhome/conf
+    network_mode: host
     ports:
         - 53:53/tcp
         - 53:53/udp
+        - 67:67/udp
+        - 68:68/udp
         - 80:80/tcp
         - 443:443/tcp
         - 443:443/udp
@@ -120,9 +123,12 @@ services:
       - com.centurylinklabs.watchtower.enable=true
 
   dash:
-    image: mauricenino/dashdot:latest
+    image: mauricenino/dashdot:nvidia
     container_name: dash
+    runtime: nvidia
     privileged: true
+    environment:
+      - DASHDOT_WIDGET_LIST=os,cpu,storage,ram,network,gpu
     ports:
       - 81:3001
     volumes:
