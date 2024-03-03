@@ -4,3 +4,5 @@
 script_logs/
 # Ignore cronjob logs
 cronjob_logs/
+# Ignore nvidia assets 
+assets/nvidia/
