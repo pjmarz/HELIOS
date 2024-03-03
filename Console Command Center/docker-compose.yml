@@ -128,7 +128,7 @@ services:
     runtime: nvidia
     privileged: true
     environment:
-      - DASHDOT_WIDGET_LIST=os,cpu,storage,ram,network,gpu
+      - DASHDOT_WIDGET_LIST=os,cpu,storage,ram,gpu,network
     ports:
       - 81:3001
     volumes:
