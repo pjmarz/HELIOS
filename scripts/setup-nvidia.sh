@@ -20,7 +20,7 @@ CUDA_KEYRING_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubunt
 NVIDIA_DOWNLOAD_DIR="$HOME/Documents/dev/HELIOS/assets/nvidia"
 
 # Log file path
-LOG_FILE="$HOME/Documents/dev/HELIOS/script_logs/nvidia-setup.log"
+LOG_FILE="$HOME/Documents/dev/HELIOS/script_logs/setup-nvidia.log"
 
 # Ensure NVIDIA download directory exists
 mkdir -p "${NVIDIA_DOWNLOAD_DIR}"
@@ -48,7 +48,7 @@ log "Updating the system..."
 execute_and_log "sudo apt-get update && sudo apt-get upgrade -y"
 
 log "Installing necessary tools and kernel headers..."
-execute_and_log "sudo apt-get install -y wget build-essential linux-headers-$(uname -r) gcc-12 g++-12"
+execute_and_log "sudo apt-get install -y wget build-essential linux-headers-$(uname -r) gcc g++"
 
 log "Ensuring GCC-12 is the default compiler..."
 execute_and_log "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 60 --slave /usr/bin/g++ g++ /usr/bin/g++-12"
@@ -87,6 +87,10 @@ log "Installing the NVIDIA driver..."
 export CC=/usr/bin/gcc-12
 execute_and_log "sudo ${NVIDIA_DOWNLOAD_DIR}/NVIDIA-Driver.run --dkms --ui=none --no-questions --silent"
 unset CC # Unsetting CC to avoid affecting subsequent commands
+
+# Installing nvidia-cuda-toolkit
+log "Installing nvidia-cuda-toolkit..."
+execute_and_log "sudo apt-get install -y nvidia-cuda-toolkit"
 
 log "Setting up the NVIDIA Container Toolkit..."
 execute_and_log "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
