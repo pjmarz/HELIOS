@@ -7,6 +7,7 @@ source /home/peter/Documents/dev/HELIOS/env.sh
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/plex-metadata-refresh.log"
 PLEX_CONFIG_DIR="${ROOT}/config/plexdb/Library/Application Support/Plex Media Server"
 CONTAINER_NAME="plex"
+PAL_CONTAINER_NAME="plexautolanguages"  # Added variable for plexautolanguages container
 
 # Define the Plex server details
 PLEX_URL="https://192.168.1.45:32400"
@@ -23,39 +24,30 @@ log() {
     echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
 
-log "Starting Plex library update..."
+log "Starting Plex and plexautolanguages update..."
+
+# Stop plexautolanguages Docker container
+log "Stopping plexautolanguages Docker container..."
+docker stop "$PAL_CONTAINER_NAME"
+log "plexautolanguages Docker container stopped."
 
 # Stop Plex Docker container
 log "Stopping Plex Docker container..."
 docker stop "$CONTAINER_NAME"
 log "Plex Docker container stopped."
 
-# Remove specific directories except for 'Playlists'
-PLEX_METADATA_DIR="$PLEX_CONFIG_DIR/Metadata"
-log "Removing metadata except for 'Playlists'..."
-find "$PLEX_METADATA_DIR" -mindepth 1 -maxdepth 1 ! -name 'Playlists' -exec rm -rf {} \; 2>/dev/null
-log "Metadata removal complete."
-
-# Remove subdirectories of 'localhost' under 'Media'
-PLEX_LOCALHOST_DIR="$PLEX_CONFIG_DIR/Media/localhost"
-log "Removing subdirectories of 'localhost' under 'Media'..."
-if [ -d "$PLEX_LOCALHOST_DIR" ]; then
-    find "$PLEX_LOCALHOST_DIR" -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \; 2>/dev/null
-    log "Subdirectories removal complete."
-else
-    log "The 'localhost' directory does not exist or has already been removed."
-fi
-
-# Remove Plug-in Support Caches
-PLEX_PLUGIN_SUPPORT_CACHES_DIR="$PLEX_CONFIG_DIR/Plug-in Support/Caches"
-log "Removing Plug-in Support Caches..."
-find "$PLEX_PLUGIN_SUPPORT_CACHES_DIR" -mindepth 1 -type d -exec rm -rf {} \; 2>/dev/null
-log "Plug-in Support Caches removal complete."
-
 # Restart Plex Docker container
 log "Restarting Plex Docker container..."
 docker restart "$CONTAINER_NAME"
 log "Plex Docker container restarted. Waiting for Plex to be fully operational..."
+
+# Wait a bit to ensure Plex is fully up
+sleep 15
+
+# Restart plexautolanguages Docker container
+log "Restarting plexautolanguages Docker container..."
+docker start "$PAL_CONTAINER_NAME"
+log "plexautolanguages Docker container restarted."
 
 # Wait a bit to ensure Plex is fully up
 sleep 60
