@@ -108,4 +108,8 @@ execute_and_log "sudo apt-get autoclean"
 # Update initramfs
 execute_and_log "sudo update-initramfs -u"
 
+# Remove the contents of NVIDIA download directory
+log "Removing NVIDIA download directory contents..."
+execute_and_log "rm -rf ${NVIDIA_DRIVER_DIR}/*"
+
 log "System needs to be rebooted. Please reboot the system manually."
