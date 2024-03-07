@@ -2,11 +2,9 @@
 
 # Script to uninstall all NVIDIA related components from Ubuntu
 
-# Source the environment variables
-source /home/peter/Documents/dev/HELIOS/env.sh
-
 # Define paths
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/purge-nvidia.log"
+NVIDIA_DRIVER_DIR="/home/peter/Documents/dev/HELIOS/assets/nvidia"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
@@ -46,7 +44,27 @@ unload_module_if_loaded() {
     fi
 }
 
+# New function for conditional package removal
+remove_package_if_exists() {
+    local package_name="$1"
+    if is_package_installed "$package_name"; then
+        execute_and_log "sudo apt-get remove --purge \"$package_name\" -y"
+    else
+        log "Package $package_name is not installed, skipping."
+    fi
+}
+
 log "Starting NVIDIA components removal process."
+
+# Find and uninstall the NVIDIA driver using a wildcard pattern
+NVIDIA_DRIVER_PATH=$(find $NVIDIA_DRIVER_DIR -name "NVIDIA-Linux-x86_64-*.run" | head -n 1)
+if [ -n "$NVIDIA_DRIVER_PATH" ]; then
+    log "Found NVIDIA driver installer: $NVIDIA_DRIVER_PATH"
+    log "Uninstalling the NVIDIA driver..."
+    execute_and_log "sudo $NVIDIA_DRIVER_PATH --uninstall"
+else
+    log "No NVIDIA driver installer found in $NVIDIA_DRIVER_DIR"
+fi
 
 # Dynamically remove NVIDIA driver packages
 execute_and_log "sudo apt-get remove --purge '^nvidia-.*' -y"
@@ -54,25 +72,21 @@ execute_and_log "sudo apt-get remove --purge '^nvidia-.*' -y"
 # Dynamically remove CUDA toolkit packages
 cuda_packages=$(dpkg -l | grep -E 'cuda-|nvidia-cuda' | awk '{print $2}')
 for package in $cuda_packages; do
-    if is_package_installed "$package"; then
-        execute_and_log "sudo apt-get remove --purge \"$package\" -y"
-    else
-        log "Package $package is not installed, skipping."
-    fi
+    remove_package_if_exists "$package"
 done
 
 # Dynamically remove any other NVIDIA related packages (libraries, encoders, etc.)
 nvidia_related_packages=$(dpkg -l | grep -E 'libnvidia-|nvidia-' | awk '{print $2}')
 for package in $nvidia_related_packages; do
-    if is_package_installed "$package"; then
-        execute_and_log "sudo apt-get remove --purge \"$package\" -y"
-    else
-        log "Package $package is not installed, skipping."
-    fi
+    remove_package_if_exists "$package"
 done
 
 # Stop NVIDIA persistence daemon
-execute_and_log "sudo systemctl stop nvidia-persistenced"
+if systemctl --all --type service | grep -q nvidia-persistenced; then
+    execute_and_log "sudo systemctl stop nvidia-persistenced"
+else
+    log "nvidia-persistenced service not loaded, skipping."
+fi
 
 # Stop GDM to release the NVIDIA kernel modules
 execute_and_log "sudo systemctl stop gdm"

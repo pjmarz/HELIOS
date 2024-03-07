@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Source the environment variables
-source /home/peter/Documents/dev/HELIOS/env.sh
+# Define the Plex Docker container name directly
+CONTAINER_NAME="plex"
 
 # Define the logfile and Plex server details
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/plex-auto-update.log"
@@ -52,29 +52,11 @@ update_library_section() {
     fi
     
     sleep 3600
-
 }
 
 # Iterate over each library section and update
 for section_id in "${LIBRARY_SECTION_IDS[@]}"; do
     update_library_section "$section_id" || log "Update failed for section: $section_id"
 done
-
-# Function to optimize Plex database
-optimize_database() {
-    log "Optimizing Plex database..."
-    docker exec "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --optimize --verbose --force
-    log "Plex database optimization complete."
-}
-
-# Function to clean Plex bundles
-clean_bundles() {
-    log "Cleaning Plex bundles..."
-    docker exec "$CONTAINER_NAME" /usr/lib/plexmediaserver/Plex\ Media\ Scanner --cleanup --verbose --force
-    log "Plex bundles cleaned."
-}
-
-optimize_database
-clean_bundles
 
 log "Plex library update tasks for all sections completed!"
