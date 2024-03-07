@@ -1,19 +1,6 @@
 version: "3.8"
 services:
 
-  dockovpn:
-    container_name: dockovpn
-    image: alekslitvinenk/openvpn:latest
-    cap_add:
-        - NET_ADMIN
-    ports:
-        - 1194:1194/udp
-    environment:
-        HOST_ADDR: ${HOST_ADDR}
-    volumes:
-        - dockovpn_data:/opt/Dockovpn_data
-    restart: unless-stopped
-
   agent:
     image: portainer/agent:latest
     container_name: portaineragent
