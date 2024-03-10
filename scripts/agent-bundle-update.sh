@@ -4,6 +4,9 @@
 # https://github.com/PAhelper/PhoenixAdult.bundle
 # https://github.com/Darklyter/StashPlexAgent.bundle
 
+# Source the environment variables
+source /home/peter/Documents/dev/HELIOS/env.sh
+
 # Log file path
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/tpdb-bundle-update.log"
 
