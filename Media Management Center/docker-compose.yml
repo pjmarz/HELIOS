@@ -130,7 +130,7 @@ services:
     network_mode: host
     volumes:
       - ${ROOT}/config/plexdb:/config
-      - ${ROOT}/Transcode:/Transcode
+      - ${ROOT}/config/plexdb/Library/Application Support/Plex Media Server/Transcode:/transcode
       - ${MEDIA}/movies:/movies
       - ${MEDIA}/tv:/tv
       - ${MEDIA}/xxx:/xxx
