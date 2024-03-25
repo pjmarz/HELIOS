@@ -6,7 +6,7 @@ CONTAINER_NAME="plex"
 # Define the logfile and Plex server details
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/plex-auto-update.log"
 PLEX_URL="https://192.168.1.45:32400"
-TOKEN="reKFC-C828Gqv6aJ2ehG"
+TOKEN="kn5myHmFyQy2HgqzWZ4T"
 LIBRARY_SECTION_IDS=("1" "2" "3")  # Array of library IDs
 
 # Clear the log file at the beginning of the script
@@ -33,7 +33,7 @@ update_library_section() {
         return 1
     fi
 
-    sleep 60
+    sleep 10
 
     log "Starting Plex metadata refresh for section ${section_id}..."
     response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh?force=1&X-Plex-Token=${TOKEN}")
@@ -42,7 +42,7 @@ update_library_section() {
         return 1
     fi
 
-    sleep 3600
+    sleep 1800
 
     log "Starting Plex media analysis for section ${section_id}..."
     response=$(curl -k -s -X PUT "${PLEX_URL}/library/sections/${section_id}/analyze" -H "X-Plex-Token: ${TOKEN}")
@@ -51,7 +51,7 @@ update_library_section() {
         return 1
     fi
     
-    sleep 3600
+    sleep 1800
 }
 
 # Iterate over each library section and update

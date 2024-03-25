@@ -4,6 +4,8 @@
 # https://github.com/PAhelper/PhoenixAdult.bundle
 # https://github.com/Darklyter/StashPlexAgent.bundle
 
+# TPDb API Key: Y0kXbIBEcZ36ukpCNWPrHecdZAtRePnGmFv6oB0u13fd0218
+
 # Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
 
