@@ -10,7 +10,7 @@
 source /home/peter/Documents/dev/HELIOS/env.sh
 
 # Log file path
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/tpdb-bundle-update.log"
+LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/agent-bundle-update.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"

@@ -5,11 +5,12 @@
 # Define paths
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/purge-nvidia.log"
 NVIDIA_DRIVER_DIR="/home/peter/Documents/dev/HELIOS/assets/nvidia"
+NVIDIA_DRIVER_PATH="${NVIDIA_DRIVER_DIR}/NVIDIA-Linux-x86_64-*.run"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
 
-# Function to prepend the current date and time to log messages
+# Function to log messages
 log() {
     local msg="$@"
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
@@ -25,7 +26,7 @@ is_package_installed() {
 execute_and_log() {
     local command="$@"
     log "Executing: $command"
-    if eval $command; then
+    if eval $command | tee -a "$LOG_FILE"; then
         log "Successfully executed: $command"
     else
         log "Error executing: $command"
@@ -33,32 +34,23 @@ execute_and_log() {
     fi
 }
 
-# Function to check and unload a module if it is loaded
-unload_module_if_loaded() {
-    local module="$1"
-    if lsmod | grep -q "^${module}"; then
-        log "Module ${module} is loaded, attempting to unload..."
-        execute_and_log "sudo rmmod ${module}"
-    else
-        log "Module ${module} is not currently loaded, skipping."
-    fi
-}
-
-# New function for conditional package removal
-remove_package_if_exists() {
-    local package_name="$1"
-    if is_package_installed "$package_name"; then
-        execute_and_log "sudo apt-get remove --purge \"$package_name\" -y"
-    else
-        log "Package $package_name is not installed, skipping."
-    fi
+# Function to unload kernel modules
+unload_kernel_modules() {
+    local modules=("$@")
+    for module in "${modules[@]}"; do
+        if lsmod | grep -q "^${module}"; then
+            log "Module ${module} is loaded, attempting to unload..."
+            execute_and_log "sudo rmmod ${module}"
+        else
+            log "Module ${module} is not currently loaded, skipping."
+        fi
+    done
 }
 
 log "Starting NVIDIA components removal process."
 
-# Find and uninstall the NVIDIA driver using a wildcard pattern
-NVIDIA_DRIVER_PATH=$(find $NVIDIA_DRIVER_DIR -name "NVIDIA-Linux-x86_64-*.run" | head -n 1)
-if [ -n "$NVIDIA_DRIVER_PATH" ]; then
+# Uninstall the NVIDIA driver
+if [ -f "$NVIDIA_DRIVER_PATH" ]; then
     log "Found NVIDIA driver installer: $NVIDIA_DRIVER_PATH"
     log "Uninstalling the NVIDIA driver..."
     execute_and_log "sudo $NVIDIA_DRIVER_PATH --uninstall"
@@ -66,20 +58,16 @@ else
     log "No NVIDIA driver installer found in $NVIDIA_DRIVER_DIR"
 fi
 
-# Dynamically remove NVIDIA driver packages
+# Remove NVIDIA driver packages
 execute_and_log "sudo apt-get remove --purge '^nvidia-.*' -y"
 
-# Dynamically remove CUDA toolkit packages
-cuda_packages=$(dpkg -l | grep -E 'cuda-|nvidia-cuda' | awk '{print $2}')
-for package in $cuda_packages; do
-    remove_package_if_exists "$package"
-done
-
-# Dynamically remove any other NVIDIA related packages (libraries, encoders, etc.)
-nvidia_related_packages=$(dpkg -l | grep -E 'libnvidia-|nvidia-' | awk '{print $2}')
-for package in $nvidia_related_packages; do
-    remove_package_if_exists "$package"
-done
+# Remove CUDA toolkit and other NVIDIA related packages
+packages_to_remove=$(dpkg -l | grep -E 'cuda-|nvidia-cuda|libnvidia-|nvidia-' | awk '{print $2}')
+if [ -n "$packages_to_remove" ]; then
+    execute_and_log "sudo apt-get remove --purge $packages_to_remove -y"
+else
+    log "No CUDA toolkit or other NVIDIA related packages found."
+fi
 
 # Stop NVIDIA persistence daemon
 if systemctl --all --type service | grep -q nvidia-persistenced; then
@@ -91,18 +79,14 @@ fi
 # Stop GDM to release the NVIDIA kernel modules
 execute_and_log "sudo systemctl stop gdm"
 
-# Attempt to remove the NVIDIA kernel modules if they are loaded
-log "Attempting to remove NVIDIA kernel modules..."
-unload_module_if_loaded nvidia_drm
-unload_module_if_loaded nvidia_modeset
-unload_module_if_loaded nvidia_uvm
-unload_module_if_loaded nvidia
+# Unload NVIDIA kernel modules
+unload_kernel_modules nvidia_drm nvidia_modeset nvidia_uvm nvidia
 
-# Remove NVIDIA container toolkit, if installed
+# Remove NVIDIA container toolkit
 execute_and_log "sudo apt-get remove --purge '^nvidia-container.*' -y"
 
 # Remove any other residual configuration files
-execute_and_log "sudo apt-get autoremove -y"
+execute_and_log "sudo apt-get autoremove --purge -y"
 execute_and_log "sudo apt-get autoclean"
 
 # Update initramfs
@@ -110,6 +94,14 @@ execute_and_log "sudo update-initramfs -u"
 
 # Remove the contents of NVIDIA download directory
 log "Removing NVIDIA download directory contents..."
-execute_and_log "rm -rf ${NVIDIA_DRIVER_DIR}/*"
+execute_and_log "sudo rm -rf ${NVIDIA_DRIVER_DIR}/*"
 
-log "System needs to be rebooted. Please reboot the system manually."
+# Prompt for reboot
+read -p "System needs to be rebooted. Reboot now? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    log "Rebooting the system..."
+    execute_and_log "sudo reboot"
+else
+    log "Please reboot the system manually when convenient."
+fi

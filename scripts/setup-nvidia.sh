@@ -30,7 +30,7 @@ execute_and_log() {
     local command="$1"
     local error_handling="${2:-critical}"
     log "Executing: $command"
-    if ! eval "$command"; then
+    if ! eval "$command" | tee -a "$LOG_FILE"; then
         log "Error executing: $command"
         if [ "$error_handling" = "critical" ]; then
             log "Critical error encountered. Stopping script."
@@ -38,7 +38,14 @@ execute_and_log() {
         else
             log "Non-critical error encountered. Proceeding."
         fi
+    else
+        log "Successfully executed: $command"
     fi
+}
+
+# Function to check if Nouveau driver is in use
+is_nouveau_in_use() {
+    lsmod | grep -q "^nouveau"
 }
 
 log "Updating the system..."
@@ -47,9 +54,13 @@ execute_and_log "sudo apt-get update && sudo apt-get upgrade -y"
 log "Installing necessary tools and kernel headers..."
 execute_and_log "sudo apt-get install -y wget build-essential linux-headers-$(uname -r) gcc g++"
 
-log "Disabling the Nouveau driver..."
-echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf > /dev/null
-execute_and_log "sudo update-initramfs -u"
+if is_nouveau_in_use; then
+    log "Disabling the Nouveau driver..."
+    echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf > /dev/null
+    execute_and_log "sudo update-initramfs -u"
+else
+    log "Nouveau driver is not in use, skipping disabling."
+fi
 
 log "Downloading and installing the latest NVIDIA driver..."
 NVIDIA_DRIVER_VERSION="550.67"  # Manually update this version if necessary
@@ -64,9 +75,28 @@ execute_and_log "sudo ./${NVIDIA_DRIVER_FILE} --dkms --ui=none --no-questions --
 log "Installing nvidia-cuda-toolkit..."
 execute_and_log "sudo apt-get install -y nvidia-cuda-toolkit"
 
+# Install NVIDIA Container Toolkit
 log "Setting up the NVIDIA Container Toolkit..."
-execute_and_log "distribution=\$(. /etc/os-release;echo \$ID\$VERSION_ID) && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
-execute_and_log "curl -s -L https://nvidia.github.io/nvidia-docker/\$distribution/nvidia-docker.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list > /dev/null"
-execute_and_log "sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit"
+execute_and_log "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
+execute_and_log "curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list"
+execute_and_log "sudo apt-get update"
+execute_and_log "sudo apt-get install -y nvidia-container-toolkit"
 
-log "System needs to be rebooted for changes to take effect. Please reboot the system manually."
+# Validate NVIDIA driver installation
+log "Validating NVIDIA driver installation..."
+if ! nvidia-smi | tee -a "$LOG_FILE"; then
+    log "NVIDIA driver validation failed. Please check the log file for more details."
+    exit 1
+else
+    log "NVIDIA driver validation successful."
+fi
+
+# Prompt for reboot
+read -p "System needs to be rebooted for changes to take effect. Reboot now? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    log "Rebooting the system..."
+    execute_and_log "sudo reboot"
+else
+    log "Please reboot the system manually when convenient."
+fi
