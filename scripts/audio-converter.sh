@@ -3,18 +3,24 @@
 # for specified video file types within the root directory and its subdirectories,
 # but only if the current language is set to 'unknown'.
 
+# Log file path
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/audio-converter.log"
-exec > >(tee -a "$LOG_FILE") 2>&1
+
+# Function to log messages with timestamps
+log() {
+    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
 
-echo "Starting script..."
+# Log the start of the script
+log "Starting script..."
 
 # Root directory containing the media files
 ROOT_DIRECTORY="/mnt/LOAS/xxx"
 
-echo "Root directory set to $ROOT_DIRECTORY"
+log "Root directory set to $ROOT_DIRECTORY"
 
 # Array of video file extensions to process
 declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
@@ -29,44 +35,41 @@ set_metadata() {
     local extension="$2"
     
     # Check the current language metadata using ffprobe
-    echo "Checking language for $file"
+    log "Checking language for $file"
     local lang=$(ffprobe -loglevel error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 "$file")
     
     # If the language is 'unknown' or not set, then set it to English
     if [ -z "$lang" ] || [ "$lang" == "und" ]; then
-        echo "Setting language to English for $file"
+        log "Setting language to English for $file"
         local tmpfile="$(mktemp --suffix=".$extension")"
         ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$tmpfile" && mv -f "$tmpfile" "$file"
-        echo "Language set to English for $file"
+        log "Language set to English for $file"
     else
-        echo "Skipping $file: language is already set to $lang."
+        log "Skipping $file: language is already set to $lang."
     fi
 }
 
 # Count total number of files to process
-echo "Counting total number of files to process..."
+log "Counting total number of files to process..."
 TOTAL=0
 for extension in "${FILE_EXTENSIONS[@]}"; do
     count=$(find "$ROOT_DIRECTORY" -type f -name "*.$extension" 2>/dev/null | wc -l)
-    echo "Found $count files with .$extension extension."
+    log "Found $count files with .$extension extension."
     TOTAL=$((TOTAL + count))
 done
 
-echo "Total number of files to process: $TOTAL"
+log "Total number of files to process: $TOTAL"
 
 # Exit if no files are found
 if [ "$TOTAL" -le 0 ]; then
-    echo "No files found to process. Please check your directory path and file extensions."
+    log "No files found to process. Please check your directory path and file extensions."
     exit 1
 fi
 
-# Export the function so it can be used by find -exec
-export -f set_metadata
-
 # Loop over each file type and apply the metadata changes
 for extension in "${FILE_EXTENSIONS[@]}"; do
-    echo "Processing .$extension files..."
+    log "Processing .$extension files..."
     find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'set_metadata "$0" "$1"' {} "$extension" \;
 done
 
-echo "Audio conversion complete."
+log "Audio conversion complete."
