@@ -3,18 +3,17 @@
 # for specified video file types within the root directory and its subdirectories,
 # but only if the current language is set to 'unknown'.
 
-# Log file path
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/audio-converter.log"
-
-# Function to log messages with timestamps
-log() {
-    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
-}
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
 
-# Log the start of the script
+# Function to log with timestamp
+log() {
+    echo "$(date +'%Y-%m-%d %H:%M:%S') $1"
+}
+
 log "Starting script..."
 
 # Root directory containing the media files
@@ -65,6 +64,10 @@ if [ "$TOTAL" -le 0 ]; then
     log "No files found to process. Please check your directory path and file extensions."
     exit 1
 fi
+
+# Export the function so it can be used by find -exec
+export -f log
+export -f set_metadata
 
 # Loop over each file type and apply the metadata changes
 for extension in "${FILE_EXTENSIONS[@]}"; do
