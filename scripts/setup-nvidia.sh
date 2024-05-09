@@ -63,7 +63,7 @@ else
 fi
 
 log "Downloading and installing the latest NVIDIA driver..."
-NVIDIA_DRIVER_VERSION="550.76"  # Manually update this version if necessary
+NVIDIA_DRIVER_VERSION="550.78"  # Manually update this version if necessary
 NVIDIA_DRIVER_URL="https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
 # Navigate to NVIDIA download directory and download the driver with its original name
 cd "${NVIDIA_DOWNLOAD_DIR}" && execute_and_log "wget -q ${NVIDIA_DRIVER_URL}"
