@@ -11,11 +11,13 @@
 # -------------------------------------------------------------------------- #
 
 # Define variables for logs and download directories
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/setup-nvidia.log"
+LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/install-nvidia.log"
 NVIDIA_DOWNLOAD_DIR="/home/peter/Documents/dev/HELIOS/assets/nvidia"
+LOG_DIR="$(dirname "$LOG_FILE")"
 
-# Ensure NVIDIA download directory exists
+# Ensure NVIDIA download directory and log directory exist
 mkdir -p "${NVIDIA_DOWNLOAD_DIR}"
+mkdir -p "$LOG_DIR"
 
 # Clear the log file at the beginning of the script
 : > "$LOG_FILE"
@@ -48,6 +50,12 @@ is_nouveau_in_use() {
     lsmod | grep -q "^nouveau"
 }
 
+# Check if script is run as root
+if [[ $EUID -ne 0 ]]; then
+    log "This script must be run as root"
+    exit 1
+fi
+
 log "Updating the system..."
 execute_and_log "sudo apt-get update && sudo apt-get upgrade -y"
 
@@ -61,16 +69,6 @@ if is_nouveau_in_use; then
 else
     log "Nouveau driver is not in use, skipping disabling."
 fi
-
-log "Downloading and installing the latest NVIDIA driver..."
-NVIDIA_DRIVER_VERSION="550.78"  # Manually update this version if necessary
-NVIDIA_DRIVER_URL="https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run"
-# Navigate to NVIDIA download directory and download the driver with its original name
-cd "${NVIDIA_DOWNLOAD_DIR}" && execute_and_log "wget -q ${NVIDIA_DRIVER_URL}"
-# Find the downloaded driver file
-NVIDIA_DRIVER_FILE=$(ls | grep "NVIDIA-Linux-x86_64-.*.run")
-execute_and_log "chmod +x ${NVIDIA_DRIVER_FILE}"
-execute_and_log "sudo ./${NVIDIA_DRIVER_FILE} --dkms --ui=none --no-questions --silent"
 
 log "Installing nvidia-cuda-toolkit..."
 execute_and_log "sudo apt-get install -y nvidia-cuda-toolkit"
