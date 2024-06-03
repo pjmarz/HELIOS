@@ -28,6 +28,9 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
                             "m4v" "svi" "3gp" "3g2" "mxf" "roq" "nsv" "flv" "f4v"
                             "f4p" "f4a" "f4b" "mod")
 
+# Declare an associative array to hold the count of converted files for each extension
+declare -A CONVERTED_COUNTS
+
 # Function to set metadata
 set_metadata() {
     local file="$1"
@@ -43,6 +46,7 @@ set_metadata() {
         local tmpfile="$(mktemp --suffix=".$extension")"
         ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$tmpfile" && mv -f "$tmpfile" "$file"
         log "Language set to English for $file"
+        ((CONVERTED_COUNTS["$extension"]++))
     else
         log "Skipping $file: language is already set to $lang."
     fi
@@ -55,6 +59,7 @@ for extension in "${FILE_EXTENSIONS[@]}"; do
     count=$(find "$ROOT_DIRECTORY" -type f -name "*.$extension" 2>/dev/null | wc -l)
     log "Found $count files with .$extension extension."
     TOTAL=$((TOTAL + count))
+    CONVERTED_COUNTS["$extension"]=0
 done
 
 log "Total number of files to process: $TOTAL"
@@ -65,9 +70,10 @@ if [ "$TOTAL" -le 0 ]; then
     exit 1
 fi
 
-# Export the function so it can be used by find -exec
+# Export the function and associative array so they can be used by find -exec
 export -f log
 export -f set_metadata
+export -A CONVERTED_COUNTS
 
 # Loop over each file type and apply the metadata changes
 for extension in "${FILE_EXTENSIONS[@]}"; do
@@ -76,3 +82,10 @@ for extension in "${FILE_EXTENSIONS[@]}"; do
 done
 
 log "Audio conversion complete."
+
+# Log the total number of files and how many were converted for each extension
+log "Summary of conversion:"
+log "Total number of files processed: $TOTAL"
+for extension in "${FILE_EXTENSIONS[@]}"; do
+    log "Converted ${CONVERTED_COUNTS["$extension"]} files with .$extension extension."
+done

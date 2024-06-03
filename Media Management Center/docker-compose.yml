@@ -4,9 +4,10 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/radarr:/config
       - ${MEDIA}/movies:/movies
@@ -23,9 +24,10 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/sonarr:/config
       - ${MEDIA}/tv:/tv
@@ -62,8 +64,9 @@ services:
     image: ghcr.io/hotio/whisparr:latest # v2 is "latest" v3 is dev branch
     environment:
       - PUID=1000
-      - PGID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/whisparr:/config
       - ${MEDIA}/xxx:/xxx
@@ -142,7 +145,7 @@ services:
     container_name: plexautolanguages
     environment:
       - PLEX_URL=http://192.168.1.45:32400
-      - PLEX_TOKEN=reKFC-C828Gqv6aJ2ehG
+      - PLEX_TOKEN=9_nBV2e7ArYx8JPEhasy
       - TZ=${TZ}    
     volumes:
      - ${ROOT}/config/plexautolanguages:/config
