@@ -92,9 +92,10 @@ services:
     image: ghcr.io/ajnart/homarr:latest
     restart: unless-stopped
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
       - PASSWORD=Arrowleaf
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -115,6 +116,7 @@ services:
     privileged: true
     environment:
       - DASHDOT_WIDGET_LIST=os,cpu,storage,ram,network,gpu
+      - DASHDOT_USE_NETWORK_INTERFACE=eno1
     ports:
       - 81:3001
     volumes:

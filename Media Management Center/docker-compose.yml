@@ -44,9 +44,10 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/bazarr:/config
       - ${MEDIA}/movies:/movies
@@ -85,9 +86,10 @@ services:
     ports:
       - 9696:9696
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/prowlarr:/config
     restart: unless-stopped
@@ -101,8 +103,9 @@ services:
     container_name: sabnzbd
     environment:
       - PUID=1000
-      - PGID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/sabnzbd:/config
       - ${CHARON}/sabnzbd/downloads:/downloads
