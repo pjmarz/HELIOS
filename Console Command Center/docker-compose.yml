@@ -149,6 +149,22 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=${TZ}
+      - UMASK=002
+    volumes:
+      - ${ROOT}/config/tautulli:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
 networks:
   agent_network:
   multimediaservices_network:

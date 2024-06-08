@@ -130,9 +130,10 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - VERSION=docker
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     network_mode: host
     volumes:
       - ${ROOT}/config/plexdb:/config
