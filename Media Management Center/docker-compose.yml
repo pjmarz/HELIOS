@@ -171,9 +171,10 @@ services:
         max-size: "2m"
     network_mode: host
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
       - STASH_STASH=/data/
       - STASH_GENERATED=/generated/
       - STASH_METADATA=/metadata/

@@ -39,7 +39,7 @@ if [[ -z "$nvidia_packages" ]]; then
     log "No NVIDIA packages found to upgrade."
 else
     log "Upgrading NVIDIA-related packages..."
-    execute_and_log "sudo apt-get install --only-upgrade $nvidia_packages"
+    execute_and_log "sudo apt-get dist-upgrade -y"
 fi
 
 log "Cleaning up unnecessary packages..."
