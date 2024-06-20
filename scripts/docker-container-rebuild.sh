@@ -80,4 +80,4 @@ done
 # Clean up any unused images, containers, networks, and volumes
 prune_docker_system
 
-log "Rebuild completed successfully at $(date)"
+log "Rebuild completed successfully at $(date). Log file is located at $LOG_FILE"

@@ -20,7 +20,7 @@ log() {
 DOCKER_COMPOSE_DIR="/home/peter/Documents/dev/HELIOS/Media Management Center"
 
 # Log the start of the script
-log "Starting new script run"
+log "Starting clean-sabnzbd.sh..."
 
 # Stop sabnzbd service
 log "Stopping sabnzbd service"

@@ -67,4 +67,4 @@ restart_docker_compose "/home/peter/Documents/dev/HELIOS/Console Command Center"
 # Restart docker-compose for Media Management Center
 restart_docker_compose "/home/peter/Documents/dev/HELIOS/Media Management Center"
 
-log_message "Docker restart process completed!"
+log_message "Docker restart process completed! Log file is located at $LOG_FILE"

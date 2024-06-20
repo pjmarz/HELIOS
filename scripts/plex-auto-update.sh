@@ -59,4 +59,4 @@ for section_id in "${LIBRARY_SECTION_IDS[@]}"; do
     update_library_section "$section_id" || log "Update failed for section: $section_id"
 done
 
-log "Plex library update tasks for all sections completed!"
+log "Plex library update tasks for all sections completed! Log file is located at $LOG_FILE"

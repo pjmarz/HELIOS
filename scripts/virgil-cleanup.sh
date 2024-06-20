@@ -81,4 +81,4 @@ log_message "Clearing trash..."
 rm -rf ~/.local/share/Trash/* | tee -a "$LOG_FILE"
 check_status "rm -rf ~/.local/share/Trash/*" "Failed to clear trash."
 
-log_message "System cleanup complete!"
+log_message "System cleanup complete! Log file is located at $LOG_FILE"

@@ -92,4 +92,4 @@ for extension in "${FILE_EXTENSIONS[@]}"; do
     find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'set_metadata "$0" "$1"' {} "$extension" \;
 done
 
-log "Audio conversion complete."
+log "Audio conversion complete. Log file is located at $LOG_FILE"
