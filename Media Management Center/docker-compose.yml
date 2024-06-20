@@ -62,7 +62,7 @@ services:
 
   whisparr:
     container_name: whisparr
-    image: ghcr.io/hotio/whisparr:latest # "latest" is v2, "v3" is dev branch
+    image: ghcr.io/hotio/whisparr:latest
     environment:
       - PUID=1000
       - PGID=984

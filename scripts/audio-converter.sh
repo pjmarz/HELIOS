@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script sets the language metadata for audio tracks to English
 # for specified video file types within the root directory and its subdirectories,
-# but only if the current language is set to 'unknown'.
+# but only if the current language is set to 'unknown', and updates Plex metadata.
 
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/audio-converter.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
@@ -28,6 +28,10 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
                             "m4v" "svi" "3gp" "3g2" "mxf" "roq" "nsv" "flv" "f4v"
                             "f4p" "f4a" "f4b" "mod")
 
+# Plex server details
+PLEX_SERVER="https://192.168.1.45:32400"
+PLEX_TOKEN="9_nBV2e7ArYx8JPEhasy"
+
 # Function to set metadata
 set_metadata() {
     local file="$1"
@@ -43,9 +47,21 @@ set_metadata() {
         local tmpfile="$(mktemp --suffix=".$extension")"
         ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$tmpfile" && mv -f "$tmpfile" "$file"
         log "Language set to English for $file"
+        
+        # Update Plex metadata
+        update_plex_metadata "$file"
     else
         log "Skipping $file: language is already set to $lang."
     fi
+}
+
+# Function to update Plex metadata
+update_plex_metadata() {
+    local file="$1"
+    log "Updating Plex metadata for $file"
+    local filepath=$(echo "$file" | sed 's/ /%20/g')
+    curl -X PUT "${PLEX_SERVER}/library/sections/all/refresh?path=${filepath}&X-Plex-Token=${PLEX_TOKEN}"
+    log "Plex metadata updated for $file"
 }
 
 # Count total number of files to process
@@ -68,6 +84,7 @@ fi
 # Export the function so it can be used by find -exec
 export -f log
 export -f set_metadata
+export -f update_plex_metadata
 
 # Loop over each file type and apply the metadata changes
 for extension in "${FILE_EXTENSIONS[@]}"; do
