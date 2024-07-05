@@ -1,5 +1,23 @@
 services:
 
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=${TZ}
+      - UMASK=002
+    volumes:
+      - ${ROOT}/config/overseerr:/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+    networks:
+      - multimediaservices_network
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
