@@ -4,7 +4,7 @@
 source /home/peter/Documents/dev/HELIOS/env.sh
 
 # Define paths
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/clean-sabnzbd.log"
+LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/clean-usenet.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
@@ -20,33 +20,31 @@ log() {
 DOCKER_COMPOSE_DIR="/home/peter/Documents/dev/HELIOS/Media Management Center"
 
 # Log the start of the script
-log "Starting clean-sabnzbd.sh..."
+log "Starting clean-usenet.sh..."
 
 # Stop sabnzbd service
 log "Stopping sabnzbd service"
 (cd "$DOCKER_COMPOSE_DIR" && docker compose stop sabnzbd)
 
-# Define the base directory for completed downloads
-BASE_DIR="/mnt/CHARON/sabnzbd/downloads/completed"
+# Define the base directory for incomplete and completed downloads
+INCOMPLETE_DIR="/mnt/LOAS/usenet/incomplete"
+COMPLETE_DIR="/mnt/LOAS/usenet/complete"
 
-# Define the intermediate directory
-INTERMEDIATE_DIR="/mnt/CHARON/sabnzbd/downloads/intermediate"
-
-# Delete all contents of the intermediate directory
-log "Deleting all contents of $INTERMEDIATE_DIR"
-rm -rf "${INTERMEDIATE_DIR:?}"/*
+# Delete all contents of the incomplete directory
+log "Deleting all contents of $INCOMPLETE_DIR"
+rm -rf "${INCOMPLETE_DIR:?}"/*
 
 # List of folders to clear within the completed directory
 FOLDERS=("default" "movies" "tv" "xxx")
 
-# Loop through each folder in the completed directory and delete its contents
+# Loop through each folder in the complete directory and delete its contents
 for folder in "${FOLDERS[@]}"
 do
-    log "Deleting contents of $BASE_DIR/$folder"
-    rm -rf "${BASE_DIR:?}/${folder:?}"/*
+    log "Deleting contents of $COMPLETE_DIR/$folder"
+    rm -rf "${COMPLETE_DIR:?}/${folder:?}"/*
 done
 
-log "All specified folders, including the intermediate directory, have been cleared."
+log "All specified folders, including the incomplete directory, have been cleared."
 
 # Restart sabnzbd service
 log "Restarting sabnzbd service"

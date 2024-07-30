@@ -28,8 +28,8 @@ services:
       - UMASK=002
     volumes:
       - ${ROOT}/config/radarr:/config
-      - ${MEDIA}/movies:/movies
-      - ${CHARON}/sabnzbd/downloads:/downloads
+      - ${LOAS}/media/movies:/movies
+      - ${LOAS}/usenet:/usenet
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -48,8 +48,8 @@ services:
       - UMASK=002
     volumes:
       - ${ROOT}/config/sonarr:/config
-      - ${MEDIA}/tv:/tv
-      - ${CHARON}/sabnzbd/downloads:/downloads
+      - ${LOAS}/media/tv:/tv
+      - ${LOAS}/usenet:/usenet
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -68,8 +68,8 @@ services:
       - UMASK=002
     volumes:
       - ${ROOT}/config/bazarr:/config
-      - ${MEDIA}/movies:/movies
-      - ${MEDIA}/tv:/tv
+      - ${LOAS}/media/movies:/movies
+      - ${LOAS}/media/tv:/tv
     ports:
       - 6767:6767
     restart: unless-stopped
@@ -88,8 +88,8 @@ services:
       - UMASK=002
     volumes:
       - ${ROOT}/config/whisparr:/config
-      - ${MEDIA}/xxx:/xxx
-      - ${CHARON}/sabnzbd/downloads:/downloads
+      - ${LOAS}/media/xxx:/xxx
+      - ${LOAS}/usenet:/usenet
     ports:
       - 6969:6969
     restart: unless-stopped
@@ -126,9 +126,7 @@ services:
       - UMASK=002
     volumes:
       - ${ROOT}/config/sabnzbd:/config
-      - ${CHARON}/sabnzbd/downloads:/downloads
-      - ${CHARON}/sabnzbd/downloads/intermediate:/intermediate
-      - ${CHARON}/sabnzbd/downloads/completed:/completed
+      - ${LOAS}/usenet:/usenet
     ports:
       - 8080:8080
     restart: unless-stopped
@@ -155,10 +153,10 @@ services:
     network_mode: host
     volumes:
       - ${ROOT}/config/plexdb:/config
-      - ${ROOT}/config/plexdb/Library/Application Support/Plex Media Server/Transcode:/transcode
-      - ${MEDIA}/movies:/movies
-      - ${MEDIA}/tv:/tv
-      - ${MEDIA}/xxx:/xxx
+      - ${TRANSCODE}:/transcode
+      - ${LOAS}/media/movies:/movies
+      - ${LOAS}/media/tv:/tv
+      - ${LOAS}/media/xxx:/xxx
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
@@ -200,8 +198,8 @@ services:
       - STASH_PORT=9999
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ${LOAS}/media/xxx:/xxx
       - ${ROOT}/config/stash/config:/root/.stash
-      - ${MEDIA}/xxx:/xxx
       - ${ROOT}/config/stash/metadata:/metadata
       - ${ROOT}/config/stash/cache:/cache
       - ${ROOT}/config/stash/blobs:/blobs
