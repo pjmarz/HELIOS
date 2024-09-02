@@ -46,9 +46,11 @@ services:
     volumes:
       - mosquitto-conf:/mosquitto/config
       - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
 
 volumes:
   teslamate-db:
   teslamate-grafana-data:
   mosquitto-conf:
   mosquitto-data:
+  mosquitto-log:
