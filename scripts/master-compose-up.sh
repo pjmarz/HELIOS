@@ -6,6 +6,7 @@ source /home/peter/Documents/dev/HELIOS/env.sh
 # Define the paths to the directories containing your docker-compose files
 console_command_center_path="/home/peter/Documents/dev/HELIOS/Console Command Center"
 media_management_center_path="/home/peter/Documents/dev/HELIOS/Media Management Center"
+tesla_management_center_path="/home/peter/Documents/dev/HELIOS/Tesla Management Center"
 
 # Define the log file
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/master-compose-up.log"
@@ -27,9 +28,10 @@ run_docker_compose_up() {
     log "docker-compose up finished in $1"
 }
 
-# Run docker-compose up -d in both directories and log the output
+# Run docker-compose up -d in all directories and log the output
 run_docker_compose_up "$console_command_center_path" &
 run_docker_compose_up "$media_management_center_path" &
+run_docker_compose_up "$tesla_management_center_path" &
 
 # Wait for all background processes to finish
 wait

@@ -24,7 +24,7 @@ log() {
 }
 
 # Log the start of the script
-log "Starting new script run"
+log "Starting agent-bundle-update.sh..."
 
 # Stop Plex and PlexAutoLanguages Docker containers before updating
 log "Stopping Plex and PlexAutoLanguages Docker containers..."
@@ -102,3 +102,5 @@ log "Cloned repositories removed."
 log "Restarting Plex and PlexAutoLanguages Docker containers..."
 (cd "$DOCKER_COMPOSE_DIR" && docker compose restart plex plexautolanguages)
 log "Plex and PlexAutoLanguages have been restarted."
+
+log "Plex agent bundle update script complete. Log file is located at $LOG_FILE"

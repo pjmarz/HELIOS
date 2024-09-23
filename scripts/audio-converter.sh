@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script sets the language metadata for audio tracks to English
 # for specified video file types within the root directory and its subdirectories,
-# but only if the current language is set to 'unknown'.
+# but only if the current language is set to 'unknown', and updates Plex metadata.
 
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/audio-converter.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
@@ -9,12 +9,17 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
 
-echo "Starting script..."
+# Function to log with timestamp
+log() {
+    echo "$(date +'%Y-%m-%d %H:%M:%S') $1"
+}
+
+log "Starting script..."
 
 # Root directory containing the media files
 ROOT_DIRECTORY="/mnt/LOAS/xxx"
 
-echo "Root directory set to $ROOT_DIRECTORY"
+log "Root directory set to $ROOT_DIRECTORY"
 
 # Array of video file extensions to process
 declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
@@ -23,50 +28,68 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
                             "m4v" "svi" "3gp" "3g2" "mxf" "roq" "nsv" "flv" "f4v"
                             "f4p" "f4a" "f4b" "mod")
 
+# Plex server details
+PLEX_SERVER="https://192.168.1.45:32400"
+PLEX_TOKEN="9_nBV2e7ArYx8JPEhasy"
+
 # Function to set metadata
 set_metadata() {
     local file="$1"
     local extension="$2"
     
     # Check the current language metadata using ffprobe
-    echo "Checking language for $file"
+    log "Checking language for $file"
     local lang=$(ffprobe -loglevel error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 "$file")
     
     # If the language is 'unknown' or not set, then set it to English
     if [ -z "$lang" ] || [ "$lang" == "und" ]; then
-        echo "Setting language to English for $file"
+        log "Setting language to English for $file"
         local tmpfile="$(mktemp --suffix=".$extension")"
         ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$tmpfile" && mv -f "$tmpfile" "$file"
-        echo "Language set to English for $file"
+        log "Language set to English for $file"
+        
+        # Update Plex metadata
+        update_plex_metadata "$file"
     else
-        echo "Skipping $file: language is already set to $lang."
+        log "Skipping $file: language is already set to $lang."
     fi
 }
 
+# Function to update Plex metadata
+update_plex_metadata() {
+    local file="$1"
+    log "Updating Plex metadata for $file"
+    local filepath=$(echo "$file" | sed 's/ /%20/g')
+    curl -X PUT "${PLEX_SERVER}/library/sections/all/refresh?path=${filepath}&X-Plex-Token=${PLEX_TOKEN}"
+    log "Plex metadata updated for $file"
+}
+
 # Count total number of files to process
-echo "Counting total number of files to process..."
+log "Counting total number of files to process..."
 TOTAL=0
 for extension in "${FILE_EXTENSIONS[@]}"; do
     count=$(find "$ROOT_DIRECTORY" -type f -name "*.$extension" 2>/dev/null | wc -l)
-    echo "Found $count files with .$extension extension."
+    log "Found $count files with .$extension extension."
     TOTAL=$((TOTAL + count))
 done
 
-echo "Total number of files to process: $TOTAL"
+log "Total number of files to process: $TOTAL"
 
 # Exit if no files are found
 if [ "$TOTAL" -le 0 ]; then
-    echo "No files found to process. Please check your directory path and file extensions."
+    log "No files found to process. Please check your directory path and file extensions."
     exit 1
 fi
 
 # Export the function so it can be used by find -exec
+export -f log
 export -f set_metadata
+export -f update_plex_metadata
 
 # Loop over each file type and apply the metadata changes
 for extension in "${FILE_EXTENSIONS[@]}"; do
-    echo "Processing .$extension files..."
+    log "Processing .$extension files..."
     find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'set_metadata "$0" "$1"' {} "$extension" \;
 done
 
-echo "Audio conversion complete."
+log "Audio conversion complete. Log file is located at $LOG_FILE"

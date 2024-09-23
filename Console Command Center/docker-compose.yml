@@ -46,33 +46,6 @@ services:
     restart: unless-stopped
     command: --interval 3600 --label-enable --cleanup --remove-volumes
 
-  adguardhome:
-    container_name: adguardhome
-    image: adguard/adguardhome:latest
-    environment:
-        - TZ=${TZ}
-    volumes:
-        - adguardhome_data:/opt/adguardhome/work
-        - adguardhome_data:/opt/adguardhome/conf
-    network_mode: host
-    ports:
-        - 53:53/tcp
-        - 53:53/udp
-        - 67:67/udp
-        - 68:68/udp
-        - 80:80/tcp
-        - 443:443/tcp
-        - 443:443/udp
-        - 3000:3000/tcp
-        - 853:853/tcp
-        - 853:853/udp
-        - 5443:5443/tcp
-        - 5443:5443/udp
-        - 6060:6060/tcp
-    restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
@@ -92,9 +65,10 @@ services:
     image: ghcr.io/ajnart/homarr:latest
     restart: unless-stopped
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
       - PASSWORD=Arrowleaf
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -115,10 +89,13 @@ services:
     privileged: true
     environment:
       - DASHDOT_WIDGET_LIST=os,cpu,storage,ram,network,gpu
+      - DASHDOT_USE_NETWORK_INTERFACE=eno1
     ports:
       - 81:3001
     volumes:
       - /:/mnt/host:ro
+      - /dev:/dev:ro
+      - /run/udev:/run/udev:ro
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
@@ -142,7 +119,26 @@ services:
       - /dev/sdc
       - /dev/sdd
       - /dev/sde
+      - /dev/sdf
+      - /dev/sdg
+      - /dev/sdi
       - /dev/nvme0n1
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=${TZ}
+      - UMASK=002
+    volumes:
+      - ${ROOT}/config/tautulli:/config
+    ports:
+      - 8181:8181
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
@@ -154,5 +150,3 @@ networks:
 volumes:
   portainer_data:
   homarr_data:
-  dockovpn_data:
-  adguardhome_data:

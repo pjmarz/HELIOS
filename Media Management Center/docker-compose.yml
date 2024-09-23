@@ -1,16 +1,35 @@
 services:
 
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=${TZ}
+      - UMASK=002
+    volumes:
+      - ${ROOT}/config/overseerr:/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+    networks:
+      - multimediaservices_network
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/radarr:/config
-      - ${MEDIA}/movies:/movies
-      - ${CHARON}/sabnzbd/downloads:/downloads
+      - ${LOAS}/media/movies:/movies
+      - ${LOAS}/usenet:/usenet
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -23,13 +42,14 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/sonarr:/config
-      - ${MEDIA}/tv:/tv
-      - ${CHARON}/sabnzbd/downloads:/downloads
+      - ${LOAS}/media/tv:/tv
+      - ${LOAS}/usenet:/usenet
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -42,13 +62,14 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/bazarr:/config
-      - ${MEDIA}/movies:/movies
-      - ${MEDIA}/tv:/tv
+      - ${LOAS}/media/movies:/movies
+      - ${LOAS}/media/tv:/tv
     ports:
       - 6767:6767
     restart: unless-stopped
@@ -59,15 +80,16 @@ services:
 
   whisparr:
     container_name: whisparr
-    image: ghcr.io/hotio/whisparr:latest # v2 is "latest" v3 is dev branch
+    image: ghcr.io/hotio/whisparr:latest
     environment:
       - PUID=1000
-      - PGID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/whisparr:/config
-      - ${MEDIA}/xxx:/xxx
-      - ${CHARON}/sabnzbd/downloads:/downloads
+      - ${LOAS}/media/xxx:/xxx
+      - ${LOAS}/usenet:/usenet
     ports:
       - 6969:6969
     restart: unless-stopped
@@ -82,9 +104,10 @@ services:
     ports:
       - 9696:9696
     environment:
-      - PGID=1000
       - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/prowlarr:/config
     restart: unless-stopped
@@ -98,13 +121,12 @@ services:
     container_name: sabnzbd
     environment:
       - PUID=1000
-      - PGID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - ${ROOT}/config/sabnzbd:/config
-      - ${CHARON}/sabnzbd/downloads:/downloads
-      - ${CHARON}/sabnzbd/downloads/intermediate:/intermediate
-      - ${CHARON}/sabnzbd/downloads/completed:/completed
+      - ${LOAS}/usenet:/usenet
     ports:
       - 8080:8080
     restart: unless-stopped
@@ -124,16 +146,17 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - VERSION=docker
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
     network_mode: host
     volumes:
       - ${ROOT}/config/plexdb:/config
-      - ${ROOT}/config/plexdb/Library/Application Support/Plex Media Server/Transcode:/transcode
-      - ${MEDIA}/movies:/movies
-      - ${MEDIA}/tv:/tv
-      - ${MEDIA}/xxx:/xxx
+      - ${TRANSCODE}:/transcode
+      - ${LOAS}/media/movies:/movies
+      - ${LOAS}/media/tv:/tv
+      - ${LOAS}/media/xxx:/xxx
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
@@ -142,7 +165,7 @@ services:
     container_name: plexautolanguages
     environment:
       - PLEX_URL=http://192.168.1.45:32400
-      - PLEX_TOKEN=reKFC-C828Gqv6aJ2ehG
+      - PLEX_TOKEN=QGrP1kka6Ycp4rfLxwML
       - TZ=${TZ}    
     volumes:
      - ${ROOT}/config/plexautolanguages:/config
@@ -164,9 +187,10 @@ services:
         max-size: "2m"
     network_mode: host
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=1000
+      - PGID=984
       - TZ=${TZ}
+      - UMASK=002
       - STASH_STASH=/data/
       - STASH_GENERATED=/generated/
       - STASH_METADATA=/metadata/
@@ -174,16 +198,11 @@ services:
       - STASH_PORT=9999
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ${LOAS}/media/xxx:/xxx
       - ${ROOT}/config/stash/config:/root/.stash
-      ## Point this at your collection.
-      - ${MEDIA}/xxx:/xxx
-      ## This is where your stash's metadata lives
       - ${ROOT}/config/stash/metadata:/metadata
-      ## Any other cache content.
       - ${ROOT}/config/stash/cache:/cache
-      ## Where to store binary blob data (scene covers, images)
       - ${ROOT}/config/stash/blobs:/blobs
-      ## Where to store generated content (screenshots,previews,transcodes,sprites)
       - ${ROOT}/config/stash/generated:/generated
 
 networks:

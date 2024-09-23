@@ -6,7 +6,7 @@ CONTAINER_NAME="plex"
 # Define the logfile and Plex server details
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/plex-auto-update.log"
 PLEX_URL="https://192.168.1.45:32400"
-TOKEN="kn5myHmFyQy2HgqzWZ4T"
+TOKEN="QGrP1kka6Ycp4rfLxwML"
 LIBRARY_SECTION_IDS=("1" "2" "3")  # Array of library IDs
 
 # Clear the log file at the beginning of the script
@@ -59,4 +59,4 @@ for section_id in "${LIBRARY_SECTION_IDS[@]}"; do
     update_library_section "$section_id" || log "Update failed for section: $section_id"
 done
 
-log "Plex library update tasks for all sections completed!"
+log "Plex library update tasks for all sections completed! Log file is located at $LOG_FILE"
