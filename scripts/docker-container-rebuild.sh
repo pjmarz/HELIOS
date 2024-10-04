@@ -1,10 +1,13 @@
 #!/bin/bash
 
+set -e  # Exit immediately if a command exits with a non-zero status
+
 # Source the environment variables
-if [ -f /home/peter/Documents/dev/HELIOS/env.sh ]; then
-    source /home/peter/Documents/dev/HELIOS/env.sh
+ENV_FILE="/home/peter/Documents/dev/HELIOS/env.sh"
+if [ -f "$ENV_FILE" ]; then
+    source "$ENV_FILE"
 else
-    echo "Environment file /home/peter/Documents/dev/HELIOS/env.sh not found. Exiting."
+    echo "Environment file $ENV_FILE not found. Exiting."
     exit 1
 fi
 
@@ -21,18 +24,10 @@ log() {
     echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
 
-# Function to check the status of the last command and log an error if it failed
-check_status() {
-    if [ $? -ne 0 ]; then
-        log "Error with command: $1"
-        exit 1
-    fi
-}
-
 # Function to process docker-compose for a given directory
 process_docker_compose() {
     local dir="$1"
-    log "Processing $dir..."
+    log "Processing directory: $dir"
 
     if [ ! -d "$dir" ]; then
         log "Directory $dir does not exist. Skipping."
@@ -40,25 +35,25 @@ process_docker_compose() {
     fi
 
     cd "$dir"
-    check_status "cd to $dir"
+    log "Changed directory to $dir"
 
     # Stop the containers defined in docker-compose.yml
     docker compose down 2>&1 | tee -a "$LOG_FILE"
-    check_status "docker compose down in $dir"
+    log "Stopped containers in $dir"
 
     # Pull down the latest images
     docker compose pull 2>&1 | tee -a "$LOG_FILE"
-    check_status "docker compose pull in $dir"
+    log "Pulled latest images in $dir"
 
     # Start the containers in detached mode
     docker compose up -d 2>&1 | tee -a "$LOG_FILE"
-    check_status "docker compose up in $dir"
+    log "Started containers in $dir"
 }
 
 # Function to prune unused docker resources
 prune_docker_system() {
     docker system prune -af 2>&1 | tee -a "$LOG_FILE"
-    check_status "docker system prune"
+    log "Pruned unused Docker resources"
 }
 
 # Start a new log session with a timestamp

@@ -30,7 +30,7 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
 
 # Plex server details
 PLEX_SERVER="https://192.168.1.45:32400"
-PLEX_TOKEN="9_nBV2e7ArYx8JPEhasy"
+PLEX_TOKEN="fhs53NgPaHw_oDHMW9Nv"
 
 # Function to set metadata
 set_metadata() {
