@@ -31,18 +31,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 log "Updating package list..."
-execute_and_log "sudo apt-get update"
+execute_and_log "apt-get update"
 
-log "Finding NVIDIA-related packages..."
-nvidia_packages=$(dpkg -l | grep -i nvidia | awk '{print $2}' | tr '\n' ' ')
-if [[ -z "$nvidia_packages" ]]; then
-    log "No NVIDIA packages found to upgrade."
-else
-    log "Upgrading NVIDIA-related packages..."
-    execute_and_log "sudo apt-get dist-upgrade -y"
-fi
+log "Upgrading all NVIDIA-related packages..."
+execute_and_log "apt-get dist-upgrade -y"
 
 log "Cleaning up unnecessary packages..."
-execute_and_log "sudo apt-get autoremove -y"
+execute_and_log "apt-get autoremove -y"
 
 log "All NVIDIA-related packages have been updated."

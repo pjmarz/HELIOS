@@ -10,24 +10,18 @@
 
 # -------------------------------------------------------------------------- #
 
-# Define variables for logs and download directories
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/install-nvidia.log"
 NVIDIA_DOWNLOAD_DIR="/home/peter/Documents/dev/HELIOS/assets/nvidia"
 LOG_DIR="$(dirname "$LOG_FILE")"
 
-# Ensure NVIDIA download directory and log directory exist
 mkdir -p "${NVIDIA_DOWNLOAD_DIR}"
 mkdir -p "$LOG_DIR"
-
-# Clear the log file at the beginning of the script
 : > "$LOG_FILE"
 
-# Function to log messages
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
 }
 
-# Function to execute and log commands, exit on error unless specified as 'noncritical'
 execute_and_log() {
     local command="$1"
     local error_handling="${2:-critical}"
@@ -45,42 +39,43 @@ execute_and_log() {
     fi
 }
 
-# Function to check if Nouveau driver is in use
 is_nouveau_in_use() {
     lsmod | grep -q "^nouveau"
 }
 
-# Check if script is run as root
 if [[ $EUID -ne 0 ]]; then
     log "This script must be run as root"
     exit 1
 fi
 
 log "Updating the system..."
-execute_and_log "sudo apt-get update && sudo apt-get upgrade -y"
+execute_and_log "apt-get update && apt-get upgrade -y"
 
 log "Installing necessary tools and kernel headers..."
-execute_and_log "sudo apt-get install -y wget build-essential linux-headers-$(uname -r) gcc g++"
+execute_and_log "apt-get install -y wget build-essential linux-headers-$(uname -r) gcc g++"
 
 if is_nouveau_in_use; then
     log "Disabling the Nouveau driver..."
-    echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf > /dev/null
-    execute_and_log "sudo update-initramfs -u"
+    echo -e "blacklist nouveau\noptions nouveau modeset=0" | tee /etc/modprobe.d/blacklist-nouveau.conf > /dev/null
+    execute_and_log "update-initramfs -u"
+    log "Nouveau driver disabled. Please reboot and rerun the script."
+    exit 1
 else
     log "Nouveau driver is not in use, skipping disabling."
 fi
 
+log "Installing NVIDIA drivers..."
+execute_and_log "apt-get install -y nvidia-driver"
+
 log "Installing nvidia-cuda-toolkit..."
-execute_and_log "sudo apt-get install -y nvidia-cuda-toolkit"
+execute_and_log "apt-get install -y nvidia-cuda-toolkit"
 
-# Install NVIDIA Container Toolkit
 log "Setting up the NVIDIA Container Toolkit..."
-execute_and_log "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
-execute_and_log "curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list"
-execute_and_log "sudo apt-get update"
-execute_and_log "sudo apt-get install -y nvidia-container-toolkit"
+execute_and_log "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
+execute_and_log "curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list"
+execute_and_log "apt-get update"
+execute_and_log "apt-get install -y nvidia-container-toolkit"
 
-# Validate NVIDIA driver installation
 log "Validating NVIDIA driver installation..."
 if ! nvidia-smi | tee -a "$LOG_FILE"; then
     log "NVIDIA driver validation failed. Please check the log file for more details."
@@ -89,12 +84,11 @@ else
     log "NVIDIA driver validation successful."
 fi
 
-# Prompt for reboot
-read -p "System needs to be rebooted for changes to take effect. Reboot now? (y/n) " -n 1 -r
+read -p "System needs to be rebooted for changes to take effect. Reboot now? (y/n) " -n 1 -r -t 30
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     log "Rebooting the system..."
-    execute_and_log "sudo reboot"
+    execute_and_log "reboot"
 else
     log "Please reboot the system manually when convenient."
 fi

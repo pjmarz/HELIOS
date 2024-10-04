@@ -43,10 +43,10 @@ log_message "Upgrading installed packages..."
 sudo apt-get full-upgrade -y | tee -a "$LOG_FILE"
 check_status "sudo apt-get full-upgrade" "Failed to upgrade installed packages."
 
-# Remove unused packages and dependencies
+# Remove unused packages and dependencies with purge
 log_message "Removing unused packages and dependencies..."
-sudo apt-get autoremove -y | tee -a "$LOG_FILE"
-check_status "sudo apt-get autoremove" "Failed to remove unused packages and dependencies."
+sudo apt-get autoremove --purge -y | tee -a "$LOG_FILE"
+check_status "sudo apt-get autoremove --purge" "Failed to remove unused packages and dependencies."
 
 # Clean the package cache
 log_message "Cleaning package cache..."
@@ -71,14 +71,22 @@ log_message "Clearing systemd journal logs..."
 sudo journalctl --vacuum-time=3d | tee -a "$LOG_FILE"
 check_status "sudo journalctl --vacuum-time=3d" "Failed to clear systemd journal logs."
 
-# Clear the thumbnail cache for the current user
-log_message "Clearing thumbnail cache..."
-rm -rf ~/.cache/thumbnails/* | tee -a "$LOG_FILE"
-check_status "rm -rf ~/.cache/thumbnails/*" "Failed to clear thumbnail cache."
+# Clear the thumbnail cache for the current user if it exists
+if [ -d ~/.cache/thumbnails ]; then
+    log_message "Clearing thumbnail cache..."
+    rm -rf ~/.cache/thumbnails/* | tee -a "$LOG_FILE"
+    check_status "rm -rf ~/.cache/thumbnails/*" "Failed to clear thumbnail cache."
+else
+    log_message "Thumbnail cache not found. Skipping."
+fi
 
-# Clear the trash
-log_message "Clearing trash..."
-rm -rf ~/.local/share/Trash/* | tee -a "$LOG_FILE"
-check_status "rm -rf ~/.local/share/Trash/*" "Failed to clear trash."
+# Clear the trash if it exists
+if [ -d ~/.local/share/Trash ]; then
+    log_message "Clearing trash..."
+    rm -rf ~/.local/share/Trash/* | tee -a "$LOG_FILE"
+    check_status "rm -rf ~/.local/share/Trash/*" "Failed to clear trash."
+else
+    log_message "Trash directory not found. Skipping."
+fi
 
 log_message "System cleanup complete! Log file is located at $LOG_FILE"
