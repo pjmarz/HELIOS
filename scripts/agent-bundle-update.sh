@@ -5,6 +5,9 @@
 # https://github.com/Darklyter/StashPlexAgent.bundle
 
 # TPDb API Key: Y0kXbIBEcZ36ukpCNWPrHecdZAtRePnGmFv6oB0u13fd0218
+# StashDB API Key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI3Yjc0NzNmMy0yNjgyLTQ5ODgtYjViMi04Mzg1YzA4NDE1NGMiLCJzdWIiOiJBUElLZXkiLCJpYXQiOjE2OTY3MDA0ODd9.Yaezq144qVDDs8eaxpvrNWqRm63YSxhL-Gsm648YEkA
+# FansDB API Key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJiZjMzZTYzNi0zOGUyLTQwNTUtOTJmMS05OTQ3OTc5NDc2OGMiLCJzdWIiOiJBUElLZXkiLCJpYXQiOjE3MDk2NzQwMTl9.8RlpP8kLB1Xx9F_Nly0OxsqPyMfx-mwm9xVv26vmMFM
+# PornDB API Key: e8f68e94f07293900b2122dda50bd737
 
 # Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
