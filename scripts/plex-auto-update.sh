@@ -6,7 +6,7 @@ CONTAINER_NAME="plex"
 # Define the logfile and Plex server details
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/plex-auto-update.log"
 PLEX_URL="https://192.168.1.45:32400"
-TOKEN="fhs53NgPaHw_oDHMW9Nv"
+TOKEN="fmdSEyKQuRrNnQiWLys8"
 LIBRARY_SECTION_IDS=("1" "2" "3")  # Array of library IDs
 
 # Clear the log file at the beginning of the script
