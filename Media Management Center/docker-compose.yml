@@ -165,7 +165,7 @@ services:
     container_name: plexautolanguages
     environment:
       - PLEX_URL=http://192.168.1.45:32400
-      - PLEX_TOKEN=fmdSEyKQuRrNnQiWLys8
+      - PLEX_TOKEN=kUGyUN2Dk3K_eFWzHx6K
       - TZ=${TZ}    
     volumes:
      - ${ROOT}/config/plexautolanguages:/config
