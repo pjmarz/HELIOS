@@ -17,7 +17,7 @@ log() {
 log "Starting script..."
 
 # Root directory containing the media files
-ROOT_DIRECTORY="/mnt/LOAS/xxx"
+ROOT_DIRECTORY="${LOAS}/xxx"
 
 log "Root directory set to $ROOT_DIRECTORY"
 
@@ -30,7 +30,6 @@ declare -a FILE_EXTENSIONS=("webm" "mkv" "flv" "vob" "ogv" "ogg" "rrc" "gifv"
 
 # Plex server details
 PLEX_SERVER="https://192.168.1.45:32400"
-PLEX_TOKEN="kUGyUN2Dk3K_eFWzHx6K"
 
 # Function to set metadata
 set_metadata() {
@@ -85,6 +84,9 @@ fi
 export -f log
 export -f set_metadata
 export -f update_plex_metadata
+
+# Export Plex token to be used in the script
+export PLEX_TOKEN
 
 # Loop over each file type and apply the metadata changes
 for extension in "${FILE_EXTENSIONS[@]}"; do
