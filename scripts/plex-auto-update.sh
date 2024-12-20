@@ -30,44 +30,97 @@ LIBRARY_SECTIONS=(
     [3]="Books"
 )
 
+# Function to poll Plex API until a library task completes
+poll_for_completion() {
+    local section_id=$1
+    local task_type=$2
+    local max_retries=12  # Poll for up to 12 minutes
+    local retry=0
+    local polling_interval=60  # Polling interval in seconds
+
+    log "Polling for ${task_type} completion for section ID: ${section_id}..."
+    while [[ $retry -lt $max_retries ]]; do
+        sleep $polling_interval
+        response=$(curl -s -k "${PLEX_URL}/library/sections/${section_id}" -H "X-Plex-Token: ${PLEX_TOKEN}")
+        
+        if [[ $? -eq 0 ]]; then
+            local scanning=$(echo "$response" | grep -o 'scanning="[^"]*"' | cut -d'"' -f2)
+            if [[ $scanning == "false" ]]; then
+                log "${task_type} completed for section ID: ${section_id}."
+                return 0
+            fi
+        else
+            log "Error polling Plex API for section ID: ${section_id}. Response: $response"
+        fi
+        
+        retry=$((retry + 1))
+        log "Polling attempt $retry/${max_retries} for section ID: ${section_id}..."
+    done
+
+    log "${task_type} did not complete within the expected time for section ID: ${section_id}."
+    return 1
+}
+
 # Function to update a single library section
 update_library_section() {
     local section_id=$1
     local section_name=$2
     local response
+    local retry=0
+    local max_retries=3
 
     # Refresh library to scan new items
     log "Starting Plex library scan for section ${section_name} (ID: ${section_id})..."
-    response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh" -H "X-Plex-Token: ${PLEX_TOKEN}")
-    if [[ $? -ne 0 ]]; then
-        log "Error scanning library section ${section_name} (ID: ${section_id}): $response"
+    while [[ $retry -lt $max_retries ]]; do
+        response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh" -H "X-Plex-Token: ${PLEX_TOKEN}")
+        if [[ $? -eq 0 ]]; then
+            break
+        fi
+        retry=$((retry + 1))
+        sleep 10
+    done
+    if [[ $retry -eq $max_retries ]]; then
+        log "Failed to scan library section ${section_name} (ID: ${section_id}) after ${max_retries} attempts."
         return 1
     fi
 
-    log "Waiting for library scan to complete for section ${section_name} (ID: ${section_id})..."
-    sleep 60  # Wait for the library scan to complete
+    poll_for_completion "$section_id" "library scan" || return 1
 
     # Refresh metadata for the library section
     log "Starting Plex metadata refresh for section ${section_name} (ID: ${section_id})..."
-    response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh?force=1" -H "X-Plex-Token: ${PLEX_TOKEN}")
-    if [[ $? -ne 0 ]]; then
-        log "Error refreshing metadata for section ${section_name} (ID: ${section_id}): $response"
+    retry=0
+    while [[ $retry -lt $max_retries ]]; do
+        response=$(curl -k -s -X GET "${PLEX_URL}/library/sections/${section_id}/refresh?force=1" -H "X-Plex-Token: ${PLEX_TOKEN}")
+        if [[ $? -eq 0 ]]; then
+            break
+        fi
+        retry=$((retry + 1))
+        sleep 10
+    done
+    if [[ $retry -eq $max_retries ]]; then
+        log "Failed to refresh metadata for section ${section_name} (ID: ${section_id}) after ${max_retries} attempts."
         return 1
     fi
 
-    log "Waiting for metadata refresh to complete for section ${section_name} (ID: ${section_id})..."
-    sleep 3600  # Wait for the metadata refresh to complete
+    poll_for_completion "$section_id" "metadata refresh" || return 1
 
     # Analyze media in the library section
     log "Starting Plex media analysis for section ${section_name} (ID: ${section_id})..."
-    response=$(curl -k -s -X PUT "${PLEX_URL}/library/sections/${section_id}/analyze" -H "X-Plex-Token: ${PLEX_TOKEN}")
-    if [[ $? -ne 0 ]]; then
-        log "Error analyzing media for section ${section_name} (ID: ${section_id}): $response"
+    retry=0
+    while [[ $retry -lt $max_retries ]]; do
+        response=$(curl -k -s -X PUT "${PLEX_URL}/library/sections/${section_id}/analyze" -H "X-Plex-Token: ${PLEX_TOKEN}")
+        if [[ $? -eq 0 ]]; then
+            break
+        fi
+        retry=$((retry + 1))
+        sleep 10
+    done
+    if [[ $retry -eq $max_retries ]]; then
+        log "Failed to analyze media for section ${section_name} (ID: ${section_id}) after ${max_retries} attempts."
         return 1
     fi
 
-    log "Waiting for media analysis to complete for section ${section_name} (ID: ${section_id})..."
-    sleep 3600  # Wait for the media analysis to complete
+    poll_for_completion "$section_id" "media analysis" || return 1
 
     log "Library section ${section_name} (ID: ${section_id}) updated successfully."
 }

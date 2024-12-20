@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Load environment variables
+# Source the environment variables
 source /home/peter/Documents/dev/HELIOS/env.sh
 
 # Define the paths to the directories containing your docker-compose files

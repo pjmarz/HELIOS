@@ -1,5 +1,5 @@
-export TZ=US/Eastern
+export TZ=America/New_York
 export ROOT=/home/peter
 export LOAS=/mnt/LOAS
 export TRANSCODE="/home/peter/config/plexdb/Library/Application Support/Plex Media Server/Transcode"
-export PLEX_TOKEN=kUGyUN2Dk3K_eFWzHx6K
+export PLEX_TOKEN=fmdSEyKQuRrNnQiWLys8

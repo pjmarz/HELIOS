@@ -3,6 +3,9 @@
 # for specified video file types within the root directory and its subdirectories,
 # but only if the current language is set to 'unknown', and updates Plex metadata.
 
+# Source the environment variables
+source /home/peter/Documents/dev/HELIOS/env.sh
+
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/audio-converter.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
