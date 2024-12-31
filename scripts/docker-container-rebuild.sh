@@ -65,7 +65,6 @@ log "--------------------------"
 DIRS=(
     "/home/peter/Documents/dev/HELIOS/Console Command Center"
     "/home/peter/Documents/dev/HELIOS/Media Management Center"
-    "/home/peter/Documents/dev/HELIOS/Tesla Management Center"
 )
 
 # Process each directory

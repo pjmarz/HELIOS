@@ -36,6 +36,38 @@ services:
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
+      
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 8090:8090
+    volumes:
+      - beszel_data:/beszel_data
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    runtime: nvidia
+    privileged: true
+    environment:
+      PORT: 45876
+      KEY: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJg3y/J5Zq12CmPSsIqeWeBn7u51XFn+OomLgetv3a9o'
+      BESZEL_GPU_METRICS: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/mnt/host:ro
+      - /dev:/dev:ro
+      - /run/udev:/run/udev:ro
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
 
   watchtower:
     container_name: watchtower
@@ -150,3 +182,4 @@ networks:
 volumes:
   portainer_data:
   homarr_data:
+  beszel_data:
