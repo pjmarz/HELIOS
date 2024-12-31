@@ -4,7 +4,13 @@
 # but only if the current language is set to 'unknown', and updates Plex metadata.
 
 # Source the environment variables
-source /home/peter/Documents/dev/HELIOS/env.sh
+ENV_FILE="/home/peter/Documents/dev/HELIOS/env.sh"
+if [ -f "$ENV_FILE" ]; then
+    source "$ENV_FILE"
+else
+    echo "Environment file $ENV_FILE not found. Exiting."
+    exit 1
+fi
 
 LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/audio-converter.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
@@ -41,17 +47,28 @@ set_metadata() {
     
     # Check the current language metadata using ffprobe
     log "Checking language for $file"
-    local lang=$(ffprobe -loglevel error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 "$file")
+    local lang
+    lang=$(ffprobe -loglevel error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 "$file" || echo "error")
+    
+    if [ "$lang" == "error" ]; then
+        log "Error reading metadata for $file. Skipping."
+        return 1
+    fi
     
     # If the language is 'unknown' or not set, then set it to English
     if [ -z "$lang" ] || [ "$lang" == "und" ]; then
         log "Setting language to English for $file"
-        local tmpfile="$(mktemp --suffix=".$extension")"
-        ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$tmpfile" && mv -f "$tmpfile" "$file"
-        log "Language set to English for $file"
+        local tmpfile
+        tmpfile=$(mktemp --suffix=".$extension")
         
-        # Update Plex metadata
-        update_plex_metadata "$file"
+        if ffmpeg -hide_banner -loglevel error -y -i "$file" -metadata:s:a:0 language=eng -codec copy "$tmpfile"; then
+            mv -f "$tmpfile" "$file"
+            log "Language set to English for $file"
+            update_plex_metadata "$file"
+        else
+            log "Error processing $file with ffmpeg. Skipping."
+            rm -f "$tmpfile"
+        fi
     else
         log "Skipping $file: language is already set to $lang."
     fi
@@ -61,9 +78,13 @@ set_metadata() {
 update_plex_metadata() {
     local file="$1"
     log "Updating Plex metadata for $file"
-    local filepath=$(echo "$file" | sed 's/ /%20/g')
-    curl -X PUT "${PLEX_SERVER}/library/sections/all/refresh?path=${filepath}&X-Plex-Token=${PLEX_TOKEN}"
-    log "Plex metadata updated for $file"
+    local filepath
+    filepath=$(echo "$file" | sed 's/ /%20/g')
+    if curl -s -o /dev/null -w "%{http_code}" -X PUT "${PLEX_SERVER}/library/sections/all/refresh?path=${filepath}&X-Plex-Token=${PLEX_TOKEN}" | grep -q 200; then
+        log "Plex metadata updated for $file"
+    else
+        log "Error updating Plex metadata for $file"
+    fi
 }
 
 # Count total number of files to process
@@ -92,9 +113,9 @@ export -f update_plex_metadata
 export PLEX_TOKEN
 
 # Loop over each file type and apply the metadata changes
+log "Processing files..."
 for extension in "${FILE_EXTENSIONS[@]}"; do
-    log "Processing .$extension files..."
-    find "$ROOT_DIRECTORY" -type f -name "*.$extension" -exec bash -c 'set_metadata "$0" "$1"' {} "$extension" \;
+    find "$ROOT_DIRECTORY" -type f -name "*.$extension" -print0 | xargs -0 -n 1 -P 4 bash -c 'set_metadata "$@"' _ {}
 done
 
 log "Audio conversion complete. Log file is located at $LOG_FILE"
