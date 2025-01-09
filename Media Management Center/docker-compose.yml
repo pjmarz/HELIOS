@@ -206,30 +206,6 @@ services:
       - ${ROOT}/config/stash/blobs:/blobs
       - ${ROOT}/config/stash/generated:/generated
 
-  unmanic:
-    image: josh5/unmanic:latest
-    container_name: unmanic
-    runtime: nvidia
-    environment:
-      - PUID=1000
-      - PGID=984
-      - TZ=${TZ}
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-    volumes:
-      - ${ROOT}/config/unmanic:/config
-      - ${LOAS}/media/movies:/movies
-      - ${LOAS}/media/tv:/tv
-      - ${LOAS}/media/xxx:/xxx
-      - ${ROOT}/config/unmanic/temp:/temp
-    ports:
-      - 8888:8888
-    restart: unless-stopped
-    networks:
-      - multimediaservices_network
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
 networks:
   multimediaservices_network:
     external: true
