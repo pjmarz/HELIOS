@@ -78,25 +78,25 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  whisparr:
-    container_name: whisparr
-    image: ghcr.io/hotio/whisparr:latest
-    environment:
-      - PUID=1000
-      - PGID=984
-      - TZ=${TZ}
-      - UMASK=002
-    volumes:
-      - ${ROOT}/config/whisparr:/config
-      - ${LOAS}/media/xxx:/xxx
-      - ${LOAS}/usenet:/usenet
-    ports:
-      - 6969:6969
-    restart: unless-stopped
-    networks:
-      - multimediaservices_network
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
+  # whisparr:
+  #   container_name: whisparr
+  #   image: ghcr.io/hotio/whisparr:latest
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=984
+  #     - TZ=${TZ}
+  #     - UMASK=002
+  #   volumes:
+  #     - ${ROOT}/config/whisparr:/config
+  #     - ${LOAS}/media/xxx:/xxx
+  #     - ${LOAS}/usenet:/usenet
+  #   ports:
+  #     - 6969:6969
+  #   restart: unless-stopped
+  #   networks:
+  #     - multimediaservices_network
+  #   labels:
+  #     - com.centurylinklabs.watchtower.enable=true
 
   prowlarr:
     container_name: prowlarr
@@ -175,36 +175,36 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  stash:
-    image: stashapp/stash:latest
-    container_name: stash
-    restart: unless-stopped
-    ports:
-      - "9999:9999"
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "10"
-        max-size: "2m"
-    network_mode: host
-    environment:
-      - PUID=1000
-      - PGID=984
-      - TZ=${TZ}
-      - UMASK=002
-      - STASH_STASH=/data/
-      - STASH_GENERATED=/generated/
-      - STASH_METADATA=/metadata/
-      - STASH_CACHE=/cache/
-      - STASH_PORT=9999
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${LOAS}/media/xxx:/xxx
-      - ${ROOT}/config/stash/config:/root/.stash
-      - ${ROOT}/config/stash/metadata:/metadata
-      - ${ROOT}/config/stash/cache:/cache
-      - ${ROOT}/config/stash/blobs:/blobs
-      - ${ROOT}/config/stash/generated:/generated
+  # stash:
+  #   image: stashapp/stash:latest
+  #   container_name: stash
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9999:9999"
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-file: "10"
+  #       max-size: "2m"
+  #   network_mode: host
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=984
+  #     - TZ=${TZ}
+  #     - UMASK=002
+  #     - STASH_STASH=/data/
+  #     - STASH_GENERATED=/generated/
+  #     - STASH_METADATA=/metadata/
+  #     - STASH_CACHE=/cache/
+  #     - STASH_PORT=9999
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ${LOAS}/media/xxx:/xxx
+  #     - ${ROOT}/config/stash/config:/root/.stash
+  #     - ${ROOT}/config/stash/metadata:/metadata
+  #     - ${ROOT}/config/stash/cache:/cache
+  #     - ${ROOT}/config/stash/blobs:/blobs
+  #     - ${ROOT}/config/stash/generated:/generated
 
 networks:
   multimediaservices_network:
