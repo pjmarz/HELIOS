@@ -1,8 +1,2 @@
-# Ignore NVIDIA driver file
-*.run
-# Ignore the script logs
-script_logs/
-# Ignore cronjob logs
-cronjob_logs/
 # Ignore nvidia assets 
-assets/nvidia/
+/assets/nvidia/

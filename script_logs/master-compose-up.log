@@ -1,0 +1,19 @@
+2025-01-22 23:00:22 - Starting docker-compose up in /root/HELIOS/Console Command Center...
+2025-01-22 23:00:22 - Starting docker-compose up in /root/HELIOS/Media Management Center...
+ Container plexautolanguages  Running
+ Container radarr  Running
+ Container overseerr  Running
+ Container bazarr  Running
+ Container sabnzbd  Running
+ Container sonarr  Running
+ Container prowlarr  Running
+ Container tautulli  Running
+ Container homeassistant  Running
+ Container portaineragent  Running
+ Container portainer  Running
+ Container watchtower  Running
+ Container flaresolverr  Running
+ Container homarr  Running
+2025-01-22 23:00:22 - docker-compose up finished in /root/HELIOS/Console Command Center
+2025-01-22 23:00:22 - docker-compose up finished in /root/HELIOS/Media Management Center
+2025-01-22 23:00:22 - All docker-compose services are up and running.
