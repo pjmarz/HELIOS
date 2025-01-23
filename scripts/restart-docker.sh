@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Source the environment variables
-source /home/peter/Documents/dev/HELIOS/env.sh
+source /root/HELIOS/env.sh
 
 # Define the log file
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/restart-docker.log"
+LOG_FILE="/root/HELIOS/script_logs/restart-docker.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
@@ -62,9 +62,9 @@ restart_docker_compose() {
 }
 
 # Restart docker-compose for Console Command Center
-restart_docker_compose "/home/peter/Documents/dev/HELIOS/Console Command Center"
+restart_docker_compose "/root/HELIOS/Console Command Center"
 
 # Restart docker-compose for Media Management Center
-restart_docker_compose "/home/peter/Documents/dev/HELIOS/Media Management Center"
+restart_docker_compose "/root/HELIOS/Media Management Center"
 
 log_message "Docker restart process completed! Log file is located at $LOG_FILE"

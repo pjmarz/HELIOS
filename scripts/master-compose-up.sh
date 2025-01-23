@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Source the environment variables
-source /home/peter/Documents/dev/HELIOS/env.sh
+source /root/HELIOS/env.sh
 
 # Define the paths to the directories containing your docker-compose files
-console_command_center_path="/home/peter/Documents/dev/HELIOS/Console Command Center"
-media_management_center_path="/home/peter/Documents/dev/HELIOS/Media Management Center"
+console_command_center_path="/root/HELIOS/Console Command Center"
+media_management_center_path="/root/HELIOS/Media Management Center"
 
 # Define the log file
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/master-compose-up.log"
+LOG_FILE="/root/HELIOS/script_logs/master-compose-up.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"

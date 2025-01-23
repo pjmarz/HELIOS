@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Source the environment variables
-source /home/peter/Documents/dev/HELIOS/env.sh
+source /root/HELIOS/env.sh
 
 # Define paths
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/clean-usenet.log"
+LOG_FILE="/root/HELIOS/script_logs/clean-usenet.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
@@ -17,7 +17,7 @@ log() {
 }
 
 # Define the Docker Compose project directory
-DOCKER_COMPOSE_DIR="/home/peter/Documents/dev/HELIOS/Media Management Center"
+DOCKER_COMPOSE_DIR="/root/HELIOS/Media Management Center"
 
 # Define the base directories for incomplete and completed downloads
 INCOMPLETE_DIR="/mnt/usenet/incomplete"

@@ -3,7 +3,7 @@
 set -e  # Exit immediately if a command exits with a non-zero status
 
 # Source the environment variables
-ENV_FILE="/home/peter/Documents/dev/HELIOS/env.sh"
+ENV_FILE="/root/HELIOS/env.sh"
 if [ -f "$ENV_FILE" ]; then
     source "$ENV_FILE"
 else
@@ -12,7 +12,7 @@ else
 fi
 
 # Define paths
-LOG_FILE="/home/peter/Documents/dev/HELIOS/script_logs/docker-container-rebuild.log"
+LOG_FILE="/root/HELIOS/script_logs/docker-container-rebuild.log"
 
 # Clear the log file at the beginning of the script
 : > "$LOG_FILE"
@@ -63,8 +63,8 @@ log "--------------------------"
 
 # Define the directories to process
 DIRS=(
-    "/home/peter/Documents/dev/HELIOS/Console Command Center"
-    "/home/peter/Documents/dev/HELIOS/Media Management Center"
+    "/root/HELIOS/Console Command Center"
+    "/root/HELIOS/Media Management Center"
 )
 
 # Process each directory
