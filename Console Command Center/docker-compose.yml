@@ -1,5 +1,22 @@
 services:
 
+  homeassistant:
+    image: lscr.io/linuxserver/homeassistant:latest
+    container_name: homeassistant
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=${TZ}
+      - UMASK=002
+    volumes:
+      - /config/homeassistant:/config
+    ports:
+      - 8123:8123
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
   agent:
     image: portainer/agent:latest
     container_name: portaineragent
@@ -98,4 +115,4 @@ networks:
 volumes:
   portainer_data:
   homarr_data:
-  beszel_data:
+  homeassistant_data:

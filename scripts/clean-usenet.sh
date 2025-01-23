@@ -19,6 +19,13 @@ log() {
 # Define the Docker Compose project directory
 DOCKER_COMPOSE_DIR="/home/peter/Documents/dev/HELIOS/Media Management Center"
 
+# Define the base directories for incomplete and completed downloads
+INCOMPLETE_DIR="/mnt/usenet/incomplete"
+COMPLETE_DIR="/mnt/usenet/complete"
+
+# List of folders to clear within the completed directory
+FOLDERS=("movies" "tv")
+
 # Log the start of the script
 log "Starting clean-usenet.sh..."
 
@@ -26,29 +33,44 @@ log "Starting clean-usenet.sh..."
 log "Stopping sabnzbd service"
 (cd "$DOCKER_COMPOSE_DIR" && docker compose stop sabnzbd)
 
-# Define the base directory for incomplete and completed downloads
-INCOMPLETE_DIR="/mnt/LOAS/usenet/incomplete"
-COMPLETE_DIR="/mnt/LOAS/usenet/complete"
+# Safeguard against accidental deletion
+if [[ ! -d "$INCOMPLETE_DIR" || ! -d "$COMPLETE_DIR" ]]; then
+    log "ERROR: One or more directories do not exist. Exiting to prevent accidental deletion."
+    exit 1
+fi
 
 # Delete all contents of the incomplete directory
 log "Deleting all contents of $INCOMPLETE_DIR"
-rm -rf "${INCOMPLETE_DIR:?}"/*
+if rm -rf "${INCOMPLETE_DIR:?}"/*; then
+    log "Successfully cleared $INCOMPLETE_DIR."
+else
+    log "Failed to clear $INCOMPLETE_DIR. Check permissions."
+fi
 
-# List of folders to clear within the completed directory
-FOLDERS=("default" "movies" "tv" "xxx")
-
-# Loop through each folder in the complete directory and delete its contents
-for folder in "${FOLDERS[@]}"
-do
-    log "Deleting contents of $COMPLETE_DIR/$folder"
-    rm -rf "${COMPLETE_DIR:?}/${folder:?}"/*
+# Loop through each folder in the completed directory and delete its contents
+for folder in "${FOLDERS[@]}"; do
+    TARGET_DIR="$COMPLETE_DIR/$folder"
+    if [[ -d "$TARGET_DIR" ]]; then
+        log "Deleting contents of $TARGET_DIR"
+        if rm -rf "${TARGET_DIR:?}"/*; then
+            log "Successfully cleared $TARGET_DIR."
+        else
+            log "Failed to clear $TARGET_DIR. Check permissions."
+        fi
+    else
+        log "WARNING: Directory $TARGET_DIR does not exist. Skipping."
+    fi
 done
 
 log "All specified folders, including the incomplete directory, have been cleared."
 
 # Restart sabnzbd service
 log "Restarting sabnzbd service"
-(cd "$DOCKER_COMPOSE_DIR" && docker compose up -d sabnzbd)
+if (cd "$DOCKER_COMPOSE_DIR" && docker compose up -d sabnzbd); then
+    log "sabnzbd service restarted successfully."
+else
+    log "Failed to restart sabnzbd service. Check Docker Compose logs."
+fi
 
 # Notify end of script and log file location
 log "Script completed. Log file is located at $LOG_FILE"
