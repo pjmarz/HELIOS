@@ -1,152 +1,128 @@
-2025-02-08 16:02:48 - --------------------------
-2025-02-08 16:02:48 - Docker Compose Refresh Started
-2025-02-08 16:02:48 - --------------------------
-2025-02-08 16:02:48 - Starting refresh in /root/HELIOS/Console Command Center...
-2025-02-08 16:02:48 - Running docker compose down in /root/HELIOS/Console Command Center...
- Container homeassistant  Stopping
- Container portainer  Stopping
- Container homarr  Stopping
- Container watchtower  Stopping
- Container tautulli  Stopping
+2025-02-10 12:40:26 - --------------------------
+2025-02-10 12:40:26 - Docker Compose Refresh Started
+2025-02-10 12:40:26 - --------------------------
+2025-02-10 12:40:26 - Starting refresh in /root/HELIOS/Console Command Center...
+2025-02-10 12:40:26 - Running docker compose down in /root/HELIOS/Console Command Center...
  Container portaineragent  Stopping
  Container flaresolverr  Stopping
+ Container homarr  Stopping
+ Container portainer  Stopping
+ Container tautulli  Stopping
+ Container watchtower  Stopping
  Container watchtower  Stopped
  Container watchtower  Removing
+ Container watchtower  Removed
  Container portaineragent  Stopped
  Container portaineragent  Removing
- Container watchtower  Removed
  Container portaineragent  Removed
  Container flaresolverr  Stopped
  Container flaresolverr  Removing
+ Container flaresolverr  Removed
  Container portainer  Stopped
  Container portainer  Removing
- Container flaresolverr  Removed
  Container portainer  Removed
- Container homeassistant  Stopped
- Container homeassistant  Removing
  Container tautulli  Stopped
  Container tautulli  Removing
  Container tautulli  Removed
- Container homeassistant  Removed
  Container homarr  Stopped
  Container homarr  Removing
  Container homarr  Removed
- Network consolecommandcenter_agent_network  Removing
  Network consolecommandcenter_default  Removing
- Network consolecommandcenter_agent_network  Removed
+ Network consolecommandcenter_agent_network  Removing
  Network consolecommandcenter_default  Removed
-2025-02-08 16:02:59 - Running docker compose up -d in /root/HELIOS/Console Command Center...
- Network consolecommandcenter_default  Creating
- Network consolecommandcenter_default  Created
+ Network consolecommandcenter_agent_network  Removed
+2025-02-10 12:40:37 - Running docker compose up -d in /root/HELIOS/Console Command Center...
  Network consolecommandcenter_agent_network  Creating
  Network consolecommandcenter_agent_network  Created
+ Network consolecommandcenter_default  Creating
+ Network consolecommandcenter_default  Created
  Container homarr  Creating
- Container portainer  Creating
+ Container portaineragent  Creating
  Container tautulli  Creating
  Container watchtower  Creating
- Container portaineragent  Creating
- Container homeassistant  Creating
  Container flaresolverr  Creating
- Container portaineragent  Created
- Container portainer  Created
+ Container portainer  Creating
  Container watchtower  Created
+ Container portainer  Created
+ Container portaineragent  Created
  Container tautulli  Created
- Container homeassistant  Created
  Container flaresolverr  Created
  Container homarr  Created
- Container tautulli  Starting
- Container homeassistant  Starting
- Container homarr  Starting
  Container watchtower  Starting
+ Container tautulli  Starting
+ Container homarr  Starting
  Container portaineragent  Starting
- Container portainer  Starting
  Container flaresolverr  Starting
+ Container portainer  Starting
  Container portainer  Started
- Container flaresolverr  Started
  Container tautulli  Started
- Container homeassistant  Started
- Container watchtower  Started
  Container portaineragent  Started
+ Container flaresolverr  Started
+ Container watchtower  Started
  Container homarr  Started
-2025-02-08 16:03:00 - Successfully refreshed Docker Compose in /root/HELIOS/Console Command Center.
-2025-02-08 16:03:00 - Starting refresh in /root/HELIOS/Media Management Center...
-2025-02-08 16:03:00 - Running docker compose down in /root/HELIOS/Media Management Center...
- Container prowlarr  Stopping
- Container sonarr  Stopping
+2025-02-10 12:40:37 - Successfully refreshed Docker Compose in /root/HELIOS/Console Command Center.
+2025-02-10 12:40:37 - Starting refresh in /root/HELIOS/Media Management Center...
+2025-02-10 12:40:37 - Running docker compose down in /root/HELIOS/Media Management Center...
  Container plexautolanguages  Stopping
- Container overseerr  Stopping
- Container tdarr-node  Stopping
- Container sabnzbd  Stopping
- Container bazarr  Stopping
  Container radarr  Stopping
+ Container sonarr  Stopping
+ Container bazarr  Stopping
+ Container prowlarr  Stopping
+ Container sabnzbd  Stopping
+ Container overseerr  Stopping
  Container plexautolanguages  Stopped
  Container plexautolanguages  Removing
  Container plexautolanguages  Removed
- Container tdarr-node  Stopped
- Container tdarr-node  Removing
- Container tdarr-node  Removed
- Container tdarr  Stopping
+ Container overseerr  Stopped
+ Container overseerr  Removing
+ Container overseerr  Removed
  Container bazarr  Stopped
  Container bazarr  Removing
  Container bazarr  Removed
+ Container sonarr  Stopped
+ Container sonarr  Removing
+ Container sonarr  Removed
  Container prowlarr  Stopped
  Container prowlarr  Removing
  Container prowlarr  Removed
- Container overseerr  Stopped
- Container overseerr  Removing
  Container radarr  Stopped
  Container radarr  Removing
+ Container radarr  Removed
  Container sabnzbd  Stopped
  Container sabnzbd  Removing
- Container overseerr  Removed
- Container sonarr  Stopped
- Container sonarr  Removing
- Container radarr  Removed
  Container sabnzbd  Removed
- Container sonarr  Removed
- Container tdarr  Stopped
- Container tdarr  Removing
- Container tdarr  Removed
  Network mediamanagementcenter_default  Removing
  Network mediamanagementcenter_default  Removed
-2025-02-08 16:03:07 - Running docker compose up -d in /root/HELIOS/Media Management Center...
+2025-02-10 12:40:41 - Running docker compose up -d in /root/HELIOS/Media Management Center...
  Network mediamanagementcenter_default  Creating
  Network mediamanagementcenter_default  Created
- Container plexautolanguages  Creating
- Container sonarr  Creating
- Container sabnzbd  Creating
- Container overseerr  Creating
  Container bazarr  Creating
+ Container sabnzbd  Creating
  Container prowlarr  Creating
+ Container overseerr  Creating
+ Container plexautolanguages  Creating
  Container radarr  Creating
- Container tdarr  Creating
- Container sonarr  Created
- Container bazarr  Created
+ Container sonarr  Creating
  Container plexautolanguages  Created
+ Container prowlarr  Created
+ Container sonarr  Created
+ Container overseerr  Created
  Container radarr  Created
  Container sabnzbd  Created
- Container tdarr  Created
- Container prowlarr  Created
- Container tdarr-node  Creating
- Container overseerr  Created
- Container tdarr-node  Created
- Container tdarr  Starting
+ Container bazarr  Created
  Container radarr  Starting
- Container prowlarr  Starting
- Container bazarr  Starting
  Container sabnzbd  Starting
- Container overseerr  Starting
  Container plexautolanguages  Starting
+ Container overseerr  Starting
+ Container bazarr  Starting
  Container sonarr  Starting
- Container sonarr  Started
- Container bazarr  Started
- Container prowlarr  Started
- Container overseerr  Started
- Container sabnzbd  Started
- Container radarr  Started
- Container tdarr  Started
- Container tdarr-node  Starting
+ Container prowlarr  Starting
  Container plexautolanguages  Started
- Container tdarr-node  Started
-2025-02-08 16:03:09 - Successfully refreshed Docker Compose in /root/HELIOS/Media Management Center.
-2025-02-08 16:03:09 - All specified Docker Compose stacks have been refreshed.
+ Container radarr  Started
+ Container bazarr  Started
+ Container sabnzbd  Started
+ Container overseerr  Started
+ Container sonarr  Started
+ Container prowlarr  Started
+2025-02-10 12:40:42 - Successfully refreshed Docker Compose in /root/HELIOS/Media Management Center.
+2025-02-10 12:40:42 - All specified Docker Compose stacks have been refreshed.

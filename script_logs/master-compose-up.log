@@ -1,29 +1,18 @@
-2025-02-08 15:29:44 - Starting docker-compose up in /root/HELIOS/Media Management Center...
-2025-02-08 15:29:44 - Starting docker-compose up in /root/HELIOS/Console Command Center...
- Container watchtower  Running
- Container portaineragent  Running
- Container homeassistant  Running
- Container homarr  Running
- Container portainer  Running
- Container tautulli  Running
- Container flaresolverr  Running
- Container prowlarr  Running
- Container overseerr  Running
+2025-02-10 12:40:20 - Starting docker-compose up in /root/HELIOS/Console Command Center...
+2025-02-10 12:40:20 - Starting docker-compose up in /root/HELIOS/Media Management Center...
  Container radarr  Running
- Container sabnzbd  Running
  Container bazarr  Running
- Container sonarr  Running
+ Container overseerr  Running
+ Container sabnzbd  Running
  Container plexautolanguages  Running
- Container tdarr-node  Stopping
-2025-02-08 15:29:44 - docker-compose up finished in /root/HELIOS/Console Command Center
- Container tdarr-node  Stopped
- Container tdarr  Recreate
- Container tdarr  Recreated
- Container tdarr-node  Recreate
- Container tdarr-node  Recreated
- Container tdarr  Starting
- Container tdarr  Started
- Container tdarr-node  Starting
- Container tdarr-node  Started
-2025-02-08 15:29:51 - docker-compose up finished in /root/HELIOS/Media Management Center
-2025-02-08 15:29:51 - All docker-compose services are up and running.
+ Container prowlarr  Running
+ Container sonarr  Running
+ Container homarr  Running
+ Container tautulli  Running
+ Container portaineragent  Running
+ Container portainer  Running
+ Container watchtower  Running
+ Container flaresolverr  Running
+2025-02-10 12:40:20 - docker-compose up finished in /root/HELIOS/Media Management Center
+2025-02-10 12:40:20 - docker-compose up finished in /root/HELIOS/Console Command Center
+2025-02-10 12:40:20 - All docker-compose services are up and running.
