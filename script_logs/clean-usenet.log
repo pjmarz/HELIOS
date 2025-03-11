@@ -1,12 +1,14 @@
-2025-02-06 10:33:47 - Starting clean-usenet.sh...
-2025-02-06 10:33:47 - Stopping sabnzbd service
-2025-02-06 10:33:50 - Deleting all contents of /mnt/usenet/incomplete
-2025-02-06 10:33:50 - Successfully cleared /mnt/usenet/incomplete.
-2025-02-06 10:33:50 - Deleting contents of /mnt/usenet/complete/movies
-2025-02-06 10:33:50 - Successfully cleared /mnt/usenet/complete/movies.
-2025-02-06 10:33:50 - Deleting contents of /mnt/usenet/complete/tv
-2025-02-06 10:33:50 - Successfully cleared /mnt/usenet/complete/tv.
-2025-02-06 10:33:50 - All specified folders, including the incomplete directory, have been cleared.
-2025-02-06 10:33:50 - Restarting sabnzbd service
-2025-02-06 10:33:50 - sabnzbd service restarted successfully.
-2025-02-06 10:33:50 - Script completed. Log file is located at /root/HELIOS/script_logs/clean-usenet.log
+2025-03-07 13:09:25 - Starting clean-usenet.sh...
+2025-03-07 13:09:25 - Stopping sabnzbd service
+2025-03-07 13:09:28 - Deleting all contents of /mnt/usenet/incomplete
+2025-03-07 13:09:28 - Successfully cleared /mnt/usenet/incomplete.
+2025-03-07 13:09:28 - Deleting contents of /mnt/usenet/complete/default
+2025-03-07 13:09:28 - Successfully cleared /mnt/usenet/complete/default.
+2025-03-07 13:09:28 - Deleting contents of /mnt/usenet/complete/movies
+2025-03-07 13:09:28 - Successfully cleared /mnt/usenet/complete/movies.
+2025-03-07 13:09:28 - Deleting contents of /mnt/usenet/complete/tv
+2025-03-07 13:09:28 - Successfully cleared /mnt/usenet/complete/tv.
+2025-03-07 13:09:28 - All specified folders, including the incomplete directory, have been cleared.
+2025-03-07 13:09:28 - Restarting sabnzbd service
+2025-03-07 13:09:28 - sabnzbd service restarted successfully.
+2025-03-07 13:09:28 - Script completed. Log file is located at /root/HELIOS/script_logs/clean-usenet.log

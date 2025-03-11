@@ -12,7 +12,8 @@ LOG_FILE="/root/HELIOS/script_logs/clean-usenet.log"
 # Function to prepend the current date and time to log messages
 log() {
     local msg="$@"
-    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    local timestamp
+    timestamp=$(date "+%Y-%m-%d %H:%M:%S")
     echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
 
@@ -23,8 +24,8 @@ DOCKER_COMPOSE_DIR="/root/HELIOS/Media Management Center"
 INCOMPLETE_DIR="/mnt/usenet/incomplete"
 COMPLETE_DIR="/mnt/usenet/complete"
 
-# List of folders to clear within the completed directory
-FOLDERS=("movies" "tv")
+# List of folders to clear within the completed directory (now including "default")
+FOLDERS=("default" "movies" "tv")
 
 # Log the start of the script
 log "Starting clean-usenet.sh..."
