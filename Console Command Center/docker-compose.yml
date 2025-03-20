@@ -108,6 +108,7 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ${CONFIG_DIR}/n8n:/config
+      - /etc/HELIOS/secrets.sh:/secrets.sh:ro
     labels:
       - com.centurylinklabs.watchtower.enable=true
 

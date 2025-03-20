@@ -1,15 +1,14 @@
-2025-03-20 13:37:54 - --------------------------
-2025-03-20 13:37:54 - Docker Compose Refresh Started
-2025-03-20 13:37:54 - --------------------------
-2025-03-20 13:37:54 - Starting refresh in /root/HELIOS/Console Command Center...
-2025-03-20 13:37:54 - Running docker compose down in /root/HELIOS/Console Command Center...
- Container portainer  Stopping
- Container flaresolverr  Stopping
+2025-03-20 15:22:49 - --------------------------
+2025-03-20 15:22:49 - Docker Compose Refresh Started
+2025-03-20 15:22:49 - --------------------------
+2025-03-20 15:22:49 - Starting refresh in /root/HELIOS/Console Command Center...
+2025-03-20 15:22:49 - Running docker compose down in /root/HELIOS/Console Command Center...
  Container homarr  Stopping
- Container watchtower  Stopping
- Container n8n  Stopping
  Container tautulli  Stopping
+ Container portainer  Stopping
+ Container watchtower  Stopping
  Container portaineragent  Stopping
+ Container flaresolverr  Stopping
  Container portaineragent  Stopped
  Container portaineragent  Removing
  Container portaineragent  Removed
@@ -18,12 +17,9 @@
  Container watchtower  Removed
  Container flaresolverr  Stopped
  Container flaresolverr  Removing
- Container flaresolverr  Removed
- Container n8n  Stopped
- Container n8n  Removing
- Container n8n  Removed
  Container portainer  Stopped
  Container portainer  Removing
+ Container flaresolverr  Removed
  Container portainer  Removed
  Container tautulli  Stopped
  Container tautulli  Removing
@@ -31,106 +27,86 @@
  Container homarr  Stopped
  Container homarr  Removing
  Container homarr  Removed
- Network consolecommandcenter_agent_network  Removing
  Network consolecommandcenter_default  Removing
+ Network consolecommandcenter_agent_network  Removing
  Network consolecommandcenter_default  Removed
  Network consolecommandcenter_agent_network  Removed
-2025-03-20 13:38:05 - Running docker compose up -d in /root/HELIOS/Console Command Center...
+2025-03-20 15:23:00 - Running docker compose up -d in /root/HELIOS/Console Command Center...
  Network consolecommandcenter_agent_network  Creating
  Network consolecommandcenter_agent_network  Created
  Network consolecommandcenter_default  Creating
  Network consolecommandcenter_default  Created
- Container tautulli  Creating
- Container watchtower  Creating
- Container n8n  Creating
  Container portainer  Creating
  Container flaresolverr  Creating
- Container portaineragent  Creating
  Container homarr  Creating
- Container watchtower  Created
- Container portainer  Created
- Container portaineragent  Created
- Container flaresolverr  Created
- Container tautulli  Created
- Container homarr  Created
- Container n8n  Created
- Container portaineragent  Starting
- Container portainer  Starting
- Container homarr  Starting
- Container tautulli  Starting
- Container watchtower  Starting
- Container n8n  Starting
- Container flaresolverr  Starting
- Container portainer  Started
- Container watchtower  Started
- Container portaineragent  Started
- Container flaresolverr  Started
- Container tautulli  Started
- Container homarr  Started
- Container n8n  Started
-2025-03-20 13:38:06 - Successfully refreshed Docker Compose in /root/HELIOS/Console Command Center.
-2025-03-20 13:38:06 - Starting refresh in /root/HELIOS/Media Management Center...
-2025-03-20 13:38:06 - Running docker compose down in /root/HELIOS/Media Management Center...
+ Container portaineragent  Creating
+ Container watchtower  Creating
+ Container n8n  Creating
+ Container tautulli  Creating
+Error response from daemon: Conflict. The container name "/n8n" is already in use by container "8094521fd09e7f54c63a66cfd13e7fc9cc21bdac1651c8d8f49b2ac0b2d47eb4". You have to remove (or rename) that container to be able to reuse that name.
+2025-03-20 15:23:00 - Successfully refreshed Docker Compose in /root/HELIOS/Console Command Center.
+2025-03-20 15:23:00 - Starting refresh in /root/HELIOS/Media Management Center...
+2025-03-20 15:23:00 - Running docker compose down in /root/HELIOS/Media Management Center...
+ Container plexautolanguages  Stopping
  Container overseerr  Stopping
  Container radarr  Stopping
- Container sonarr  Stopping
  Container bazarr  Stopping
  Container prowlarr  Stopping
  Container sabnzbd  Stopping
- Container plexautolanguages  Stopping
+ Container sonarr  Stopping
  Container plexautolanguages  Stopped
  Container plexautolanguages  Removing
  Container plexautolanguages  Removed
- Container overseerr  Stopped
- Container overseerr  Removing
- Container overseerr  Removed
  Container bazarr  Stopped
  Container bazarr  Removing
  Container bazarr  Removed
+ Container overseerr  Stopped
+ Container overseerr  Removing
+ Container overseerr  Removed
  Container sonarr  Stopped
  Container sonarr  Removing
  Container sonarr  Removed
- Container prowlarr  Stopped
- Container prowlarr  Removing
- Container prowlarr  Removed
  Container radarr  Stopped
  Container radarr  Removing
  Container radarr  Removed
+ Container prowlarr  Stopped
+ Container prowlarr  Removing
+ Container prowlarr  Removed
  Container sabnzbd  Stopped
  Container sabnzbd  Removing
  Container sabnzbd  Removed
  Network mediamanagementcenter_default  Removing
  Network mediamanagementcenter_default  Removed
-2025-03-20 13:38:09 - Running docker compose up -d in /root/HELIOS/Media Management Center...
+2025-03-20 15:23:04 - Running docker compose up -d in /root/HELIOS/Media Management Center...
  Network mediamanagementcenter_default  Creating
  Network mediamanagementcenter_default  Created
- Container sabnzbd  Creating
  Container plexautolanguages  Creating
- Container bazarr  Creating
+ Container radarr  Creating
  Container sonarr  Creating
  Container overseerr  Creating
  Container prowlarr  Creating
- Container radarr  Creating
- Container radarr  Created
- Container overseerr  Created
+ Container bazarr  Creating
+ Container sabnzbd  Creating
  Container sonarr  Created
- Container sabnzbd  Created
  Container plexautolanguages  Created
- Container bazarr  Created
+ Container radarr  Created
+ Container sabnzbd  Created
  Container prowlarr  Created
- Container sonarr  Starting
+ Container bazarr  Created
+ Container overseerr  Created
  Container sabnzbd  Starting
+ Container plexautolanguages  Starting
+ Container sonarr  Starting
+ Container bazarr  Starting
  Container overseerr  Starting
  Container prowlarr  Starting
- Container plexautolanguages  Starting
- Container bazarr  Starting
  Container radarr  Starting
+ Container plexautolanguages  Started
+ Container sabnzbd  Started
+ Container bazarr  Started
  Container overseerr  Started
  Container sonarr  Started
- Container sabnzbd  Started
- Container radarr  Started
  Container prowlarr  Started
- Container bazarr  Started
- Container plexautolanguages  Started
-2025-03-20 13:38:10 - Successfully refreshed Docker Compose in /root/HELIOS/Media Management Center.
-2025-03-20 13:38:10 - All specified Docker Compose stacks have been refreshed.
+ Container radarr  Started
+2025-03-20 15:23:05 - Successfully refreshed Docker Compose in /root/HELIOS/Media Management Center.
+2025-03-20 15:23:05 - All specified Docker Compose stacks have been refreshed.
