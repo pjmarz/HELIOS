@@ -62,13 +62,13 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
-      - PASSWORD=${HOMARR_PASSWORD:-Arrowleaf}
+      - UMASK=${UMASK}
+      - PASSWORD=${HOMARR_PASSWORD}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /config/homarr/config:/app/data/configs
-      - /config/homarr/icons:/app/public/icons
-      - /config/homarr/imgs:/app/public/imgs
+      - ${CONFIG_DIR}/homarr/config:/app/data/configs
+      - ${CONFIG_DIR}/homarr/icons:/app/public/icons
+      - ${CONFIG_DIR}/homarr/imgs:/app/public/imgs
       - homarr_data:/data
     ports:
       - ${HOMARR_PORT}:7575
@@ -82,9 +82,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=${UMASK}
     volumes:
-      - /config/tautulli:/config
+      - ${CONFIG_DIR}/tautulli:/config
     ports:
       - ${TAUTULLI_PORT}:8181
     restart: unless-stopped
@@ -107,7 +107,7 @@ services:
       - WEBHOOK_TUNNEL_URL=${N8N_WEBHOOK_TUNNEL_URL}
     volumes:
       - n8n_data:/home/node/.n8n
-      - /config/n8n:/config
+      - ${CONFIG_DIR}/n8n:/config
     labels:
       - com.centurylinklabs.watchtower.enable=true
 

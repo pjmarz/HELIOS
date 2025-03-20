@@ -7,9 +7,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=${UMASK}
     volumes:
-      - /config/overseerr:/config
+      - ${CONFIG_DIR}/overseerr:/config
     ports:
       - ${OVERSEERR_PORT}:5055
     restart: unless-stopped
@@ -23,9 +23,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=${UMASK}
     volumes:
-      - /config/radarr:/config
+      - ${CONFIG_DIR}/radarr:/config
       - ${MOVIES_DIR}:/movies
       - ${DOWNLOADS_DIR}:/usenet
     ports:
@@ -41,9 +41,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=${UMASK}
     volumes:
-      - /config/sonarr:/config
+      - ${CONFIG_DIR}/sonarr:/config
       - ${TV_DIR}:/tv
       - ${DOWNLOADS_DIR}:/usenet
     ports:
@@ -59,9 +59,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=${UMASK}
     volumes:
-      - /config/bazarr:/config
+      - ${CONFIG_DIR}/bazarr:/config
       - ${MOVIES_DIR}:/movies
       - ${TV_DIR}:/tv
     ports:
@@ -79,9 +79,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=${UMASK}
     volumes:
-      - /config/prowlarr:/config
+      - ${CONFIG_DIR}/prowlarr:/config
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
@@ -93,9 +93,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=${UMASK}
     volumes:
-      - /config/sabnzbd:/config
+      - ${CONFIG_DIR}/sabnzbd:/config
       - ${DOWNLOADS_DIR}:/usenet
     ports:
       - ${SABNZBD_PORT}:8080
@@ -111,7 +111,7 @@ services:
       - PLEX_TOKEN=${PLEX_TOKEN}
       - TZ=${TZ}    
     volumes:
-      - /config/plexautolanguages:/config
+      - ${CONFIG_DIR}/plexautolanguages:/config
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true

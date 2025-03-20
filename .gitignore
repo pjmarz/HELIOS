@@ -5,6 +5,11 @@
 .secrets
 *.env
 .env
+.env.*
+*credentials*
+*token*
+*password*
+*secret*
 
 # Docker
 .docker/
@@ -13,3 +18,19 @@ docker-compose.override.yml
 # System Files
 .DS_Store
 Thumbs.db
+
+# Logs and Databases
+*.log
+*.sqlite
+*.db
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Backup files
+*.bak
+*.backup
+*~
