@@ -1,2 +1,15 @@
 # Ignore nvidia assets 
 /assets/nvidia/
+
+# Sensitive Configuration
+.secrets
+*.env
+.env
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# System Files
+.DS_Store
+Thumbs.db

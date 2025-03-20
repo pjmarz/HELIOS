@@ -20,8 +20,8 @@ services:
     privileged: true
     command: -H tcp://agent:9001 --tlsskipverify
     ports:
-      - 9443:9443
-      - 8000:8000
+      - ${PORTAINER_SSL_PORT}:9443
+      - ${PORTAINER_PORT}:8000
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
@@ -49,7 +49,7 @@ services:
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
       - TZ=${TZ}
     ports:
-      - ${PORT:-8191}:8191
+      - ${FLARESOLVERR_PORT}:8191
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
@@ -59,11 +59,11 @@ services:
     image: ghcr.io/ajnart/homarr:latest
     restart: unless-stopped
     environment:
-      - PUID=1000
-      - PGID=984
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=002
-      - PASSWORD=Arrowleaf
+      - PASSWORD=${HOMARR_PASSWORD:-Arrowleaf}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /config/homarr/config:/app/data/configs
@@ -71,7 +71,7 @@ services:
       - /config/homarr/imgs:/app/public/imgs
       - homarr_data:/data
     ports:
-      - 7575:7575
+      - ${HOMARR_PORT}:7575
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
@@ -79,14 +79,14 @@ services:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
     environment:
-      - PUID=1000
-      - PGID=984
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=002
     volumes:
       - /config/tautulli:/config
     ports:
-      - 8181:8181
+      - ${TAUTULLI_PORT}:8181
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
@@ -96,15 +96,15 @@ services:
     container_name: n8n
     restart: unless-stopped
     ports:
-      - 5678:5678
+      - ${N8N_PORT}:5678
     environment:
-      - PUID=1000
-      - PGID=984
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - N8N_SECURE_COOKIE=false
-      - N8N_HOST=n8n.welcometomarz.net
-      - N8N_PROTOCOL=https
-      - WEBHOOK_TUNNEL_URL=https://n8n.welcometomarz.net
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PROTOCOL=${N8N_PROTOCOL}
+      - WEBHOOK_TUNNEL_URL=${N8N_WEBHOOK_TUNNEL_URL}
     volumes:
       - n8n_data:/home/node/.n8n
       - /config/n8n:/config
