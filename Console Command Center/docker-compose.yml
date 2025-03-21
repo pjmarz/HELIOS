@@ -98,12 +98,14 @@ services:
     ports:
       - ${N8N_PORT}:5678
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=0
+      - PGID=0
       - TZ=${TZ}
+      - UMASK=${UMASK}
       - N8N_SECURE_COOKIE=false
       - N8N_HOST=${N8N_HOST}
       - N8N_PROTOCOL=${N8N_PROTOCOL}
+      - N8N_COMMUNITY_PACKAGES_ENABLED=true
       - WEBHOOK_TUNNEL_URL=${N8N_WEBHOOK_TUNNEL_URL}
     volumes:
       - n8n_data:/home/node/.n8n

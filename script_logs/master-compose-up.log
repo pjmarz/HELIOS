@@ -1,32 +1,67 @@
-2025-03-20 15:28:06 - Starting docker-compose up in /root/HELIOS/Media Management Center...
-2025-03-20 15:28:06 - Starting docker-compose up in /root/HELIOS/Console Command Center...
- Container sonarr  Running
- Container prowlarr  Running
- Container sabnzbd  Running
- Container plexautolanguages  Running
- Container overseerr  Running
- Container radarr  Running
- Container bazarr  Running
+2025-03-21 13:51:48 - Starting docker-compose up in /root/HELIOS/Console Command Center...
+2025-03-21 13:51:48 - Starting docker-compose up in /root/HELIOS/Media Management Center...
+ Network consolecommandcenter_default  Creating
+ Network mediamanagementcenter_default  Creating
+ Network mediamanagementcenter_default  Created
+ Container radarr  Creating
+ Container bazarr  Creating
+ Container sabnzbd  Creating
+ Container sonarr  Creating
+ Container prowlarr  Creating
+ Container plexautolanguages  Creating
+ Container overseerr  Creating
+ Network consolecommandcenter_default  Created
+ Network consolecommandcenter_agent_network  Creating
+ Network consolecommandcenter_agent_network  Created
+ Container flaresolverr  Creating
+ Container tautulli  Creating
+ Container portaineragent  Creating
  Container n8n  Creating
  Container homarr  Creating
- Container flaresolverr  Creating
-2025-03-20 15:28:06 - docker-compose up finished in /root/HELIOS/Media Management Center
- Container homarr  Created
+ Container portainer  Creating
+ Container watchtower  Creating
+ Container portaineragent  Created
+ Container sabnzbd  Created
+ Container bazarr  Created
+ Container radarr  Created
+ Container overseerr  Created
+ Container watchtower  Created
+ Container tautulli  Created
+ Container portainer  Created
+ Container sonarr  Created
+ Container prowlarr  Created
  Container flaresolverr  Created
  Container n8n  Created
- Container homarr  Starting
- Container tautulli  Starting
- Container flaresolverr  Starting
- Container portaineragent  Starting
- Container watchtower  Starting
+ Container plexautolanguages  Created
+ Container radarr  Starting
+ Container sonarr  Starting
+ Container sabnzbd  Starting
+ Container plexautolanguages  Starting
+ Container prowlarr  Starting
+ Container overseerr  Starting
+ Container bazarr  Starting
+ Container homarr  Created
  Container portainer  Starting
+ Container watchtower  Starting
+ Container tautulli  Starting
  Container n8n  Starting
+ Container portaineragent  Starting
+ Container flaresolverr  Starting
+ Container homarr  Starting
+ Container bazarr  Started
+ Container plexautolanguages  Started
+ Container overseerr  Started
+ Container sonarr  Started
+ Container radarr  Started
  Container portainer  Started
- Container tautulli  Started
- Container portaineragent  Started
- Container n8n  Started
- Container flaresolverr  Started
  Container watchtower  Started
+ Container sabnzbd  Started
+ Container portaineragent  Started
  Container homarr  Started
-2025-03-20 15:28:07 - docker-compose up finished in /root/HELIOS/Console Command Center
-2025-03-20 15:28:07 - All docker-compose services are up and running.
+ Container n8n  Started
+ Container prowlarr  Started
+2025-03-21 13:51:50 - docker-compose up finished in /root/HELIOS/Media Management Center
+ Container tautulli  Started
+ Container flaresolverr  Started
+2025-03-21 13:51:50 - docker-compose up finished in /root/HELIOS/Console Command Center
+2025-03-21 13:51:50 - All docker-compose services are up and running.
