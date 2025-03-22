@@ -1,38 +1,61 @@
-# Security Policy
+# 🛡️ Security Policy
 
-## Reporting a Vulnerability
+<div align="center">
+  <p>
+    <img src="https://img.shields.io/badge/Policy-Active-brightgreen?style=for-the-badge" alt="Policy Status"/>
+    <img src="https://img.shields.io/badge/Security-First-blue?style=for-the-badge" alt="Security Priority"/>
+  </p>
+</div>
 
-We take the security of our software seriously. If you believe you have found a security vulnerability in HELIOS, please report it to us following these guidelines.
+## 🔍 Reporting a Vulnerability
 
-### How to Report a Security Vulnerability?
+We take the security of HELIOS seriously. If you believe you have found a security vulnerability, please follow these guidelines to report it.
 
-Please send an email to [petermarino2@gmail.com] with the following details:
+### 📫 How to Report
 
-- A clear description of the vulnerability.
-- Steps to reproduce the issue, or an explanation of how the vulnerability can be exploited.
-- Any relevant screenshots or output.
+Please send details to **petermarino2@gmail.com** including:
 
-Your report will be reviewed by our security team and we will communicate with you during the vulnerability verification process.
+- 📝 Clear description of the vulnerability
+- 🔄 Steps to reproduce the issue
+- 🎯 Potential exploitation methods
+- 📸 Relevant screenshots or output
 
-### What to Expect After Reporting a Vulnerability?
+### ⏱️ What to Expect
 
-- We will acknowledge receipt of your vulnerability report.
-- We'll work with you to understand and reproduce the issue.
-- Once the issue is confirmed, we will work on a fix and plan a release.
-- We will keep you informed about the progress towards the fix and release.
-- After the release, we will publicly acknowledge your responsible disclosure, if you wish.
+1. **Acknowledgment** - We'll confirm receipt of your report
+2. **Verification** - Our team will work with you to understand and reproduce the issue
+3. **Resolution** - We'll develop and test a fix
+4. **Release** - Security patches will be prioritized for release
+5. **Recognition** - Public acknowledgment of your responsible disclosure (optional)
 
-## Security Update Policy
+## 🔒 Security Measures
 
-In this section, you can inform users about how you make updates to your software, particularly addressing security vulnerabilities.
+### Active Protection
+- 🔄 Regular dependency updates
+- 🕵️ Automated vulnerability scanning
+- 🚀 Rapid security patch deployment
+- 📊 Continuous monitoring
 
-- We regularly update our project dependencies and scan for vulnerabilities.
-- Security patches will be prioritized and released as quickly as possible.
-- We recommend keeping your software up to date to benefit from these fixes.
+### Best Practices
+- ✅ Keep HELIOS and its components updated
+- 🔐 Follow security configuration guidelines
+- 📢 Monitor security announcements
+- 🔍 Regular security audits
 
-## Additional Security Information
+## 📈 Update Policy
 
-- Ensure you follow best practices when using LUMINAL.
-- Regularly check this page for announcements about security updates.
+We maintain a proactive approach to security:
 
-Thank you for helping to keep HELIOS and its users safe!
+- 🏃‍♂️ Critical vulnerabilities: Immediate attention
+- 🔄 Regular updates: Monthly security reviews
+- 📦 Dependencies: Weekly automated checks
+- 🛡️ Preventive measures: Continuous implementation
+
+---
+
+<div align="center">
+  <p>
+    <strong>Thank you for helping keep HELIOS secure!</strong>
+  </p>
+  <sub>Together we build a safer environment 🤝</sub>
+</div>
