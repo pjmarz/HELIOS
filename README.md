@@ -71,7 +71,7 @@ Your personal entertainment hub:
     <td>Usenet Download Client</td>
   </tr>
   <tr>
-    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png"/> <b><a href="https://github.com/plex/plex-auto-languages">Plex Auto Languages</a></b></td>
+    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png"/> <b><a href="https://github.com/RemiRigal/Plex-Auto-Languages">Plex Auto Languages</a></b></td>
     <td>Automated Language Management</td>
   </tr>
   <tr>
@@ -97,7 +97,7 @@ Your personal entertainment hub:
   </tr>
   <tr>
     <td rowspan="4"><b>🔧 Infrastructure</b></td>
-    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png"/> <b><a href="https://github.com/proxmox/proxmox-ve">Proxmox VE</a></b></td>
+    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png"/> <b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
     <td>Virtualization Platform</td>
   </tr>
   <tr>
