@@ -101,7 +101,7 @@ Your personal entertainment hub:
     <td>Virtualization Platform</td>
   </tr>
   <tr>
-    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png"/> <b><a href="https://github.com/docker/docker-ce">Docker</a></b></td>
+    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png"/> <b><a href="https://www.docker.com/">Docker</a></b></td>
     <td>Containerization Platform</td>
   </tr>
   <tr>
