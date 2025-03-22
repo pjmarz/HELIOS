@@ -105,7 +105,7 @@ Your personal entertainment hub:
     <td>Containerization Platform</td>
   </tr>
   <tr>
-    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png"/> <b><a href="https://github.com/n8n-io/n8n">N8N</a></b></td>
+    <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png"/> <b><a href="https://n8n.io/">N8N</a></b></td>
     <td>Workflow Automation</td>
   </tr>
   <tr>
