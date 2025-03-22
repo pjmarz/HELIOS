@@ -142,8 +142,6 @@ HELIOS demonstrates expertise in:
   </a>
   
   <p align="center">
-    <sub>Built with precision and passion 🚀</sub>
-    <br />
-    <em>Crafted with ❤️ by Peter Marino</em>
+    <sub>Built with passion and love ♥️</sub>
   </p>
 </div>
