@@ -19,6 +19,7 @@ docker-compose.override.yml
 # System Files
 .DS_Store
 Thumbs.db
+.vscode/
 
 # Logs and Databases
 *.log
