@@ -4,7 +4,7 @@
 source /root/HELIOS/env.sh
 
 # Define the log file
-LOG_FILE="/root/HELIOS/script_logs/restart-docker.log"
+LOG_FILE="/root/HELIOS/logs/restart-docker.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"

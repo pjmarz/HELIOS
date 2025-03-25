@@ -8,7 +8,7 @@ console_command_center_path="/root/HELIOS/Console Command Center"
 media_management_center_path="/root/HELIOS/Media Management Center"
 
 # Define the log file
-LOG_FILE="/root/HELIOS/script_logs/master-compose-up.log"
+LOG_FILE="/root/HELIOS/logs/master-compose-up.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"

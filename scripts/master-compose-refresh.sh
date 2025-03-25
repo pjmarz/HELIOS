@@ -10,7 +10,7 @@ declare -a COMPOSE_DIRS=(
 )
 
 # Define the log file
-LOG_FILE="/root/HELIOS/script_logs/master-compose-refresh.log"
+LOG_FILE="/root/HELIOS/logs/master-compose-refresh.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"

@@ -12,7 +12,7 @@ else
 fi
 
 # Define paths
-LOG_FILE="/root/HELIOS/script_logs/docker-container-rebuild.log"
+LOG_FILE="/root/HELIOS/logs/docker-container-rebuild.log"
 
 # Clear the log file at the beginning of the script
 : > "$LOG_FILE"

@@ -4,7 +4,7 @@
 source /root/HELIOS/env.sh
 
 # Define paths
-LOG_FILE="/root/HELIOS/script_logs/clean-usenet.log"
+LOG_FILE="/root/HELIOS/logs/clean-usenet.log"
 
 # Clear the log file at the beginning of the script
 > "$LOG_FILE"
