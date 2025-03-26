@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/images/HELIOS.gif" width="600" alt="HELIOS">
+  <img src="assets/images/HELIOS.gif" width="300" alt="HELIOS">
 
   <p align="center">
     <img src="https://img.shields.io/badge/Status-Operational-brightgreen?style=for-the-badge" alt="Status"/>
