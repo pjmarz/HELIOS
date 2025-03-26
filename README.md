@@ -12,35 +12,16 @@
 
 ## 🎯 Project Overview
 
-HELIOS is a sophisticated self-hosted solution that combines powerful server management capabilities with comprehensive media organization. Named after the Greek god of the sun, HELIOS illuminates your digital world by bringing order to chaos. Built on Proxmox VE, it leverages Docker containers for maximum flexibility and reliability.
+HELIOS is a self-hosted media management and server administration system built on Proxmox VE using Docker containers. The project aims to create a reliable, automated system for media collection, organization, and server management through containerized services.
 
-### 💻 Console Command Center
-The nerve center of your digital domain:
-- 🔧 Powered by Portainer for seamless container management
-- 🛡️ Secure remote access through Cloudflared tunnels
-- 🔄 Automated updates via Watchtower
-- 📊 Real-time monitoring with Tautulli and Homarr
-- 🔮 Workflow automation using N8N
-
-### 🎬 Media Management Center
-Your personal entertainment hub:
-- 🎥 Automated movie collection management with Radarr
-- 📺 TV series automation through Sonarr
-- 🗣️ Subtitle management with Bazarr
-- 📝 Streamlined media requests through Overseerr
-- 🔍 Advanced indexing with Prowlarr
-- ⬇️ High-speed downloads via SABnzbd
-- 🌐 Smart language handling with Plex Auto Languages
-
-## 🛠️ Tech Stack
+## 🛠️ System Components
 
 <div align="center">
-
 <table>
 <thead>
   <tr>
     <th>Category</th>
-    <th>Technology</th>
+    <th>Service</th>
     <th>Purpose</th>
   </tr>
 </thead>
@@ -75,7 +56,7 @@ Your personal entertainment hub:
     <td>Automated Language Management</td>
   </tr>
   <tr>
-    <td rowspan="5"><b>📊 Monitoring & Management</b></td>
+    <td rowspan="5"><b>📊 Server Management</b></td>
     <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png"/> <b><a href="https://github.com/portainer/portainer">Portainer</a></b></td>
     <td>Container Management</td>
   </tr>
@@ -93,7 +74,7 @@ Your personal entertainment hub:
   </tr>
   <tr>
     <td><img height="24" width="24" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png"/> <b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
-    <td>Secure Remote Access Tunnel</td>
+    <td>Secure Remote Access</td>
   </tr>
   <tr>
     <td rowspan="4"><b>🔧 Infrastructure</b></td>
@@ -114,25 +95,37 @@ Your personal entertainment hub:
   </tr>
 </tbody>
 </table>
-
 </div>
 
-## 💡 Key Features
+## 💡 Implementation Details
 
-- 🏗️ Modular Architecture
-- 🔐 Security-First Design
-- 🤖 Automated Management
-- 📊 Intuitive Monitoring
-- 🎯 Efficient Resource Utilization
+The project implements:
+- Containerized services using Docker and Docker Compose
+- Automated container updates and maintenance
+- Secure remote access through Cloudflare tunnels
+- Centralized logging and monitoring
+- Resource-efficient container orchestration
 
-## 🎨 Project Showcase
+## 🔧 System Architecture
 
-HELIOS demonstrates expertise in:
-- 🔧 DevOps Practices
-- 🐳 Container Orchestration
-- 🔒 Security Implementation
-- 🏗️ System Architecture
-- 📊 Resource Management
+Key architectural features:
+- Modular service configuration
+- Automated service recovery
+- Centralized management interface
+- Secure network isolation
+- Efficient resource allocation
+
+## 🛠️ Maintenance
+
+
+- Service orchestration (start/stop/refresh all containers)
+- Automated container rebuilds with latest images
+- Download directory cleanup and management
+- Docker service maintenance and recovery
+- Automated container updates via Watchtower
+- Centralized logging and monitoring
+
+
 
 ---
 
@@ -142,6 +135,6 @@ HELIOS demonstrates expertise in:
   </a>
   
   <p align="center">
-    <sub>Built with passion and love ♥️</sub>
+    <sub>Built with ♥️ by pjmarz</sub>
   </p>
 </div>
