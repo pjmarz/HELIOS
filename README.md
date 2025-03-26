@@ -18,102 +18,100 @@ HELIOS is a self-hosted media management and server administration system built 
 
 ## 🛠️ System Components
 
-<div align="center">
 <table>
-<thead>
-  <tr>
-    <th>Category</th>
-    <th>Service</th>
-    <th>Purpose</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td rowspan="7"><b>🎬 Media Management</b></td>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png"/></td>
-    <td><b><a href="https://github.com/Radarr/Radarr">Radarr</a></b></td>
-    <td>Movie Collection & Downloads</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sonarr.png"/></td>
-    <td><b><a href="https://github.com/Sonarr/Sonarr">Sonarr</a></b></td>
-    <td>TV Series Collection & Downloads</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/bazarr.png"/></td>
-    <td><b><a href="https://github.com/morpheus65535/bazarr">Bazarr</a></b></td>
-    <td>Subtitle Management</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/overseerr.png"/></td>
-    <td><b><a href="https://github.com/sct/overseerr">Overseerr</a></b></td>
-    <td>Media Request & Discovery</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prowlarr.png"/></td>
-    <td><b><a href="https://github.com/Prowlarr/Prowlarr">Prowlarr</a></b></td>
-    <td>Indexer Management</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png"/></td>
-    <td><b><a href="https://github.com/sabnzbd/sabnzbd">SABnzbd</a></b></td>
-    <td>Usenet Download Client</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png"/></td>
-    <td><b><a href="https://github.com/RemiRigal/Plex-Auto-Languages">Plex Auto Languages</a></b></td>
-    <td>Automated Language Management</td>
-  </tr>
-  <tr>
-    <td rowspan="5"><b>📊 Server Management</b></td>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png"/></td>
-    <td><b><a href="https://github.com/portainer/portainer">Portainer</a></b></td>
-    <td>Container Management</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/watchtower.png"/></td>
-    <td><b><a href="https://github.com/containrrr/watchtower">Watchtower</a></b></td>
-    <td>Automated Container Updates</td>
-  </tr>
-  <tr>
-    <td><img height="32" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tautulli.png"/></td>
-    <td><b><a href="https://github.com/Tautulli/Tautulli">Tautulli</a></b></td>
-    <td>Media Server Analytics</td>
-  </tr>
-  <tr>
-    <td><img height="24" width="38" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png"/></td>
-    <td><b><a href="https://github.com/ajnart/homarr">Homarr</a></b></td>
-    <td>Dashboard & Service Management</td>
-  </tr>
-  <tr>
-    <td><img height="24" width="40" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png"/></td>
-    <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
-    <td>Secure Remote Access</td>
-  </tr>
-  <tr>
-    <td rowspan="4"><b>🔧 Infrastructure</b></td>
-    <td><img height="28" width="28" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png"/></td>
-    <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
-    <td>Virtualization Platform</td>
-  </tr>
-  <tr>
-    <td><img height="20" width="28" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png"/></td>
-    <td><b><a href="https://www.docker.com/">Docker</a></b></td>
-    <td>Containerization Platform</td>
-  </tr>
-  <tr>
-    <td><img height="20" width="40" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png"/></td>
-    <td><b><a href="https://n8n.io/">N8N</a></b></td>
-    <td>Workflow Automation</td>
-  </tr>
-  <tr>
-    <td><img height="20" width="32" style="vertical-align: middle;" src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png"/></td>
-    <td><b><a href="https://github.com/FlareSolverr/FlareSolverr">FlareSolverr</a></b></td>
-    <td>Proxy & Anti-Bot Protection</td>
-  </tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th colspan="2">Service</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="7"><b>🎬 Media Management</b></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="24" height="24" alt="Radarr"></td>
+      <td><b><a href="https://github.com/Radarr/Radarr">Radarr</a></b></td>
+      <td>Movie Collection & Downloads</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sonarr.png" width="24" height="24" alt="Sonarr"></td>
+      <td><b><a href="https://github.com/Sonarr/Sonarr">Sonarr</a></b></td>
+      <td>TV Series Collection & Downloads</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/bazarr.png" width="24" height="24" alt="Bazarr"></td>
+      <td><b><a href="https://github.com/morpheus65535/bazarr">Bazarr</a></b></td>
+      <td>Subtitle Management</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/overseerr.png" width="24" height="24" alt="Overseerr"></td>
+      <td><b><a href="https://github.com/sct/overseerr">Overseerr</a></b></td>
+      <td>Media Request & Discovery</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prowlarr.png" width="24" height="24" alt="Prowlarr"></td>
+      <td><b><a href="https://github.com/Prowlarr/Prowlarr">Prowlarr</a></b></td>
+      <td>Indexer Management</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png" width="24" height="24" alt="SABnzbd"></td>
+      <td><b><a href="https://github.com/sabnzbd/sabnzbd">SABnzbd</a></b></td>
+      <td>Usenet Download Client</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png" width="24" height="24" alt="Plex"></td>
+      <td><b><a href="https://github.com/RemiRigal/Plex-Auto-Languages">Plex Auto Languages</a></b></td>
+      <td>Automated Language Management</td>
+    </tr>
+    <tr>
+      <td rowspan="5"><b>📊 Server Management</b></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png" width="24" height="24" alt="Portainer"></td>
+      <td><b><a href="https://github.com/portainer/portainer">Portainer</a></b></td>
+      <td>Container Management</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/watchtower.png" width="24" height="24" alt="Watchtower"></td>
+      <td><b><a href="https://github.com/containrrr/watchtower">Watchtower</a></b></td>
+      <td>Automated Container Updates</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tautulli.png" width="24" height="24" alt="Tautulli"></td>
+      <td><b><a href="https://github.com/Tautulli/Tautulli">Tautulli</a></b></td>
+      <td>Media Server Analytics</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png" width="40" height="24" alt="Homarr"></td>
+      <td><b><a href="https://github.com/ajnart/homarr">Homarr</a></b></td>
+      <td>Dashboard & Service Management</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="40" height="24" alt="Cloudflared"></td>
+      <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
+      <td>Secure Remote Access</td>
+    </tr>
+    <tr>
+      <td rowspan="4"><b>🔧 Infrastructure</b></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="24" height="24" alt="Proxmox"></td>
+      <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
+      <td>Virtualization Platform</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="30" height="24" alt="Docker"></td>
+      <td><b><a href="https://www.docker.com/">Docker</a></b></td>
+      <td>Containerization Platform</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png" width="40" height="24" alt="N8N"></td>
+      <td><b><a href="https://n8n.io/">N8N</a></b></td>
+      <td>Workflow Automation</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="32" height="24" alt="FlareSolverr"></td>
+      <td><b><a href="https://github.com/FlareSolverr/FlareSolverr">FlareSolverr</a></b></td>
+      <td>Proxy & Anti-Bot Protection</td>
+    </tr>
+  </tbody>
 </table>
-</div>
 
 ## 💡 Implementation Details
 
