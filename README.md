@@ -14,7 +14,7 @@
 
 ## 🎯 Project Overview
 
-HELIOS is a self-hosted media management and server administration system built on Proxmox VE using Docker containers. The project aims to create a reliable, automated system for media collection, organization, and server management through containerized services.
+HELIOS is a self-hosted media management and server administration system built on Proxmox VE. The project aims to create a reliable, automated system for media collection, organization, and server management through containerized services.
 
 ## 🛠️ System Components
 
