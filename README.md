@@ -135,6 +135,6 @@ Key architectural features:
   </a>
   
   <p align="center">
-    <sub>Built with ♥️</sub>
+    <sub><i> i'm gonna sing the doom song now </i></sub>
   </p>
 </div>
