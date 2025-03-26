@@ -70,7 +70,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Container Management</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/watchtower.png" width="32" height="32" alt="Watchtower"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/watchtower.png" width="36" height="36" alt="Watchtower"></td>
       <td><b><a href="https://github.com/containrrr/watchtower">Watchtower</a></b></td>
       <td>Automated Container Updates</td>
     </tr>
