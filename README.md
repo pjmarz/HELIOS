@@ -1,5 +1,7 @@
 <div align="center">
-  <img src="assets/images/HELIOS.gif" width="300" alt="HELIOS">
+  <a href="https://github.com/pjmarz/HELIOS">
+    <img src="assets/images/HELIOS.gif" width="300" alt="HELIOS">
+  </a>
 
   <p align="center">
     <img src="https://img.shields.io/badge/Status-Operational-brightgreen?style=for-the-badge" alt="Status"/>
@@ -130,11 +132,11 @@ Key architectural features:
 ---
 
 <div align="center">
-  <a href="https://github.com/pjmarz/HELIOS">
+  <a href="https://www.youtube.com/watch?v=Nw_cdqQHGA8">
     <img src="assets/images/GIR.gif" alt="HELIOS" width="120" height="120">
   </a>
   
   <p align="center">
-    <sub><i> i'm gonna sing the doom song now </i></sub>
+    <sub><i> I'm gonna sing the doom song now </i></sub>
   </p>
 </div>
