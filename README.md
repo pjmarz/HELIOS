@@ -85,7 +85,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Dashboard & Service Management</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="40" height="24" alt="Cloudflared"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared"></td>
       <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
       <td>Secure Remote Access</td>
     </tr>
