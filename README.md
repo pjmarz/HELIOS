@@ -80,12 +80,12 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Media Server Analytics</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png" width="53" height="32" alt="Homarr"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png" width="40" height="24" alt="Homarr"></td>
       <td><b><a href="https://github.com/ajnart/homarr">Homarr</a></b></td>
       <td>Dashboard & Service Management</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="53" height="32" alt="Cloudflared"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="40" height="24" alt="Cloudflared"></td>
       <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
       <td>Secure Remote Access</td>
     </tr>
@@ -96,17 +96,17 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Virtualization Platform</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="40" height="32" alt="Docker"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="30" height="24" alt="Docker"></td>
       <td><b><a href="https://www.docker.com/">Docker</a></b></td>
       <td>Containerization Platform</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png" width="53" height="32" alt="N8N"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png" width="40" height="24" alt="N8N"></td>
       <td><b><a href="https://n8n.io/">N8N</a></b></td>
       <td>Workflow Automation</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="43" height="32" alt="FlareSolverr"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="32" height="24" alt="FlareSolverr"></td>
       <td><b><a href="https://github.com/FlareSolverr/FlareSolverr">FlareSolverr</a></b></td>
       <td>Proxy & Anti-Bot Protection</td>
     </tr>
