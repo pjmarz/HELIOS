@@ -1,8 +1,12 @@
 #!/bin/bash
 
-set -e  # Exit immediately if a command exits with a non-zero status
+# Exit on error
+set -e
 
-# Source the environment variables
+# Script Description
+# Rebuilds all Docker containers by pulling latest images and restarting services
+
+# Source environment variables
 ENV_FILE="/root/HELIOS/env.sh"
 if [ -f "$ENV_FILE" ]; then
     source "$ENV_FILE"
@@ -11,18 +15,42 @@ else
     exit 1
 fi
 
-# Define paths
-LOG_FILE="/root/HELIOS/logs/docker-container-rebuild.log"
+# Base paths
+HELIOS_ROOT="/root/HELIOS"
+CONSOLE_CENTER="${HELIOS_ROOT}/Console Command Center"
+MEDIA_CENTER="${HELIOS_ROOT}/Media Management Center"
 
-# Clear the log file at the beginning of the script
+# Logging configuration
+LOG_DIR="${HELIOS_ROOT}/logs"
+LOG_FILE="${LOG_DIR}/$(basename "$0" .sh).log"
+
+# Create logs directory if it doesn't exist
+mkdir -p "$LOG_DIR"
+
+# Initialize log file
 : > "$LOG_FILE"
 
-# Function to prepend the current date and time to log messages
+# Logging function
 log() {
-    local msg="$@"
-    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    local msg="$*"
+    local timestamp
+    timestamp=$(date "+%Y-%m-%d %H:%M:%S")
     echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
+
+# Error handling function
+handle_error() {
+    local exit_code=$?
+    local line_number=$1
+    log "Error on line $line_number: Exit code $exit_code"
+    exit $exit_code
+}
+
+# Set error trap
+trap 'handle_error $LINENO' ERR
+
+# Log script start
+log "=== Script Start ==="
 
 # Function to process docker-compose for a given directory
 process_docker_compose() {
@@ -31,48 +59,55 @@ process_docker_compose() {
 
     if [ ! -d "$dir" ]; then
         log "Directory $dir does not exist. Skipping."
-        return
+        return 1
     fi
 
-    cd "$dir"
-    log "Changed directory to $dir"
+    cd "$dir" || {
+        log "Failed to change directory to $dir"
+        return 1
+    }
 
-    # Stop the containers defined in docker-compose.yml
-    docker compose down 2>&1 | tee -a "$LOG_FILE"
-    log "Stopped containers in $dir"
+    log "Stopping containers in $dir"
+    docker compose down || {
+        log "Failed to stop containers in $dir"
+        return 1
+    }
 
-    # Pull down the latest images
-    docker compose pull 2>&1 | tee -a "$LOG_FILE"
-    log "Pulled latest images in $dir"
+    log "Pulling latest images in $dir"
+    docker compose pull || {
+        log "Failed to pull latest images in $dir"
+        return 1
+    }
 
-    # Start the containers in detached mode
-    docker compose up -d 2>&1 | tee -a "$LOG_FILE"
-    log "Started containers in $dir"
+    log "Starting containers in $dir"
+    docker compose up -d || {
+        log "Failed to start containers in $dir"
+        return 1
+    }
+
+    return 0
 }
 
 # Function to prune unused docker resources
 prune_docker_system() {
-    docker system prune -af 2>&1 | tee -a "$LOG_FILE"
-    log "Pruned unused Docker resources"
+    log "Pruning unused Docker resources"
+    docker system prune -af || {
+        log "Failed to prune Docker system"
+        return 1
+    }
 }
 
-# Start a new log session with a timestamp
-log "--------------------------"
-log "Rebuild started at $(date)"
-log "--------------------------"
-
-# Define the directories to process
-DIRS=(
-    "/root/HELIOS/Console Command Center"
-    "/root/HELIOS/Media Management Center"
-)
-
 # Process each directory
-for dir in "${DIRS[@]}"; do
-    process_docker_compose "$dir"
-done
+process_docker_compose "$CONSOLE_CENTER"
+process_docker_compose "$MEDIA_CENTER"
 
 # Clean up any unused images, containers, networks, and volumes
 prune_docker_system
 
-log "Rebuild completed successfully at $(date). Log file is located at $LOG_FILE"
+# Cleanup function
+cleanup() {
+    local exit_code=$?
+    log "=== Script Complete (Exit Code: $exit_code) ==="
+}
+
+trap cleanup EXIT

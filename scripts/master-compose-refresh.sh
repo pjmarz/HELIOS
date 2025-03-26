@@ -1,70 +1,99 @@
 #!/bin/bash
 
-# Source the environment variables
-source /root/HELIOS/env.sh
+# Exit on error
+set -e
 
-# Define the paths to the directories containing your docker-compose files
-declare -a COMPOSE_DIRS=(
-    "/root/HELIOS/Console Command Center"
-    "/root/HELIOS/Media Management Center"
-)
+# Script Description
+# Refreshes all Docker Compose services by stopping and starting them
 
-# Define the log file
-LOG_FILE="/root/HELIOS/logs/master-compose-refresh.log"
+# Source environment variables
+ENV_FILE="/root/HELIOS/env.sh"
+if [ -f "$ENV_FILE" ]; then
+    source "$ENV_FILE"
+else
+    echo "Environment file $ENV_FILE not found. Exiting."
+    exit 1
+fi
 
-# Clear the log file at the beginning of the script
-> "$LOG_FILE"
+# Base paths
+HELIOS_ROOT="/root/HELIOS"
+CONSOLE_CENTER="${HELIOS_ROOT}/Console Command Center"
+MEDIA_CENTER="${HELIOS_ROOT}/Media Management Center"
 
-# Function to prepend the current date and time to log messages
-log_message() {
-    local msg="$1"
-    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+# Logging configuration
+LOG_DIR="${HELIOS_ROOT}/logs"
+LOG_FILE="${LOG_DIR}/$(basename "$0" .sh).log"
+
+# Create logs directory if it doesn't exist
+mkdir -p "$LOG_DIR"
+
+# Initialize log file
+: > "$LOG_FILE"
+
+# Logging function
+log() {
+    local msg="$*"
+    local timestamp
+    timestamp=$(date "+%Y-%m-%d %H:%M:%S")
     echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
+
+# Error handling function
+handle_error() {
+    local exit_code=$?
+    local line_number=$1
+    log "Error on line $line_number: Exit code $exit_code"
+    exit $exit_code
+}
+
+# Set error trap
+trap 'handle_error $LINENO' ERR
+
+# Log script start
+log "=== Script Start ==="
 
 # Function to refresh Docker Compose in a given directory
 refresh_docker_compose() {
     local directory="$1"
 
-    log_message "Starting refresh in ${directory}..."
+    log "Starting refresh in ${directory}..."
 
     if [ ! -d "$directory" ]; then
-        log_message "Directory ${directory} does not exist. Skipping."
-        return
+        log "Directory ${directory} does not exist. Skipping."
+        return 1
     fi
 
     cd "$directory" || {
-        log_message "Failed to navigate to ${directory}. Skipping."
-        return
+        log "Failed to navigate to ${directory}. Skipping."
+        return 1
     }
 
     # Bring down the Docker Compose stack
-    log_message "Running docker compose down in ${directory}..."
-    docker compose down 2>&1 | tee -a "$LOG_FILE"
-    if [ $? -ne 0 ]; then
-        log_message "Error encountered while running docker compose down in ${directory}."
-        return
-    fi
+    log "Running docker compose down in ${directory}..."
+    docker compose down || {
+        log "Error running docker compose down in ${directory}"
+        return 1
+    }
 
     # Bring up the Docker Compose stack
-    log_message "Running docker compose up -d in ${directory}..."
-    docker compose up -d 2>&1 | tee -a "$LOG_FILE"
-    if [ $? -ne 0 ]; then
-        log_message "Error encountered while running docker compose up in ${directory}."
-        return
-    fi
+    log "Running docker compose up -d in ${directory}..."
+    docker compose up -d || {
+        log "Error running docker compose up in ${directory}"
+        return 1
+    }
 
-    log_message "Successfully refreshed Docker Compose in ${directory}."
+    log "Successfully refreshed Docker Compose in ${directory}"
+    return 0
 }
 
-# Start the script
-log_message "--------------------------"
-log_message "Docker Compose Refresh Started"
-log_message "--------------------------"
-
 # Process each Docker Compose directory
-for directory in "${COMPOSE_DIRS[@]}"; do
-    refresh_docker_compose "$directory"
-done
+refresh_docker_compose "$CONSOLE_CENTER"
+refresh_docker_compose "$MEDIA_CENTER"
 
-log_message "All specified Docker Compose stacks have been refreshed."
+# Cleanup function
+cleanup() {
+    local exit_code=$?
+    log "=== Script Complete (Exit Code: $exit_code) ==="
+}
+
+trap cleanup EXIT

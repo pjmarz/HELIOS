@@ -1,38 +1,67 @@
 #!/bin/bash
 
-# Source the environment variables
-source /root/HELIOS/env.sh
+# Exit on error
+set -e
 
-# Define paths
-LOG_FILE="/root/HELIOS/logs/clean-usenet.log"
+# Script Description
+# Cleans up usenet download directories and restarts sabnzbd service
 
-# Clear the log file at the beginning of the script
-> "$LOG_FILE"
+# Source environment variables
+ENV_FILE="/root/HELIOS/env.sh"
+if [ -f "$ENV_FILE" ]; then
+    source "$ENV_FILE"
+else
+    echo "Environment file $ENV_FILE not found. Exiting."
+    exit 1
+fi
 
-# Function to prepend the current date and time to log messages
+# Base paths
+HELIOS_ROOT="/root/HELIOS"
+MEDIA_CENTER="${HELIOS_ROOT}/Media Management Center"
+INCOMPLETE_DIR="/mnt/usenet/incomplete"
+COMPLETE_DIR="/mnt/usenet/complete"
+
+# Logging configuration
+LOG_DIR="${HELIOS_ROOT}/logs"
+LOG_FILE="${LOG_DIR}/$(basename "$0" .sh).log"
+
+# Create logs directory if it doesn't exist
+mkdir -p "$LOG_DIR"
+
+# Initialize log file
+: > "$LOG_FILE"
+
+# Logging function
 log() {
-    local msg="$@"
+    local msg="$*"
     local timestamp
     timestamp=$(date "+%Y-%m-%d %H:%M:%S")
     echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
 }
 
-# Define the Docker Compose project directory
-DOCKER_COMPOSE_DIR="/root/HELIOS/Media Management Center"
+# Error handling function
+handle_error() {
+    local exit_code=$?
+    local line_number=$1
+    log "Error on line $line_number: Exit code $exit_code"
+    exit $exit_code
+}
 
-# Define the base directories for incomplete and completed downloads
-INCOMPLETE_DIR="/mnt/usenet/incomplete"
-COMPLETE_DIR="/mnt/usenet/complete"
+# Set error trap
+trap 'handle_error $LINENO' ERR
 
-# List of folders to clear within the completed directory (now including "default")
+# Log script start
+log "=== Script Start ==="
+
+# List of folders to clear within the completed directory
 FOLDERS=("default" "movies" "tv")
-
-# Log the start of the script
-log "Starting clean-usenet.sh..."
 
 # Stop sabnzbd service
 log "Stopping sabnzbd service"
-(cd "$DOCKER_COMPOSE_DIR" && docker compose stop sabnzbd)
+(cd "$MEDIA_CENTER" && docker compose stop sabnzbd) || {
+    log "Error stopping sabnzbd service"
+    exit 1
+}
 
 # Safeguard against accidental deletion
 if [[ ! -d "$INCOMPLETE_DIR" || ! -d "$COMPLETE_DIR" ]]; then
@@ -43,7 +72,7 @@ fi
 # Delete all contents of the incomplete directory
 log "Deleting all contents of $INCOMPLETE_DIR"
 if rm -rf "${INCOMPLETE_DIR:?}"/*; then
-    log "Successfully cleared $INCOMPLETE_DIR."
+    log "Successfully cleared $INCOMPLETE_DIR"
 else
     log "Failed to clear $INCOMPLETE_DIR. Check permissions."
 fi
@@ -54,7 +83,7 @@ for folder in "${FOLDERS[@]}"; do
     if [[ -d "$TARGET_DIR" ]]; then
         log "Deleting contents of $TARGET_DIR"
         if rm -rf "${TARGET_DIR:?}"/*; then
-            log "Successfully cleared $TARGET_DIR."
+            log "Successfully cleared $TARGET_DIR"
         else
             log "Failed to clear $TARGET_DIR. Check permissions."
         fi
@@ -63,15 +92,17 @@ for folder in "${FOLDERS[@]}"; do
     fi
 done
 
-log "All specified folders, including the incomplete directory, have been cleared."
-
 # Restart sabnzbd service
 log "Restarting sabnzbd service"
-if (cd "$DOCKER_COMPOSE_DIR" && docker compose up -d sabnzbd); then
-    log "sabnzbd service restarted successfully."
-else
-    log "Failed to restart sabnzbd service. Check Docker Compose logs."
-fi
+(cd "$MEDIA_CENTER" && docker compose up -d sabnzbd) || {
+    log "Failed to restart sabnzbd service"
+    exit 1
+}
 
-# Notify end of script and log file location
-log "Script completed. Log file is located at $LOG_FILE"
+# Cleanup function
+cleanup() {
+    local exit_code=$?
+    log "=== Script Complete (Exit Code: $exit_code) ==="
+}
+
+trap cleanup EXIT
