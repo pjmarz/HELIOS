@@ -131,10 +131,10 @@ Key architectural features:
 
 <div align="center">
   <a href="https://github.com/pjmarz/HELIOS">
-    <img src="assets/images/HELIOS.jpg" alt="HELIOS" width="320" height="320">
+    <img src="assets/images/GIR.gif" alt="HELIOS" width="120" height="120">
   </a>
   
   <p align="center">
-    <sub>Built with ♥️ by pjmarz</sub>
+    <sub>Built with ♥️</sub>
   </p>
 </div>
