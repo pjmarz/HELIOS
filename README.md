@@ -96,7 +96,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Virtualization Platform</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="38" height="24" alt="Docker"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker"></td>
       <td><b><a href="https://www.docker.com/">Docker</a></b></td>
       <td>Containerization Platform</td>
     </tr>
