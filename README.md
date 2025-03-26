@@ -1,5 +1,7 @@
 <div align="center">
-  <h1>🌟 HELIOS 🌟</h1>
+  <video width="600" autoplay loop muted playsinline>
+    <source src="assets/images/HELIOS.mp4" type="video/mp4">
+  </video>
 
   <p align="center">
     <img src="https://img.shields.io/badge/Status-Operational-brightgreen?style=for-the-badge" alt="Status"/>
