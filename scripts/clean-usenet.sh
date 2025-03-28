@@ -4,10 +4,14 @@
 set -e
 
 # Script Description
-# Cleans up usenet download directories and restarts sabnzbd service
+# Cleans Usenet download directories by removing contents of incomplete and completed folders
+
+# Get the script's directory path and the project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HELIOS_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Source environment variables
-ENV_FILE="/root/HELIOS/env.sh"
+ENV_FILE="${HELIOS_ROOT}/env.sh"
 if [ -f "$ENV_FILE" ]; then
     source "$ENV_FILE"
 else
@@ -15,11 +19,13 @@ else
     exit 1
 fi
 
-# Base paths
-HELIOS_ROOT="/root/HELIOS"
-MEDIA_CENTER="${HELIOS_ROOT}/Media Management Center"
-INCOMPLETE_DIR="/mnt/usenet/incomplete"
-COMPLETE_DIR="/mnt/usenet/complete"
+# Configuration
+MEDIA_DEPLOYMENT="${HELIOS_ROOT}/deployments/media"
+INCOMPLETE_DIR="${DOWNLOADS_DIR}/incomplete"
+COMPLETE_DIR="${DOWNLOADS_DIR}/complete"
+
+# Define specific folders to clean in the complete directory
+FOLDERS=("movies" "tv" "other")
 
 # Logging configuration
 LOG_DIR="${HELIOS_ROOT}/logs"
@@ -53,12 +59,20 @@ trap 'handle_error $LINENO' ERR
 # Log script start
 log "=== Script Start ==="
 
-# List of folders to clear within the completed directory
-FOLDERS=("default" "movies" "tv")
+# Validate paths to ensure they exist
+if [[ ! -d "$HELIOS_ROOT" ]]; then
+    log "HELIOS root directory not found at $HELIOS_ROOT"
+    exit 1
+fi
 
-# Stop sabnzbd service
+if [[ ! -d "$MEDIA_DEPLOYMENT" ]]; then
+    log "Media deployment directory not found at $MEDIA_DEPLOYMENT"
+    exit 1
+fi
+
+# Stop sabnzbd service before cleaning directories
 log "Stopping sabnzbd service"
-(cd "$MEDIA_CENTER" && docker compose stop sabnzbd) || {
+(cd "$MEDIA_DEPLOYMENT" && docker compose stop sabnzbd) || {
     log "Error stopping sabnzbd service"
     exit 1
 }
@@ -94,7 +108,7 @@ done
 
 # Restart sabnzbd service
 log "Restarting sabnzbd service"
-(cd "$MEDIA_CENTER" && docker compose up -d sabnzbd) || {
+(cd "$MEDIA_DEPLOYMENT" && docker compose up -d sabnzbd) || {
     log "Failed to restart sabnzbd service"
     exit 1
 }

@@ -6,19 +6,18 @@ set -e
 # Script Description
 # Restarts Docker service and all Docker Compose services in HELIOS system
 
+# Get the script's directory path and the project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HELIOS_ROOT="$(dirname "$SCRIPT_DIR")"
+
 # Source environment variables
-ENV_FILE="/root/HELIOS/env.sh"
+ENV_FILE="${HELIOS_ROOT}/env.sh"
 if [ -f "$ENV_FILE" ]; then
     source "$ENV_FILE"
 else
     echo "Environment file $ENV_FILE not found. Exiting."
     exit 1
 fi
-
-# Base paths
-HELIOS_ROOT="/root/HELIOS"
-CONSOLE_CENTER="${HELIOS_ROOT}/Console Command Center"
-MEDIA_CENTER="${HELIOS_ROOT}/Media Management Center"
 
 # Logging configuration
 LOG_DIR="${HELIOS_ROOT}/logs"
@@ -71,30 +70,30 @@ sudo systemctl restart docker || {
     exit 1
 }
 
-# Function to restart docker-compose in a specific directory
-restart_docker_compose() {
-    local directory="$1"
-    log "Navigating to ${directory}..."
-    cd "$directory" || {
-        log "Error navigating to ${directory}. Exiting."
+# Wait for Docker service to be fully operational
+log "Waiting for Docker service to be fully operational..."
+sleep 5
+
+# Function to restart all services using the root docker-compose file
+restart_all_services() {
+    log "Navigating to ${HELIOS_ROOT}..."
+    cd "$HELIOS_ROOT" || {
+        log "Error navigating to ${HELIOS_ROOT}. Exiting."
         exit 1
     }
 
-    log "Running docker compose up in detached mode..."
+    log "Running docker compose up with root docker-compose.yml in detached mode..."
     docker compose up -d || {
-        log "Error running docker compose up in ${directory}. Exiting."
+        log "Error running docker compose up. Exiting."
         exit 1
     }
 
-    log "Checking Docker Compose services status in ${directory}..."
+    log "Checking Docker Compose services status..."
     docker compose ps | tee -a "$LOG_FILE"
 }
 
-# Restart docker-compose for Console Command Center
-restart_docker_compose "$CONSOLE_CENTER"
-
-# Restart docker-compose for Media Management Center
-restart_docker_compose "$MEDIA_CENTER"
+# Restart all services using the root docker-compose.yml
+restart_all_services
 
 # Cleanup function
 cleanup() {

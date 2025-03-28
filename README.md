@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/pjmarz/HELIOS">
-    <img src="assets/images/HELIOS.gif" width="300" alt="HELIOS">
+    <img src="assets/media/HELIOS.gif" width="300" alt="HELIOS">
   </a>
 
   <p align="center">
@@ -147,10 +147,100 @@ Key architectural features:
 
 <div align="center">
   <a href="https://youtu.be/Nw_cdqQHGA8?t=1">
-    <img src="assets/images/GIR.gif" alt="HELIOS" width="120" height="120">
+    <img src="assets/media/GIR.gif" alt="HELIOS" width="120" height="120">
   </a>
   
   <p align="center">
     <sub><i> I'm gonna sing the doom song now </i></sub>
   </p>
 </div>
+
+## 🏗️ Project Structure
+
+```
+HELIOS/
+├── deployments/                   # Deployment configurations
+│   ├── console/                  # Console management services
+│   │   ├── docker-compose.yml   # Console services configuration
+│   │   └── config/              # Service-specific configurations
+│   └── media/                   # Media management services
+│       ├── docker-compose.yml   # Media services configuration
+│       └── config/              # Service-specific configurations
+│
+├── scripts/                      # Operational scripts
+│   ├── master-compose-up.sh      # Start all services
+│   ├── master-compose-down.sh    # Stop all services
+│   ├── master-compose-refresh.sh # Refresh all services
+│   ├── docker-container-rebuild.sh # Rebuild containers
+│   ├── clean-usenet.sh           # Clean download directories
+│   └── restart-docker.sh         # Restart Docker service
+│
+├── docker-compose.yml            # Root compose orchestration
+├── env.sh                        # Environment variables (shell)
+├── .env                          # Environment variables (Docker)
+│
+├── logs/                        # Application and script logs
+├── assets/                      # Project assets and images
+│   └── media/                   # Media files like GIFs and images
+│
+├── .gitignore                   # Git ignore rules
+├── .dockerignore                # Docker build ignore rules
+├── CHANGELOG.md                 # Project version history
+└── README.md                    # Project documentation
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [Proxmox VE](https://www.proxmox.com/en/proxmox-ve) (optional, for full implementation)
+- Sufficient storage space for media
+
+### Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/HELIOS.git
+   cd HELIOS
+   ```
+
+2. Configure environment variables:
+   ```bash
+   # Copy and edit environment variables
+   cp .env.example .env
+   nano .env
+   ```
+
+3. Start all services:
+   ```bash
+   ./scripts/master-compose-up.sh
+   ```
+
+### Configuration
+
+1. Access the Portainer interface at `http://your-ip:8000` to manage containers
+2. Access Homarr dashboard at `http://your-ip:7575` for service overview
+3. Configure media services through their respective web interfaces
+
+## 🔧 Operations
+
+### Starting Services
+```bash
+./scripts/master-compose-up.sh
+```
+
+### Stopping Services
+```bash
+./scripts/master-compose-down.sh
+```
+
+### Updating Containers
+```bash
+./scripts/docker-container-rebuild.sh
+```
+
+### Cleaning Download Directories
+```bash
+./scripts/clean-usenet.sh
+```

@@ -1,0 +1,40 @@
+# Version Control
+.git/
+.gitignore
+
+# Logs
+logs/
+*.log
+
+# Secrets
+.secrets
+*.env
+.env
+.env.*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Documentation
+*.md
+LICENSE*
+
+# Custom files
+GIR.txt
+ZIM.txt
+
+# Docker
+.docker/ 

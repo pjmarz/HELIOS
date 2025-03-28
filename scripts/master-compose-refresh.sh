@@ -4,21 +4,20 @@
 set -e
 
 # Script Description
-# Refreshes all Docker Compose services by stopping and starting them
+# Refreshes all Docker Compose services by stopping and starting them using the root docker-compose.yml
+
+# Get the script's directory path and the project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HELIOS_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Source environment variables
-ENV_FILE="/root/HELIOS/env.sh"
+ENV_FILE="${HELIOS_ROOT}/env.sh"
 if [ -f "$ENV_FILE" ]; then
     source "$ENV_FILE"
 else
     echo "Environment file $ENV_FILE not found. Exiting."
     exit 1
 fi
-
-# Base paths
-HELIOS_ROOT="/root/HELIOS"
-CONSOLE_CENTER="${HELIOS_ROOT}/Console Command Center"
-MEDIA_CENTER="${HELIOS_ROOT}/Media Management Center"
 
 # Logging configuration
 LOG_DIR="${HELIOS_ROOT}/logs"
@@ -52,43 +51,35 @@ trap 'handle_error $LINENO' ERR
 # Log script start
 log "=== Script Start ==="
 
-# Function to refresh Docker Compose in a given directory
+# Function to refresh Docker Compose services using the root compose file
 refresh_docker_compose() {
-    local directory="$1"
+    log "Starting refresh of all services..."
 
-    log "Starting refresh in ${directory}..."
-
-    if [ ! -d "$directory" ]; then
-        log "Directory ${directory} does not exist. Skipping."
-        return 1
-    fi
-
-    cd "$directory" || {
-        log "Failed to navigate to ${directory}. Skipping."
+    cd "$HELIOS_ROOT" || {
+        log "Failed to navigate to ${HELIOS_ROOT}. Exiting."
         return 1
     }
 
-    # Bring down the Docker Compose stack
-    log "Running docker compose down in ${directory}..."
+    # Bring down all services
+    log "Running docker compose down..."
     docker compose down || {
-        log "Error running docker compose down in ${directory}"
+        log "Error running docker compose down"
         return 1
     }
 
-    # Bring up the Docker Compose stack
-    log "Running docker compose up -d in ${directory}..."
+    # Bring up all services
+    log "Running docker compose up -d..."
     docker compose up -d || {
-        log "Error running docker compose up in ${directory}"
+        log "Error running docker compose up"
         return 1
     }
 
-    log "Successfully refreshed Docker Compose in ${directory}"
+    log "Successfully refreshed all Docker Compose services"
     return 0
 }
 
-# Process each Docker Compose directory
-refresh_docker_compose "$CONSOLE_CENTER"
-refresh_docker_compose "$MEDIA_CENTER"
+# Refresh all services
+refresh_docker_compose
 
 # Cleanup function
 cleanup() {

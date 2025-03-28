@@ -1,0 +1,30 @@
+---
+name: helios
+
+include:
+  - path: ./deployments/console/docker-compose.yml
+    project_directory: ./deployments/console
+  - path: ./deployments/media/docker-compose.yml
+    project_directory: ./deployments/media
+
+# Shared networks for services that need to communicate across compose files
+networks:
+  helios_network:
+    name: helios_network
+    driver: bridge
+
+# Shared volumes that can be accessed across services
+volumes:
+  shared_config:
+    name: helios_shared_config
+
+# Common settings and environment variables
+x-common: &common-settings
+  restart: unless-stopped
+  environment: &common-env
+    PUID: ${PUID}
+    PGID: ${PGID}
+    TZ: ${TZ}
+    UMASK: ${UMASK}
+  labels: &common-labels
+    - com.centurylinklabs.watchtower.enable=true 

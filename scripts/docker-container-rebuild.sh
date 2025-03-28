@@ -4,21 +4,20 @@
 set -e
 
 # Script Description
-# Rebuilds all Docker containers by pulling latest images and restarting services
+# Rebuilds all Docker containers by pulling latest images and restarting services using the root docker-compose.yml
+
+# Get the script's directory path and the project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HELIOS_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Source environment variables
-ENV_FILE="/root/HELIOS/env.sh"
+ENV_FILE="${HELIOS_ROOT}/env.sh"
 if [ -f "$ENV_FILE" ]; then
     source "$ENV_FILE"
 else
     echo "Environment file $ENV_FILE not found. Exiting."
     exit 1
 fi
-
-# Base paths
-HELIOS_ROOT="/root/HELIOS"
-CONSOLE_CENTER="${HELIOS_ROOT}/Console Command Center"
-MEDIA_CENTER="${HELIOS_ROOT}/Media Management Center"
 
 # Logging configuration
 LOG_DIR="${HELIOS_ROOT}/logs"
@@ -52,36 +51,30 @@ trap 'handle_error $LINENO' ERR
 # Log script start
 log "=== Script Start ==="
 
-# Function to process docker-compose for a given directory
-process_docker_compose() {
-    local dir="$1"
-    log "Processing directory: $dir"
+# Function to rebuild all docker services using the root compose file
+rebuild_docker_services() {
+    log "Rebuilding all services using root docker-compose.yml"
 
-    if [ ! -d "$dir" ]; then
-        log "Directory $dir does not exist. Skipping."
-        return 1
-    fi
-
-    cd "$dir" || {
-        log "Failed to change directory to $dir"
+    cd "$HELIOS_ROOT" || {
+        log "Failed to change directory to $HELIOS_ROOT"
         return 1
     }
 
-    log "Stopping containers in $dir"
+    log "Stopping all containers"
     docker compose down || {
-        log "Failed to stop containers in $dir"
+        log "Failed to stop containers"
         return 1
     }
 
-    log "Pulling latest images in $dir"
+    log "Pulling latest images for all services"
     docker compose pull || {
-        log "Failed to pull latest images in $dir"
+        log "Failed to pull latest images"
         return 1
     }
 
-    log "Starting containers in $dir"
+    log "Starting all containers"
     docker compose up -d || {
-        log "Failed to start containers in $dir"
+        log "Failed to start containers"
         return 1
     }
 
@@ -97,9 +90,8 @@ prune_docker_system() {
     }
 }
 
-# Process each directory
-process_docker_compose "$CONSOLE_CENTER"
-process_docker_compose "$MEDIA_CENTER"
+# Rebuild all services
+rebuild_docker_services
 
 # Clean up any unused images, containers, networks, and volumes
 prune_docker_system
