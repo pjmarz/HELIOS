@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Standardized environment variable management between env.sh and .env
 - Refined Docker Compose configurations for better service orchestration
 - Improved error handling in operational scripts
+- Standardized Docker project naming to lowercase for compatibility with Docker's automatic name conversion
 
 ### Fixed
 - Resolved path references in operational scripts
