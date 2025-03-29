@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.0] - 2024-03-29
 
 ### Added
+- Added Tdarr for automated media transcoding and health checks with NVIDIA GPU support
 - Added container pruning to `compose-down.sh`, `compose-refresh.sh`, and `docker-rebuild.sh` scripts
 - Implemented proper logging in `system-verify.sh` for consistency with other scripts
 - Enhanced media directory cleaning with improved error handling

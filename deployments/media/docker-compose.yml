@@ -130,4 +130,38 @@ services:
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
+
+  tdarr:
+    image: ghcr.io/haveagitgat/tdarr:latest
+    container_name: tdarr
+    runtime: nvidia
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+      - serverIP=0.0.0.0
+      - serverPort=8266
+      - webUIPort=8265
+      - internalNode=true
+      - inContainer=true
+      - ffmpegVersion=7
+      - nodeName=HeliosNode
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ${CONFIG_DIR}/tdarr:/config
+      - ${CONFIG_DIR}/tdarr/temp:/temp
+      - ${MOVIES_DIR}:/movies:ro
+      - ${TV_DIR}:/tv:ro
+      - ${DOWNLOADS_DIR}/movies:/downloads/movies:ro
+      - ${DOWNLOADS_DIR}/tv:/downloads/tv:ro
+      - ${DOWNLOADS_DIR}/default:/downloads/default:ro
+      - ${DOWNLOADS_DIR}/those:/downloads/those:ro
+    ports:
+      - 8265:8265  # WebUI port
+      - 8266:8266  # Server port
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
       
