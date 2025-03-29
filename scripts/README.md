@@ -38,12 +38,15 @@ The following scripts are kept for backward compatibility and will be deprecated
 ## Features
 
 - **Automatic Path Detection**: Scripts use relative paths for portability
-- **Environment Loading**: Automatically loads variables from env.sh
-- **.env Generation**: Creates .env file for Docker Compose when needed
+- **Environment Loading**: Automatically loads variables from env.sh with fallback paths
+- **.env Generation**: Creates .env file for Docker Compose with proper secrets inclusion
 - **Detailed Logging**: All operations are logged to the logs/ directory with timestamps
 - **Error Handling**: Comprehensive error checking and reporting with standardized messages
 - **Container Pruning**: Automatic clean-up of stopped containers and unused images
 - **Consistent Formatting**: Standardized output and logging format across all scripts
+- **Permissions Management**: Validates and ensures correct permissions for configuration directories
+- **Symlink Validation**: Checks and repairs symbolic links for sensitive files
+- **Self-Healing Configuration**: Automatically creates missing directories and repairs broken links
 
 ## Usage
 
@@ -65,3 +68,16 @@ All scripts generate logs in the `logs/` directory, named after the script (e.g.
 - `compose-refresh.sh` - Prunes stopped containers between down and up operations
 - `docker-rebuild.sh` - Uses targeted pruning for both containers and images
 - `media-clean.sh` - Uses direct Docker commands to reliably stop/start containers without conflicts
+
+## Environment Management
+
+- `.env` - Auto-generated from env.sh for Docker Compose with proper secrets
+- `env.sh` - Centralized environment variables with export statements
+- `.secrets` - Sensitive credentials with fallback path support
+
+## Configuration Directory Standards
+
+The system uses standardized permissions for service directories:
+- Regular services: UID=1000, GID=984, with 755 directory permissions
+- Special services (n8n): Root ownership maintained for system-level access
+- Data files: 644 permissions for database and configuration files

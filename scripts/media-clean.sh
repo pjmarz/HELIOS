@@ -77,7 +77,7 @@ CONTAINER_RUNNING=$(docker ps --format '{{.Names}}' | grep -w "sabnzbd" || true)
 if [[ -n "$CONTAINER_RUNNING" ]]; then
     # Container is running, need to stop it
     log "Stopping running sabnzbd container"
-    docker stop sabnzbd || {
+    docker compose stop sabnzbd || {
         log "Error: Failed to stop sabnzbd container"
         exit 1
     }
@@ -116,7 +116,7 @@ done
 
 # Start the sabnzbd container
 log "Starting sabnzbd container"
-docker start sabnzbd || {
+docker compose start sabnzbd || {
     log "Error: Failed to start sabnzbd container. If the container doesn't exist, you may need to run docker compose up -d sabnzbd in the media deployment directory."
     exit 1
 }

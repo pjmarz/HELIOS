@@ -125,6 +125,27 @@ check_var "MOVIES_DIR"
 check_var "TV_DIR"
 check_var "DOWNLOADS_DIR"
 
+# Verify config directory exists and is accessible
+log_color "$YELLOW" "Checking config directory..."
+if [ -d "$CONFIG_DIR" ]; then
+    log_color "$GREEN" "✓ Config directory exists at $CONFIG_DIR"
+    # Check if it's writable
+    if [ -w "$CONFIG_DIR" ]; then
+        log_color "$GREEN" "✓ Config directory is writable"
+    else
+        log_color "$RED" "✗ Config directory is not writable"
+        log_color "$YELLOW" "  Try: sudo chmod -R 755 $CONFIG_DIR"
+        log_color "$YELLOW" "  And: sudo chown -R $PUID:$PGID $CONFIG_DIR"
+        MISSING_VARS=$((MISSING_VARS+1))
+    fi
+else
+    log_color "$RED" "✗ Config directory does not exist at $CONFIG_DIR"
+    log_color "$YELLOW" "  Creating directory..."
+    mkdir -p "$CONFIG_DIR" && \
+    log_color "$GREEN" "✓ Created config directory at $CONFIG_DIR" || \
+    (log_color "$RED" "✗ Failed to create config directory" && MISSING_VARS=$((MISSING_VARS+1)))
+fi
+
 # Check ports
 check_var "PORTAINER_PORT"
 check_var "PORTAINER_SSL_PORT"
@@ -182,6 +203,32 @@ if [ -z "$HOMARR_PASSWORD" ]; then
     MISSING_VARS=$((MISSING_VARS+1))
 else
     log_color "$GREEN" "✓ HOMARR_PASSWORD is set"
+fi
+
+# Check symbolic link for secrets file
+log_color "$YELLOW" "Checking symbolic link for .secrets file..."
+if [ -L "/etc/HELIOS/.secrets" ]; then
+    log_color "$GREEN" "✓ /etc/HELIOS/.secrets symlink exists"
+    # Check if the target exists
+    if [ -e "/etc/HELIOS/.secrets" ]; then
+        log_color "$GREEN" "✓ Symlink target exists"
+    else
+        log_color "$RED" "✗ Symlink target does not exist"
+        log_color "$YELLOW" "  Try: cd /etc/HELIOS && ln -s secrets.sh .secrets"
+        MISSING_VARS=$((MISSING_VARS+1))
+    fi
+else
+    log_color "$YELLOW" "⚠ /etc/HELIOS/.secrets symlink does not exist"
+    # Check if we need to create it
+    if [ -f "/etc/HELIOS/secrets.sh" ]; then
+        log_color "$YELLOW" "  Creating symlink..."
+        ln -s /etc/HELIOS/secrets.sh /etc/HELIOS/.secrets && \
+        log_color "$GREEN" "✓ Created symlink /etc/HELIOS/.secrets -> /etc/HELIOS/secrets.sh" || \
+        (log_color "$RED" "✗ Failed to create symlink" && MISSING_VARS=$((MISSING_VARS+1)))
+    else
+        log_color "$RED" "✗ Neither /etc/HELIOS/.secrets nor /etc/HELIOS/secrets.sh exists"
+        MISSING_VARS=$((MISSING_VARS+1))
+    fi
 fi
 
 # Final report

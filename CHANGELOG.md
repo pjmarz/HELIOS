@@ -5,6 +5,26 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2024-03-29
+
+### Added
+- Added config directory validation in `system-verify.sh` with auto-creation
+- Implemented fallback paths for secrets file with multi-location detection
+- Added symbolic link validation and auto-repair for `.secrets` file
+- Enhanced .env generation with consistent secrets handling
+
+### Changed
+- Standardized permissions across service configuration directories (UID=1000, GID=984)
+- Improved environment variable handling with more resilient sourcing
+- Modified configuration paths to use `/etc/HELIOS/config` for all services
+- Enhanced error detection and self-healing for common configuration issues
+
+### Fixed
+- Fixed inconsistent ownership across configuration directories
+- Resolved potential permission issues with configuration files
+- Standardized directory structure to follow best practices
+- Improved security for sensitive configuration files
+
 ## [1.2.0] - 2024-03-29
 
 ### Added
