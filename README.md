@@ -28,7 +28,7 @@ HELIOS is a self-hosted media management and server administration system built 
   </thead>
   <tbody>
     <tr>
-      <td rowspan="7"><b>🎬 Media Management</b></td>
+      <td rowspan="8"><b>🎬 Media Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tdarr.png" width="32" height="32" alt="Tdarr"></td>
       <td><b><a href="https://github.com/HaveAGitGat/Tdarr">Tdarr</a></b></td>
       <td>Media Transcoding & Health Check</td>
