@@ -1,30 +1,46 @@
 ---
+# ===========================================================================
+# HELIOS ROOT DOCKER COMPOSE CONFIGURATION
+# ===========================================================================
+# This is the main orchestration file that ties together all HELIOS services
+# It uses Docker Compose's include feature to manage multiple service groups
+# while providing shared resources like networks and volumes
+# ===========================================================================
+
 name: helios
 
+# Include sub-compose files
+# This approach provides modularity while maintaining unified orchestration
 include:
+  # Console services (management, monitoring, automation)
   - path: ./deployments/console/docker-compose.yml
     project_directory: ./deployments/console
+  # Media services (content management, transcoding, downloads)
   - path: ./deployments/media/docker-compose.yml
     project_directory: ./deployments/media
 
 # Shared networks for services that need to communicate across compose files
+# This ensures all services can communicate when needed while maintaining
+# appropriate isolation between service groups
 networks:
   helios_network:
     name: helios_network
-    driver: bridge
+    driver: bridge      # Standard bridge network driver
 
 # Shared volumes that can be accessed across services
+# These volumes persist data between container restarts and rebuilds
 volumes:
   shared_config:
-    name: helios_shared_config
+    name: helios_shared_config  # Stores configuration that might be shared between services
 
 # Common settings and environment variables
+# Using YAML anchors (&) for DRY (Don't Repeat Yourself) configuration
 x-common: &common-settings
-  restart: unless-stopped
+  restart: unless-stopped      # Ensures services automatically restart unless manually stopped
   environment: &common-env
-    PUID: ${PUID}
-    PGID: ${PGID}
-    TZ: ${TZ}
-    UMASK: ${UMASK}
+    PUID: ${PUID}              # Process User ID - Controls file ownership
+    PGID: ${PGID}              # Process Group ID - Controls file ownership
+    TZ: ${TZ}                  # Timezone setting for accurate scheduling/logs
+    UMASK: ${UMASK}            # Controls default file permissions
   labels: &common-labels
-    - com.centurylinklabs.watchtower.enable=true 
+    - com.centurylinklabs.watchtower.enable=true  # Enables automatic updates via Watchtower 

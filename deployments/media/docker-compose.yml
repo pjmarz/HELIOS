@@ -1,20 +1,35 @@
 ---
-# Media services configuration
+# ===========================================================================
+# HELIOS MEDIA SERVICES CONFIGURATION
+# ===========================================================================
+# This file defines all media-related services including:
+# - Content management (Radarr, Sonarr)
+# - Download clients (SABnzbd)
+# - Subtitle management (Bazarr)
+# - Indexers (Prowlarr)
+# - Request management (Overseerr)
+# - Media processing (Tdarr, Plex Auto Languages)
+# ===========================================================================
+
 name: helios-media
 
-# Common configuration
+# Common configuration shared across services
+# These anchors (&) allow for DRY (Don't Repeat Yourself) configuration
 x-common: &common-settings
-  restart: unless-stopped
+  restart: unless-stopped  # Ensures services automatically restart unless manually stopped
   environment: &common-env
-    PUID: ${PUID}
-    PGID: ${PGID}
-    TZ: ${TZ}
-    UMASK: ${UMASK}
+    PUID: ${PUID}          # Process User ID - Controls file ownership
+    PGID: ${PGID}          # Process Group ID - Controls file ownership
+    TZ: ${TZ}              # Timezone setting for accurate scheduling/logs
+    UMASK: ${UMASK}        # Controls default file permissions
   labels: &common-labels
-    - com.centurylinklabs.watchtower.enable=true
+    - com.centurylinklabs.watchtower.enable=true  # Enables automatic updates via Watchtower
 
 services:
   
+  # ==== OVERSEERR ====
+  # Media request and discovery platform that integrates with Plex
+  # Web UI for users to request content which is then processed by Radarr/Sonarr
   overseerr:
     image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
@@ -24,13 +39,16 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/overseerr:/config
+      - ${CONFIG_DIR}/overseerr:/config  # Persistent configuration storage
     ports:
-      - ${OVERSEERR_PORT}:5055
+      - ${OVERSEERR_PORT}:5055  # Web UI access port
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  # ==== RADARR ====
+  # Movie collection manager that works with various download clients
+  # Monitors RSS feeds for new movies and manages download/import
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
@@ -40,15 +58,18 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/radarr:/config
-      - ${MOVIES_DIR}:/movies
-      - ${DOWNLOADS_DIR}:/usenet
+      - ${CONFIG_DIR}/radarr:/config     # Persistent configuration storage
+      - ${MOVIES_DIR}:/movies            # Mount point for movie library
+      - ${DOWNLOADS_DIR}:/usenet         # Access to download directory
     ports:
-      - ${RADARR_PORT}:7878
+      - ${RADARR_PORT}:7878              # Web UI access port
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  # ==== SONARR ====
+  # TV series collection manager that works with various download clients
+  # Monitors RSS feeds for new episodes and manages download/import
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
@@ -58,15 +79,18 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/sonarr:/config
-      - ${TV_DIR}:/tv
-      - ${DOWNLOADS_DIR}:/usenet
+      - ${CONFIG_DIR}/sonarr:/config     # Persistent configuration storage
+      - ${TV_DIR}:/tv                    # Mount point for TV series library
+      - ${DOWNLOADS_DIR}:/usenet         # Access to download directory
     ports:
-      - ${SONARR_PORT}:8989
+      - ${SONARR_PORT}:8989              # Web UI access port
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  # ==== BAZARR ====
+  # Companion app to Sonarr and Radarr for managing and downloading subtitles
+  # Automatically searches for missing subtitles and downloads them
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
@@ -76,31 +100,37 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/bazarr:/config
-      - ${MOVIES_DIR}:/movies
-      - ${TV_DIR}:/tv
+      - ${CONFIG_DIR}/bazarr:/config     # Persistent configuration storage
+      - ${MOVIES_DIR}:/movies            # Access to movie files for subtitle management
+      - ${TV_DIR}:/tv                    # Access to TV files for subtitle management
     ports:
-      - ${BAZARR_PORT}:6767
+      - ${BAZARR_PORT}:6767              # Web UI access port
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  # ==== PROWLARR ====
+  # Indexer manager/proxy that integrates with the *arr stack
+  # Manages all your indexers in one place with integration to Sonarr/Radarr
   prowlarr:
     container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
     ports:
-      - ${PROWLARR_PORT}:9696
+      - ${PROWLARR_PORT}:9696           # Web UI access port
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/prowlarr:/config
+      - ${CONFIG_DIR}/prowlarr:/config  # Persistent configuration storage
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  # ==== SABNZBD ====
+  # Usenet binary downloader with extensive post-processing capabilities
+  # Automatically processes downloads and passes to Radarr/Sonarr
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
@@ -110,54 +140,63 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/sabnzbd:/config
-      - ${DOWNLOADS_DIR}:/usenet
+      - ${CONFIG_DIR}/sabnzbd:/config    # Persistent configuration storage
+      - ${DOWNLOADS_DIR}:/usenet         # Download storage location
     ports:
-      - ${SABNZBD_PORT}:8080
+      - ${SABNZBD_PORT}:8080             # Web UI access port
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  # ==== PLEX AUTO LANGUAGES ====
+  # Automatically sets audio/subtitle preferences based on user language settings
+  # Enhances Plex experience by ensuring correct language tracks are selected
   plexautolanguages:
     image: remirigal/plex-auto-languages:latest
     container_name: plexautolanguages
     environment:
-      - PLEX_URL=${PLEX_URL}
-      - PLEX_TOKEN=${PLEX_TOKEN}
-      - TZ=${TZ}    
+      - PLEX_URL=${PLEX_URL}             # Plex server URL for API access
+      - PLEX_TOKEN=${PLEX_TOKEN}         # Authentication token for Plex API
+      - TZ=${TZ}                         # Timezone setting
     volumes:
-      - ${CONFIG_DIR}/plexautolanguages:/config
+      - ${CONFIG_DIR}/plexautolanguages:/config  # Persistent configuration storage
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
+  # ==== TDARR ====
+  # Media transcoding and health check platform
+  # Automates video transcoding and performs health checks on media files
   tdarr:
     image: ghcr.io/haveagitgat/tdarr:latest
     container_name: tdarr
-    runtime: nvidia
+    runtime: nvidia                      # Uses NVIDIA runtime for GPU acceleration
     environment:
+      # Standard environment variables
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=${UMASK}
-      - serverIP=0.0.0.0
-      - serverPort=8266
-      - webUIPort=8265
-      - internalNode=true
-      - inContainer=true
-      - ffmpegVersion=7
-      - nodeName=HeliosNode
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - NVIDIA_VISIBLE_DEVICES=all
+      # Tdarr-specific settings
+      - serverIP=0.0.0.0                 # Listen on all interfaces
+      - serverPort=8266                  # Server API port
+      - webUIPort=8265                   # Web UI port
+      - internalNode=true                # Enable the internal transcoding node
+      - inContainer=true                 # Acknowledge container environment
+      - ffmpegVersion=7                  # FFmpeg version to use
+      - nodeName=HeliosNode              # Name for the internal node
+      # NVIDIA GPU settings
+      - NVIDIA_DRIVER_CAPABILITIES=all   # Enable all NVIDIA driver capabilities
+      - NVIDIA_VISIBLE_DEVICES=all       # Make all GPUs available to container
     volumes:
-      - ${CONFIG_DIR}/tdarr:/config
-      - ${CONFIG_DIR}/tdarr/temp:/temp
-      - ${MOVIES_DIR}:/movies:ro
-      - ${TV_DIR}:/tv:ro
-      - ${DOWNLOADS_DIR}/movies:/downloads/movies:ro
-      - ${DOWNLOADS_DIR}/tv:/downloads/tv:ro
-      - ${DOWNLOADS_DIR}/default:/downloads/default:ro
-      - ${DOWNLOADS_DIR}/those:/downloads/those:ro
+      - ${CONFIG_DIR}/tdarr:/config                      # Persistent configuration
+      - ${CONFIG_DIR}/tdarr/temp:/temp                   # Temporary transcoding directory
+      - ${MOVIES_DIR}:/movies:ro                         # Movies library (read-only)
+      - ${TV_DIR}:/tv:ro                                 # TV library (read-only)
+      - ${DOWNLOADS_DIR}/movies:/downloads/movies:ro     # Movies download directory (read-only)
+      - ${DOWNLOADS_DIR}/tv:/downloads/tv:ro             # TV download directory (read-only)
+      - ${DOWNLOADS_DIR}/default:/downloads/default:ro   # Default download directory (read-only)
+      - ${DOWNLOADS_DIR}/those:/downloads/those:ro       # Additional download directory (read-only)
     ports:
       - 8265:8265  # WebUI port
       - 8266:8266  # Server port
