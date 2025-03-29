@@ -110,7 +110,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=${UMASK}
-      - PASSWORD=${HOMARR_PASSWORD}  # Dashboard access password
+      - PASSWORD=${HOMARR_PASSWORD}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for service discovery
       - ${CONFIG_DIR}/homarr/config:/app/data/configs  # Configuration files
@@ -160,19 +160,23 @@ services:
       - N8N_PROTOCOL=${N8N_PROTOCOL}  # Protocol for generated URLs
       - N8N_COMMUNITY_PACKAGES_ENABLED=true  # Enable community packages
       - WEBHOOK_TUNNEL_URL=${N8N_WEBHOOK_TUNNEL_URL}  # External webhook URL
+      - PLEX_TOKEN=${PLEX_TOKEN}  # Plex authentication token
     volumes:
       - n8n_data:/home/node/.n8n  # Persistent workflow and data storage
       - ${CONFIG_DIR}/n8n:/config  # Additional configuration
-      - ../../.secrets:/secrets.sh:ro  # Secrets file for credentials (read-only)
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
 # Networks defined for service isolation and communication
 networks:
   agent_network:  # Private network for Portainer and its agent
+    name: helios_console_agent_network
 
 # Persistent volumes for service data
 volumes:
   portainer_data:  # Stores Portainer configurations and settings
+    name: helios_portainer_data
   homarr_data:     # Stores Homarr dashboard configurations
+    name: helios_homarr_data
   n8n_data:        # Stores n8n workflows and credentials
+    name: helios_n8n_data

@@ -156,8 +156,8 @@ services:
     container_name: plexautolanguages
     environment:
       - PLEX_URL=${PLEX_URL}             # Plex server URL for API access
-      - PLEX_TOKEN=${PLEX_TOKEN}         # Authentication token for Plex API
       - TZ=${TZ}                         # Timezone setting
+      - PLEX_TOKEN=${PLEX_TOKEN}         # Plex authentication token
     volumes:
       - ${CONFIG_DIR}/plexautolanguages:/config  # Persistent configuration storage
     restart: unless-stopped
