@@ -193,10 +193,8 @@ services:
       - ${CONFIG_DIR}/tdarr/temp:/temp                   # Temporary transcoding directory
       - ${MOVIES_DIR}:/movies:ro                         # Movies library (read-only)
       - ${TV_DIR}:/tv:ro                                 # TV library (read-only)
-      - ${DOWNLOADS_DIR}/movies:/downloads/movies:ro     # Movies download directory (read-only)
-      - ${DOWNLOADS_DIR}/tv:/downloads/tv:ro             # TV download directory (read-only)
-      - ${DOWNLOADS_DIR}/default:/downloads/default:ro   # Default download directory (read-only)
-      - ${DOWNLOADS_DIR}/those:/downloads/those:ro       # Additional download directory (read-only)
+      - ${DOWNLOADS_DIR}/complete:/downloads/complete:ro # Complete downloads directory (read-only)
+      - ${DOWNLOADS_DIR}/incomplete:/downloads/incomplete:ro # Incomplete downloads directory (read-only)
     ports:
       - 8265:8265  # WebUI port
       - 8266:8266  # Server port
