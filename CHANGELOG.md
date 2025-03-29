@@ -5,6 +5,14 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Evaluated Docker Secrets for sensitive data management
+- Reverted to environment variables for simpler configuration management
+- Enhanced environment variable handling for sensitive data
+- Validated system configuration with comprehensive testing
+
 ## [1.3.0] - 2024-03-29
 
 ### Added
@@ -64,26 +72,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Resolved path references in operational scripts
 - Fixed environment variable inconsistencies
 - Standardized logging format across scripts
-
-## [Unreleased]
-
-### Added
-- Root docker-compose.yml for centralized service orchestration
-- Shared network configuration
-- Common environment variables using YAML anchors
-- `.env.example` file as reference for environment configuration
-
-### Changed
-- Reorganized project structure to follow industry best practices
-- Moved Docker Compose files to dedicated `deployments` directory
-- Separated services into `console` and `media` subdirectories
-- Updated operational scripts to use the root docker-compose.yml
-- Improved environment variable organization and documentation in env.sh
-
-### Removed
-- Eliminated redundant directory structure
-- Removed unnecessary path nesting
-- Cleaned up deprecated configuration approaches
 
 ## [1.0.0] - 2025-01-15
 
