@@ -84,10 +84,19 @@ rebuild_docker_services() {
 # Function to prune unused docker resources
 prune_docker_system() {
     log "Pruning unused Docker resources"
-    docker system prune -af || {
-        log "Failed to prune Docker system"
-        return 1
+    
+    log "Pruning stopped containers..."
+    docker container prune -f || {
+        log "Warning: Container pruning failed"
     }
+    
+    log "Pruning unused images..."
+    docker image prune -f || {
+        log "Warning: Image pruning failed"
+    }
+    
+    log "Docker resources pruning completed"
+    return 0
 }
 
 # Rebuild all services

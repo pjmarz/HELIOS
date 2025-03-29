@@ -66,6 +66,12 @@ refresh_docker_compose() {
         log "Error running docker compose down"
         return 1
     }
+    
+    # Prune stopped containers
+    log "Pruning stopped containers..."
+    docker container prune -f || {
+        log "Warning: Container pruning failed, continuing anyway"
+    }
 
     # Bring up all services
     log "Running docker compose up -d..."

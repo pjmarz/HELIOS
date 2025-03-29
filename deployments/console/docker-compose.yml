@@ -2,6 +2,17 @@
 # Console services configuration
 name: helios-console
 
+# Common configuration
+x-common: &common-settings
+  restart: unless-stopped
+  environment: &common-env
+    PUID: ${PUID}
+    PGID: ${PGID}
+    TZ: ${TZ}
+    UMASK: ${UMASK}
+  labels: &common-labels
+    - com.centurylinklabs.watchtower.enable=true
+
 services:
   agent:
     image: portainer/agent:latest
@@ -49,8 +60,8 @@ services:
     container_name: flaresolverr
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-info}
-      - LOG_HTML=${LOG_HTML:-false}
-      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
       - TZ=${TZ}
     ports:
       - ${FLARESOLVERR_PORT}:8191

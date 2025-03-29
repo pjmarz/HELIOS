@@ -2,44 +2,77 @@
 
 This directory contains operational scripts for managing the HELIOS system.
 
+## Naming Convention
+
+Scripts follow a consistent prefix-based naming pattern:
+
+- `compose-*.sh` - Docker Compose operations
+- `docker-*.sh` - Docker engine management
+- `media-*.sh` - Media management operations
+- `system-*.sh` - System configuration and verification
+
 ## Script Overview
 
 | Script | Description |
 |--------|-------------|
-| `master-compose-up.sh` | Starts all Docker Compose services using the root docker-compose.yml |
-| `master-compose-down.sh` | Stops all Docker Compose services |
-| `master-compose-refresh.sh` | Refreshes all services by stopping and starting them |
-| `docker-container-rebuild.sh` | Rebuilds all containers by pulling latest images and restarting them |
-| `clean-usenet.sh` | Cleans up Usenet download directories and restarts SABnzbd |
-| `restart-docker.sh` | Restarts the Docker service and all containers |
+| `compose-up.sh` | Starts all Docker Compose services using the root docker-compose.yml |
+| `compose-down.sh` | Stops all Docker Compose services and prunes stopped containers |
+| `compose-refresh.sh` | Refreshes all services by stopping and starting them with container pruning |
+| `docker-rebuild.sh` | Rebuilds containers by pulling latest images and prunes unused images and containers |
+| `docker-restart.sh` | Restarts the Docker service and all containers |
+| `media-clean.sh` | Cleans up Usenet download directories and handles SABnzbd using direct Docker commands |
+| `system-verify.sh` | Verifies environment configuration and Docker Compose setup with detailed logging |
 
-## Usage
+## Legacy Scripts (To Be Deprecated)
 
-All scripts are designed to be run from the command line:
+The following scripts are kept for backward compatibility and will be deprecated:
 
-```bash
-./scripts/master-compose-up.sh    # Start all services
-./scripts/master-compose-down.sh  # Stop all services
-```
+- `master-compose-up.sh` → use `compose-up.sh` instead
+- `master-compose-down.sh` → use `compose-down.sh` instead
+- `master-compose-refresh.sh` → use `compose-refresh.sh` instead
+- `docker-container-rebuild.sh` → use `docker-rebuild.sh` instead
+- `clean-usenet.sh` → use `media-clean.sh` instead
+- `restart-docker.sh` → use `docker-restart.sh` instead
+- `verify-config.sh` → use `system-verify.sh` instead
 
 ## Features
 
 - **Automatic Path Detection**: Scripts use relative paths for portability
 - **Environment Loading**: Automatically loads variables from env.sh
 - **.env Generation**: Creates .env file for Docker Compose when needed
-- **Detailed Logging**: All operations are logged to the logs/ directory
-- **Error Handling**: Comprehensive error checking and reporting
+- **Detailed Logging**: All operations are logged to the logs/ directory with timestamps
+- **Error Handling**: Comprehensive error checking and reporting with standardized messages
+- **Container Pruning**: Automatic clean-up of stopped containers and unused images
+- **Consistent Formatting**: Standardized output and logging format across all scripts
+
+## Usage
+
+All scripts are designed to be run from the command line:
+
+```bash
+./scripts/compose-up.sh    # Start all services
+./scripts/compose-down.sh  # Stop all services
+./scripts/system-verify.sh # Verify configuration
+```
 
 ## Logs
 
-All scripts generate logs in the `logs/` directory, named after the script (e.g., `master-compose-up.log`).
+All scripts generate logs in the `logs/` directory, named after the script (e.g., `compose-up.log`).
+
+## Docker Resource Management
+
+- `compose-down.sh` - Prunes stopped containers after stopping services
+- `compose-refresh.sh` - Prunes stopped containers between down and up operations
+- `docker-rebuild.sh` - Uses targeted pruning for both containers and images
+- `media-clean.sh` - Uses direct Docker commands to reliably stop/start containers without conflicts
 
 ## Adding New Scripts
 
 When creating new scripts, follow these guidelines:
 
-1. Use the same header and error handling structure as existing scripts
-2. Get script and project paths dynamically using `SCRIPT_DIR` and `HELIOS_ROOT`
-3. Source the environment variables from env.sh
-4. Include proper logging and error handling
-5. Add script documentation to this README 
+1. Use the consistent prefix-based naming convention
+2. Use the same header and error handling structure as existing scripts
+3. Get script and project paths dynamically using `SCRIPT_DIR` and `HELIOS_ROOT`
+4. Source the environment variables from env.sh
+5. Include proper logging and error handling with standardized message format
+6. Add script documentation to this README 

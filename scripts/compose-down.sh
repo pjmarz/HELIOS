@@ -61,6 +61,15 @@ run_docker_compose_down() {
     else
         log "Error encountered while stopping services"
     fi
+    
+    # Prune stopped containers
+    log "Pruning stopped containers..."
+    docker container prune -f 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -eq 0 ]; then
+        log "Container pruning completed successfully"
+    else
+        log "Warning: Container pruning failed"
+    fi
 }
 
 # Run docker-compose down using the root compose file

@@ -2,6 +2,17 @@
 # Media services configuration
 name: helios-media
 
+# Common configuration
+x-common: &common-settings
+  restart: unless-stopped
+  environment: &common-env
+    PUID: ${PUID}
+    PGID: ${PGID}
+    TZ: ${TZ}
+    UMASK: ${UMASK}
+  labels: &common-labels
+    - com.centurylinklabs.watchtower.enable=true
+
 services:
   
   overseerr:

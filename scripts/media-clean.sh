@@ -25,7 +25,7 @@ INCOMPLETE_DIR="${DOWNLOADS_DIR}/incomplete"
 COMPLETE_DIR="${DOWNLOADS_DIR}/complete"
 
 # Define specific folders to clean in the complete directory
-FOLDERS=("movies" "tv" "other")
+FOLDERS=("movies" "tv" "default")
 
 # Logging configuration
 LOG_DIR="${HELIOS_ROOT}/logs"
@@ -61,25 +61,33 @@ log "=== Script Start ==="
 
 # Validate paths to ensure they exist
 if [[ ! -d "$HELIOS_ROOT" ]]; then
-    log "HELIOS root directory not found at $HELIOS_ROOT"
+    log "Error: HELIOS root directory not found at $HELIOS_ROOT"
     exit 1
 fi
 
 if [[ ! -d "$MEDIA_DEPLOYMENT" ]]; then
-    log "Media deployment directory not found at $MEDIA_DEPLOYMENT"
+    log "Error: Media deployment directory not found at $MEDIA_DEPLOYMENT"
     exit 1
 fi
 
-# Stop sabnzbd service before cleaning directories
-log "Stopping sabnzbd service"
-(cd "$MEDIA_DEPLOYMENT" && docker compose stop sabnzbd) || {
-    log "Error stopping sabnzbd service"
-    exit 1
-}
+# Check if sabnzbd container exists and is running
+log "Checking sabnzbd container status"
+CONTAINER_RUNNING=$(docker ps --format '{{.Names}}' | grep -w "sabnzbd" || true)
+
+if [[ -n "$CONTAINER_RUNNING" ]]; then
+    # Container is running, need to stop it
+    log "Stopping running sabnzbd container"
+    docker stop sabnzbd || {
+        log "Error: Failed to stop sabnzbd container"
+        exit 1
+    }
+else
+    log "sabnzbd container is not running"
+fi
 
 # Safeguard against accidental deletion
 if [[ ! -d "$INCOMPLETE_DIR" || ! -d "$COMPLETE_DIR" ]]; then
-    log "ERROR: One or more directories do not exist. Exiting to prevent accidental deletion."
+    log "Error: One or more directories do not exist. Exiting to prevent accidental deletion."
     exit 1
 fi
 
@@ -88,7 +96,7 @@ log "Deleting all contents of $INCOMPLETE_DIR"
 if rm -rf "${INCOMPLETE_DIR:?}"/*; then
     log "Successfully cleared $INCOMPLETE_DIR"
 else
-    log "Failed to clear $INCOMPLETE_DIR. Check permissions."
+    log "Error: Failed to clear $INCOMPLETE_DIR. Check permissions."
 fi
 
 # Loop through each folder in the completed directory and delete its contents
@@ -99,17 +107,17 @@ for folder in "${FOLDERS[@]}"; do
         if rm -rf "${TARGET_DIR:?}"/*; then
             log "Successfully cleared $TARGET_DIR"
         else
-            log "Failed to clear $TARGET_DIR. Check permissions."
+            log "Error: Failed to clear $TARGET_DIR. Check permissions."
         fi
     else
-        log "WARNING: Directory $TARGET_DIR does not exist. Skipping."
+        log "Warning: Directory $TARGET_DIR does not exist. Skipping."
     fi
 done
 
-# Restart sabnzbd service
-log "Restarting sabnzbd service"
-(cd "$MEDIA_DEPLOYMENT" && docker compose up -d sabnzbd) || {
-    log "Failed to restart sabnzbd service"
+# Start the sabnzbd container
+log "Starting sabnzbd container"
+docker start sabnzbd || {
+    log "Error: Failed to start sabnzbd container. If the container doesn't exist, you may need to run docker compose up -d sabnzbd in the media deployment directory."
     exit 1
 }
 

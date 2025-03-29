@@ -58,7 +58,7 @@ if systemctl is-active --quiet docker; then
 else
     log "Docker is not active. Attempting to start..."
     sudo systemctl start docker || {
-        log "Error starting Docker service. Exiting."
+        log "Error: Failed to start Docker service. Exiting."
         exit 1
     }
 fi
@@ -66,7 +66,7 @@ fi
 # Restart Docker service
 log "Restarting Docker service..."
 sudo systemctl restart docker || {
-    log "Error restarting Docker service. Exiting."
+    log "Error: Failed to restart Docker service. Exiting."
     exit 1
 }
 
@@ -78,13 +78,13 @@ sleep 5
 restart_all_services() {
     log "Navigating to ${HELIOS_ROOT}..."
     cd "$HELIOS_ROOT" || {
-        log "Error navigating to ${HELIOS_ROOT}. Exiting."
+        log "Error: Failed to navigate to ${HELIOS_ROOT}. Exiting."
         exit 1
     }
 
     log "Running docker compose up with root docker-compose.yml in detached mode..."
     docker compose up -d || {
-        log "Error running docker compose up. Exiting."
+        log "Error: Failed to run docker compose up. Exiting."
         exit 1
     }
 
