@@ -57,13 +57,3 @@ docker compose up -d
 ## Configuration
 
 Each deployment's `config/` directory contains configuration files that are mounted into the respective containers. These are mounted as volumes in the Docker Compose files.
-
-## Adding New Services
-
-When adding a new service:
-
-1. Add it to the appropriate docker-compose.yml file
-2. Create necessary configuration in the config/ directory
-3. Ensure environment variables are defined in the root .env file
-4. Define any required volumes with the proper naming convention
-5. Test the deployment independently before integrating with the root docker-compose.yml 
