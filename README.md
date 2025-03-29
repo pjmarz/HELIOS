@@ -2,12 +2,6 @@
   <a href="https://github.com/pjmarz/HELIOS">
     <img src="assets/media/HELIOS.gif" width="300" alt="HELIOS">
   </a>
-
-  <p align="center">
-    <img src="https://img.shields.io/badge/Status-Operational-brightgreen?style=for-the-badge" alt="Status"/>
-    <img src="https://img.shields.io/badge/Docker-Powered-blue?style=for-the-badge&logo=docker" alt="Docker"/>
-    <img src="https://img.shields.io/badge/Type-Self_Hosted-orange?style=for-the-badge" alt="Self-Hosted"/>
-  </p>
 </div>
 
 ---
