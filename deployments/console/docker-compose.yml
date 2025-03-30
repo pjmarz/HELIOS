@@ -7,7 +7,6 @@
 # - Dashboard and service overview (Homarr)
 # - Automatic updates (Watchtower)
 # - Media analytics (Tautulli)
-# - Workflow automation (n8n)
 # - Network utilities (FlareSolverr)
 # ===========================================================================
 
@@ -143,31 +142,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  # ==== N8N ====
-  # Workflow automation platform for connecting various services
-  # Can automate tasks between Plex, *arr services, and external tools
-  n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
-    container_name: n8n
-    restart: unless-stopped
-    ports:
-      - ${N8N_PORT}:5678  # Web UI access port
-    environment:
-      - PUID=0  # Run as root for broad compatibility
-      - PGID=0  # Run as root for broad compatibility
-      - TZ=${TZ}
-      - UMASK=${UMASK}
-      - N8N_SECURE_COOKIE=false  # Disable secure cookie for non-HTTPS access
-      - N8N_HOST=${N8N_HOST}  # Hostname for generated URLs
-      - N8N_PROTOCOL=${N8N_PROTOCOL}  # Protocol for generated URLs
-      - N8N_COMMUNITY_PACKAGES_ENABLED=true  # Enable community packages
-      - WEBHOOK_TUNNEL_URL=${N8N_WEBHOOK_TUNNEL_URL}  # External webhook URL
-    volumes:
-      - n8n_data:/home/node/.n8n  # Persistent workflow and data storage
-      - ${CONFIG_DIR}/n8n:/config  # Additional configuration
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
 # Networks defined for service isolation and communication
 networks:
   agent_network:  # Private network for Portainer and its agent
@@ -179,5 +153,3 @@ volumes:
     name: helios_portainer_data
   homarr_data:     # Stores Homarr dashboard configurations
     name: helios_homarr_data
-  n8n_data:        # Stores n8n workflows and credentials
-    name: helios_n8n_data

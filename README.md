@@ -100,11 +100,6 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Containerization Platform</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png" width="44" height="24" alt="N8N"></td>
-      <td><b><a href="https://n8n.io/">N8N</a></b></td>
-      <td>Workflow Automation</td>
-    </tr>
-    <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="40" height="24" alt="FlareSolverr"></td>
       <td><b><a href="https://github.com/FlareSolverr/FlareSolverr">FlareSolverr</a></b></td>
       <td>Proxy & Anti-Bot Protection</td>

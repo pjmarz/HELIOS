@@ -151,7 +151,6 @@ check_var "PORTAINER_PORT"
 check_var "PORTAINER_SSL_PORT"
 check_var "HOMARR_PORT"
 check_var "TAUTULLI_PORT"
-check_var "N8N_PORT"
 check_var "FLARESOLVERR_PORT"
 check_var "OVERSEERR_PORT"
 check_var "RADARR_PORT"
@@ -162,11 +161,6 @@ check_var "SABNZBD_PORT"
 
 # Check logging
 check_var "LOG_LEVEL"
-
-# Check N8N config
-check_var "N8N_HOST"
-check_var "N8N_PROTOCOL"
-check_var "N8N_WEBHOOK_TUNNEL_URL"
 
 # Check Plex config
 check_var "PLEX_URL"

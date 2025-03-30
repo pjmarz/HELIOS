@@ -79,5 +79,4 @@ All scripts generate logs in the `logs/` directory, named after the script (e.g.
 
 The system uses standardized permissions for service directories:
 - Regular services: UID=1000, GID=984, with 755 directory permissions
-- Special services (n8n): Root ownership maintained for system-level access
 - Data files: 644 permissions for database and configuration files
