@@ -110,13 +110,15 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=${UMASK}
-      - PASSWORD=${HOMARR_PASSWORD}
+      - PASSWORD_FILE=/run/secrets/homarr_password
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for service discovery
       - ${CONFIG_DIR}/homarr/config:/app/data/configs  # Configuration files
       - ${CONFIG_DIR}/homarr/icons:/app/public/icons   # Custom icons
       - ${CONFIG_DIR}/homarr/imgs:/app/public/imgs     # Custom images
       - homarr_data:/data  # Persistent application data
+    secrets:
+      - homarr_password
     ports:
       - ${HOMARR_PORT}:7575  # Web UI access port
     labels:
@@ -160,7 +162,6 @@ services:
       - N8N_PROTOCOL=${N8N_PROTOCOL}  # Protocol for generated URLs
       - N8N_COMMUNITY_PACKAGES_ENABLED=true  # Enable community packages
       - WEBHOOK_TUNNEL_URL=${N8N_WEBHOOK_TUNNEL_URL}  # External webhook URL
-      - PLEX_TOKEN=${PLEX_TOKEN}  # Plex authentication token
     volumes:
       - n8n_data:/home/node/.n8n  # Persistent workflow and data storage
       - ${CONFIG_DIR}/n8n:/config  # Additional configuration

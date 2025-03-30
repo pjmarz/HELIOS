@@ -33,6 +33,14 @@ volumes:
   shared_config:
     name: helios_shared_config  # Stores configuration that might be shared between services
 
+# Define secrets to securely handle sensitive information
+# These secrets can be accessed by services that need them
+secrets:
+  plex_token:
+    file: ./secrets/plex_token.txt
+  homarr_password:
+    file: ./secrets/homarr_password.txt
+
 # Common settings and environment variables
 # Using YAML anchors (&) for DRY (Don't Repeat Yourself) configuration
 x-common: &common-settings

@@ -191,44 +191,78 @@ fi
 
 # Check secret variables
 log_color "$YELLOW" "Checking secret variables..."
-if [ -z "$PLEX_TOKEN" ]; then
-    log_color "$RED" "✗ Missing secret: PLEX_TOKEN"
-    MISSING_VARS=$((MISSING_VARS+1))
-else
-    log_color "$GREEN" "✓ PLEX_TOKEN is set"
-fi
 
-if [ -z "$HOMARR_PASSWORD" ]; then
-    log_color "$RED" "✗ Missing secret: HOMARR_PASSWORD"
-    MISSING_VARS=$((MISSING_VARS+1))
-else
-    log_color "$GREEN" "✓ HOMARR_PASSWORD is set"
-fi
-
-# Check symbolic link for secrets file
-log_color "$YELLOW" "Checking symbolic link for .secrets file..."
-if [ -L "/etc/HELIOS/.secrets" ]; then
-    log_color "$GREEN" "✓ /etc/HELIOS/.secrets symlink exists"
-    # Check if the target exists
-    if [ -e "/etc/HELIOS/.secrets" ]; then
-        log_color "$GREEN" "✓ Symlink target exists"
+# Check for Docker Secrets
+HELIOS_SECRETS_DIR="${HELIOS_ROOT}/secrets"
+if [ -d "$HELIOS_SECRETS_DIR" ]; then
+    log_color "$GREEN" "✓ Docker Secrets directory exists at $HELIOS_SECRETS_DIR"
+    
+    # Check for Plex token
+    if [ -f "${HELIOS_SECRETS_DIR}/plex_token.txt" ]; then
+        # Verify file has content
+        if [ -s "${HELIOS_SECRETS_DIR}/plex_token.txt" ]; then
+            log_color "$GREEN" "✓ Plex token secret file exists and has content"
+        else
+            log_color "$RED" "✗ Plex token secret file exists but is empty"
+            MISSING_VARS=$((MISSING_VARS+1))
+        fi
     else
-        log_color "$RED" "✗ Symlink target does not exist"
-        log_color "$YELLOW" "  Try: cd /etc/HELIOS && ln -s secrets.sh .secrets"
+        log_color "$RED" "✗ Missing secret file: plex_token.txt"
         MISSING_VARS=$((MISSING_VARS+1))
     fi
-else
-    log_color "$YELLOW" "⚠ /etc/HELIOS/.secrets symlink does not exist"
-    # Check if we need to create it
-    if [ -f "/etc/HELIOS/secrets.sh" ]; then
-        log_color "$YELLOW" "  Creating symlink..."
-        ln -s /etc/HELIOS/secrets.sh /etc/HELIOS/.secrets && \
-        log_color "$GREEN" "✓ Created symlink /etc/HELIOS/.secrets -> /etc/HELIOS/secrets.sh" || \
-        (log_color "$RED" "✗ Failed to create symlink" && MISSING_VARS=$((MISSING_VARS+1)))
+    
+    # Check for Homarr password
+    if [ -f "${HELIOS_SECRETS_DIR}/homarr_password.txt" ]; then
+        # Verify file has content
+        if [ -s "${HELIOS_SECRETS_DIR}/homarr_password.txt" ]; then
+            log_color "$GREEN" "✓ Homarr password secret file exists and has content"
+        else
+            log_color "$RED" "✗ Homarr password secret file exists but is empty"
+            MISSING_VARS=$((MISSING_VARS+1))
+        fi
     else
-        log_color "$RED" "✗ Neither /etc/HELIOS/.secrets nor /etc/HELIOS/secrets.sh exists"
+        log_color "$RED" "✗ Missing secret file: homarr_password.txt"
         MISSING_VARS=$((MISSING_VARS+1))
     fi
+    
+    # Check file permissions
+    INSECURE_PERMS=0
+    for SECRET_FILE in "${HELIOS_SECRETS_DIR}"/*.txt; do
+        if [ -f "$SECRET_FILE" ]; then
+            FILE_PERMS=$(stat -c "%a" "$SECRET_FILE")
+            if [[ "$FILE_PERMS" != "600" ]]; then
+                log_color "$RED" "✗ Insecure permissions ($FILE_PERMS) on $(basename "$SECRET_FILE")"
+                log_color "$YELLOW" "  Try: chmod 600 $SECRET_FILE"
+                INSECURE_PERMS=$((INSECURE_PERMS+1))
+            fi
+        fi
+    done
+    
+    if [ $INSECURE_PERMS -eq 0 ]; then
+        log_color "$GREEN" "✓ All secret files have secure permissions"
+    else
+        MISSING_VARS=$((MISSING_VARS+$INSECURE_PERMS))
+    fi
+else
+    log_color "$RED" "✗ Docker Secrets directory not found at $HELIOS_SECRETS_DIR"
+    log_color "$YELLOW" "  HELIOS now uses Docker Secrets for sensitive information"
+    log_color "$YELLOW" "  Try: mkdir -p $HELIOS_SECRETS_DIR"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Also check if env.sh still has the values set (even as empty placeholders)
+if [ -z "$PLEX_TOKEN" ] && [ ! -f "${HELIOS_SECRETS_DIR}/plex_token.txt" ]; then
+    log_color "$RED" "✗ PLEX_TOKEN not found in env.sh or Docker Secrets"
+    MISSING_VARS=$((MISSING_VARS+1))
+elif [ -z "$PLEX_TOKEN" ] && [ -f "${HELIOS_SECRETS_DIR}/plex_token.txt" ]; then
+    log_color "$YELLOW" "⚠ PLEX_TOKEN is empty in env.sh but exists in Docker Secrets (this is OK)"
+fi
+
+if [ -z "$HOMARR_PASSWORD" ] && [ ! -f "${HELIOS_SECRETS_DIR}/homarr_password.txt" ]; then
+    log_color "$RED" "✗ HOMARR_PASSWORD not found in env.sh or Docker Secrets"
+    MISSING_VARS=$((MISSING_VARS+1))
+elif [ -z "$HOMARR_PASSWORD" ] && [ -f "${HELIOS_SECRETS_DIR}/homarr_password.txt" ]; then
+    log_color "$YELLOW" "⚠ HOMARR_PASSWORD is empty in env.sh but exists in Docker Secrets (this is OK)"
 fi
 
 # Final report

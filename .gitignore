@@ -3,6 +3,7 @@
 
 # Sensitive Configuration
 .secrets
+/secrets/
 env.sh
 *.env
 .env

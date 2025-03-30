@@ -116,6 +116,7 @@ HELIOS is a self-hosted media management and server administration system built 
 
 The project implements:
 - Containerized services using Docker and Docker Compose
+- Docker Secrets for secure management of sensitive information
 - Automated container updates and maintenance
 - Secure remote access through Cloudflare tunnels
 - Centralized logging and monitoring

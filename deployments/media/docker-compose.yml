@@ -157,9 +157,11 @@ services:
     environment:
       - PLEX_URL=${PLEX_URL}             # Plex server URL for API access
       - TZ=${TZ}                         # Timezone setting
-      - PLEX_TOKEN=${PLEX_TOKEN}         # Plex authentication token
+      - PLEX_TOKEN_FILE=/run/secrets/plex_token  # Plex authentication token from secret
     volumes:
       - ${CONFIG_DIR}/plexautolanguages:/config  # Persistent configuration storage
+    secrets:
+      - plex_token
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true

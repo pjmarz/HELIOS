@@ -73,7 +73,7 @@ All scripts generate logs in the `logs/` directory, named after the script (e.g.
 
 - `.env` - Auto-generated from env.sh for Docker Compose with proper secrets
 - `env.sh` - Centralized environment variables with export statements
-- `.secrets` - Sensitive credentials with fallback path support
+- `/secrets/` - Directory containing Docker Secrets files for sensitive credentials
 
 ## Configuration Directory Standards
 

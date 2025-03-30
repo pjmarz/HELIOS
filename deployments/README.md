@@ -54,6 +54,16 @@ docker compose up -d
 - `helios_agent_network` - Dedicated network for Portainer agent communication
 - Predefined networks ensure proper service discovery and isolation
 
+## Docker Secrets
+
+HELIOS uses Docker Secrets for managing sensitive information:
+- Secrets are stored in the `/secrets/` directory
+- Each secret is a separate file with restricted permissions (600)
+- Services access secrets through the Docker Secrets mechanism
+- Currently implemented secrets:
+  - `plex_token.txt` - Plex authentication token for API access
+  - `homarr_password.txt` - Password for Homarr dashboard
+
 ## Configuration
 
 Each deployment's `config/` directory contains configuration files that are mounted into the respective containers. These are mounted as volumes in the Docker Compose files.

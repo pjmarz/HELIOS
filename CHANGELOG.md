@@ -7,11 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2024-03-30
+
+### Added
+- Implemented Docker Secrets for secure management of sensitive information
+- Added dedicated `/secrets/` directory with proper file permissions (600)
+- Created secret files for Plex token and Homarr password
+- Enhanced documentation with Docker Secrets usage information
+
 ### Changed
-- Evaluated Docker Secrets for sensitive data management
-- Reverted to environment variables for simpler configuration management
-- Enhanced environment variable handling for sensitive data
-- Validated system configuration with comprehensive testing
+- Refactored docker-compose.yml to use Docker Secrets for sensitive data
+- Updated services configurations to use secrets instead of environment variables
+- Modified system-verify.sh to check and validate Docker Secrets configuration
+- Updated README files to reflect the new security approach
+
+### Removed
+- Eliminated the use of .secrets file in favor of Docker Secrets
+- Removed sensitive information from environment variables files
+
+### Security
+- Improved security by isolating sensitive credentials in Docker Secrets
+- Implemented proper file permissions for secret files
+- Reduced attack surface by removing sensitive data from environment files
 
 ## [1.3.0] - 2024-03-29
 
