@@ -29,6 +29,7 @@
         
         /* Glow effect for the HELIOS logo */
         .hero-content img {
+            max-width: 200px;
             transition: filter 0.3s ease;
         }
         
@@ -42,7 +43,7 @@
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
             color: white;
-            padding: 4rem 0;
+            padding: 2rem 0;
             margin-bottom: 2rem;
         }
         
@@ -104,11 +105,21 @@
         
         /* Service icon hover effects */
         .service-card img {
+            width: 32px;
+            height: auto;
+            object-fit: contain;
             transition: transform 0.3s ease;
         }
         
         .service-card:hover img {
             transform: scale(1.1);
+        }
+        
+        /* Adjust specific icon sizes */
+        .service-card img[src*="watchtower.png"],
+        .service-card img[src*="cloudflare.png"],
+        .service-card img[src*="homarr.png"] {
+            width: 36px;
         }
         
         /* Link hover effects */
@@ -126,7 +137,7 @@
         }
         
         .footer img:hover {
-            transform: rotate(360deg) scale(1.1);
+            transform: scale(1.1);
         }
         
         /* Scroll to top button */
@@ -225,7 +236,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container text-center hero-content">
-            <img src="./assets/media/HELIOS.gif" alt="HELIOS" class="mb-4" style="max-width: 300px;">
+            <img src="./assets/media/HELIOS.gif" alt="HELIOS" class="mb-4" style="max-width: 200px;">
             <p class="lead">Self-hosted Media Management & Server Administration System</p>
             <a href="https://github.com/pjmarz/HELIOS" class="btn btn-light btn-lg mt-3">View on GitHub</a>
         </div>
