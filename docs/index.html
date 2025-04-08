@@ -205,6 +205,19 @@
             color: white;
             transform: translateY(-2px);
         }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #404040;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
@@ -418,26 +431,46 @@
     <section id="screenshots" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5">Screenshots & Demos</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <img src="./media/homarr.png" alt="Dashboard" class="img-fluid mb-4">
-                    <p class="text-center">Dashboard Overview</p>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="./media/homarr.png" alt="Dashboard" class="card-img-top">
+                        <div class="card-body">
+                            <p class="card-text text-center">Dashboard Overview</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <img src="./media/activepieces.png" alt="Activepieces Flow" class="img-fluid mb-4">
-                    <p class="text-center">Activepieces Automation Flow</p>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="./media/activepieces.png" alt="Activepieces Flow" class="card-img-top">
+                        <div class="card-body">
+                            <p class="card-text text-center">Activepieces Automation Flow</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <img src="./media/ollama.png" alt="Ollama Interface" class="img-fluid mb-4">
-                    <p class="text-center">Ollama Interface</p>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="./media/ollama.png" alt="Ollama Interface" class="card-img-top">
+                        <div class="card-body">
+                            <p class="card-text text-center">Ollama Interface</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <img src="./media/portainer.png" alt="Portainer Management" class="img-fluid mb-4">
-                    <p class="text-center">Portainer Management Dashboard</p>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="./media/portainer.png" alt="Portainer Management" class="card-img-top">
+                        <div class="card-body">
+                            <p class="card-text text-center">Portainer Management Dashboard</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <img src="./media/pve.png" alt="Proxmox Environment" class="img-fluid mb-4">
-                    <p class="text-center">Proxmox Virtual Environment</p>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="./media/pve.png" alt="Proxmox Environment" class="card-img-top">
+                        <div class="card-body">
+                            <p class="card-text text-center">Proxmox Virtual Environment</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
