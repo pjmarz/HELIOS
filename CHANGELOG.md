@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added Activepieces workflow automation platform for system and media integrations
+- Configured Activepieces with SQLite3 database and in-memory queue for optimal performance
+- Added environment variable configuration for Activepieces service
+
 ## [1.4.0] - 2024-03-30
 
 ### Added

@@ -63,7 +63,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Automated Language Management</td>
     </tr>
     <tr>
-      <td rowspan="5"><b>📊 Server Management</b></td>
+      <td rowspan="6"><b>📊 Server Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png" width="32" height="32" alt="Portainer"></td>
       <td><b><a href="https://github.com/portainer/portainer">Portainer</a></b></td>
       <td>Container Management</td>
@@ -82,6 +82,11 @@ HELIOS is a self-hosted media management and server administration system built 
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png" width="40" height="24" alt="Homarr"></td>
       <td><b><a href="https://github.com/ajnart/homarr">Homarr</a></b></td>
       <td>Dashboard & Service Management</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/activepieces.png" width="32" height="32" alt="Activepieces"></td>
+      <td><b><a href="https://github.com/activepieces/activepieces">Activepieces</a></b></td>
+      <td>Workflow Automation Platform</td>
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared"></td>
