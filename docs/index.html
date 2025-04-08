@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELIOS - Media Management & Server Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .service-card {
+            transition: transform 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../assets/media/HELIOS.gif" alt="HELIOS" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#components">Components</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/pjmarz/HELIOS">GitHub</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">HELIOS</h1>
+            <p class="lead">Self-hosted Media Management & Server Administration System</p>
+            <a href="https://github.com/pjmarz/HELIOS" class="btn btn-light btn-lg mt-3">View on GitHub</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Key Features</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-film feature-icon"></i>
+                    <h3>Media Management</h3>
+                    <p>Automated media collection, organization, and transcoding with popular tools like Radarr, Sonarr, and Tdarr.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-server feature-icon"></i>
+                    <h3>Server Administration</h3>
+                    <p>Comprehensive server management with Portainer, Watchtower, and Tautulli for monitoring and maintenance.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-shield-check feature-icon"></i>
+                    <h3>Secure & Automated</h3>
+                    <p>Built on Docker and Proxmox VE with automated updates and secure remote access through Cloudflare tunnels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Components Section -->
+    <section id="components" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">System Components</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card service-card">
+                        <div class="card-body">
+                            <h5 class="card-title">🎬 Media Management</h5>
+                            <ul class="list-unstyled">
+                                <li>• Tdarr - Media Transcoding</li>
+                                <li>• Radarr - Movie Collection</li>
+                                <li>• Sonarr - TV Series Collection</li>
+                                <li>• Bazarr - Subtitle Management</li>
+                                <li>• Overseerr - Media Requests</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card">
+                        <div class="card-body">
+                            <h5 class="card-title">📊 Server Management</h5>
+                            <ul class="list-unstyled">
+                                <li>• Portainer - Container Management</li>
+                                <li>• Watchtower - Automated Updates</li>
+                                <li>• Tautulli - Analytics</li>
+                                <li>• Homarr - Dashboard</li>
+                                <li>• Activepieces - Automation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card">
+                        <div class="card-body">
+                            <h5 class="card-title">🔧 Infrastructure</h5>
+                            <ul class="list-unstyled">
+                                <li>• Proxmox VE - Virtualization</li>
+                                <li>• Docker - Containerization</li>
+                                <li>• Cloudflared - Secure Access</li>
+                                <li>• FlareSolverr - Proxy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="mb-0">HELIOS - A comprehensive media management and server administration system</p>
+            <p class="mb-0">Built with ❤️ using Docker and Proxmox VE</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
