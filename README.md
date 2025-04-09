@@ -147,7 +147,7 @@ Key architectural features:
 
 <div align="center">
   <a href="https://youtu.be/Nw_cdqQHGA8?t=1">
-    <img src="assets/media/GIR.gif" alt="HELIOS" width="120" height="120">
+    <img src="docs/media/GIR.gif" alt="HELIOS" width="120" height="120">
   </a>
   
   <p align="center">
