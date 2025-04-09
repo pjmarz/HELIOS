@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/pjmarz/HELIOS">
-    <img src="assets/media/HELIOS.gif" width="300" alt="HELIOS">
+    <img src="docs/media/HELIOS.gif" width="300" alt="HELIOS">
   </a>
 </div>
 
