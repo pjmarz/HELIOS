@@ -259,6 +259,193 @@ elif [ -z "$HOMARR_PASSWORD" ] && [ -f "${HELIOS_SECRETS_DIR}/homarr_password.tx
     log_color "$YELLOW" "⚠ HOMARR_PASSWORD is empty in env.sh but exists in Docker Secrets (this is OK)"
 fi
 
+# ======== NEW ADDITIONS START HERE ========
+
+# Check media directory permissions
+log_color "$YELLOW" "Checking media directory permissions..."
+
+check_media_dir() {
+    local dir="$1"
+    local name="$2"
+    
+    if [ -d "$dir" ]; then
+        log_color "$GREEN" "✓ $name directory exists at $dir"
+        
+        if [ -r "$dir" ]; then
+            log_color "$GREEN" "✓ $name directory is readable"
+        else
+            log_color "$RED" "✗ $name directory is not readable"
+            log_color "$YELLOW" "  Try: sudo chmod -R 755 $dir"
+            MISSING_VARS=$((MISSING_VARS+1))
+        fi
+        
+        if [ -w "$dir" ]; then
+            log_color "$GREEN" "✓ $name directory is writable"
+        else
+            log_color "$RED" "✗ $name directory is not writable"
+            log_color "$YELLOW" "  Try: sudo chown -R $PUID:$PGID $dir"
+            MISSING_VARS=$((MISSING_VARS+1))
+        fi
+    else
+        log_color "$RED" "✗ $name directory does not exist at $dir"
+        log_color "$YELLOW" "  Creating directory..."
+        mkdir -p "$dir" && \
+        log_color "$GREEN" "✓ Created $name directory at $dir" || \
+        (log_color "$RED" "✗ Failed to create $name directory" && MISSING_VARS=$((MISSING_VARS+1)))
+    fi
+}
+
+check_media_dir "$MOVIES_DIR" "Movies"
+check_media_dir "$TV_DIR" "TV Shows"
+check_media_dir "$DOWNLOADS_DIR" "Downloads"
+check_media_dir "$DOWNLOADS_DIR/complete" "Downloads complete"
+check_media_dir "$DOWNLOADS_DIR/incomplete" "Downloads incomplete"
+
+# Check for NVIDIA GPU support
+log_color "$YELLOW" "Checking NVIDIA GPU support..."
+if command -v nvidia-smi &>/dev/null; then
+    nvidia_smi_output=$(nvidia-smi --query-gpu=name,driver_version --format=csv,noheader)
+    if [ $? -eq 0 ]; then
+        log_color "$GREEN" "✓ NVIDIA GPU detected: $nvidia_smi_output"
+    else
+        log_color "$RED" "✗ NVIDIA GPU detection failed, check driver installation"
+        log_color "$YELLOW" "  This may affect Tdarr's transcoding performance"
+        MISSING_VARS=$((MISSING_VARS+1))
+    fi
+else
+    log_color "$RED" "✗ nvidia-smi not found, NVIDIA driver not installed"
+    log_color "$YELLOW" "  GPU acceleration for Tdarr may not work properly"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Check for NVIDIA Docker runtime
+log_color "$YELLOW" "Checking NVIDIA Docker runtime..."
+if docker info | grep -q "Runtimes:.*nvidia"; then
+    log_color "$GREEN" "✓ NVIDIA Docker runtime is available"
+else
+    log_color "$RED" "✗ NVIDIA Docker runtime is not configured"
+    log_color "$YELLOW" "  GPU acceleration for containers won't work"
+    log_color "$YELLOW" "  See: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Network connectivity check
+log_color "$YELLOW" "Checking network connectivity..."
+
+# Verify Plex server connectivity
+if curl --connect-timeout 5 --silent --head "$PLEX_URL" >/dev/null; then
+    log_color "$GREEN" "✓ Plex server is reachable at $PLEX_URL"
+else
+    log_color "$RED" "✗ Cannot reach Plex server at $PLEX_URL"
+    log_color "$YELLOW" "  Ensure the server is running and accessible"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Check internet connectivity
+if ping -c 1 google.com >/dev/null 2>&1; then
+    log_color "$GREEN" "✓ Internet connection is available"
+else
+    log_color "$RED" "✗ No internet connection detected"
+    log_color "$YELLOW" "  Download-oriented services may not work properly"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Docker Compose version check
+log_color "$YELLOW" "Checking Docker Compose version..."
+
+COMPOSE_VERSION=$(docker compose version --short)
+COMPOSE_VERSION_MAJOR=$(echo "$COMPOSE_VERSION" | cut -d. -f1)
+COMPOSE_VERSION_MINOR=$(echo "$COMPOSE_VERSION" | cut -d. -f2)
+
+if [ "$COMPOSE_VERSION_MAJOR" -ge 2 ] || ([ "$COMPOSE_VERSION_MAJOR" -eq 1 ] && [ "$COMPOSE_VERSION_MINOR" -ge 28 ]); then
+    log_color "$GREEN" "✓ Docker Compose version $COMPOSE_VERSION is adequate"
+else
+    log_color "$RED" "✗ Docker Compose version $COMPOSE_VERSION may be too old"
+    log_color "$YELLOW" "  Version 1.28.0 or higher is recommended for include feature support"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Docker Volume verification
+log_color "$YELLOW" "Checking Docker volumes..."
+
+# List of expected volume names from docker-compose.yml
+EXPECTED_VOLUMES=("helios_portainer_data" "helios_homarr_data")
+
+for vol in "${EXPECTED_VOLUMES[@]}"; do
+    if docker volume inspect "$vol" >/dev/null 2>&1; then
+        log_color "$GREEN" "✓ Docker volume $vol exists"
+    else
+        log_color "$YELLOW" "⚠ Docker volume $vol doesn't exist yet (will be created on first run)"
+    fi
+done
+
+# Deployment files verification
+log_color "$YELLOW" "Checking deployment files..."
+
+# Check for console deployment
+if [ -f "${HELIOS_ROOT}/deployments/console/docker-compose.yml" ]; then
+    log_color "$GREEN" "✓ Console services compose file exists"
+else
+    log_color "$RED" "✗ Console services compose file missing"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Check for media deployment
+if [ -f "${HELIOS_ROOT}/deployments/media/docker-compose.yml" ]; then
+    log_color "$GREEN" "✓ Media services compose file exists"
+else
+    log_color "$RED" "✗ Media services compose file missing"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Disk space verification
+log_color "$YELLOW" "Checking disk space..."
+
+# Check main media storage
+LOAS_DISK_USAGE=$(df -h "$LOAS" | awk 'NR==2 {print $5}' | tr -d '%')
+LOAS_AVAILABLE=$(df -h "$LOAS" | awk 'NR==2 {print $4}')
+
+if [ "$LOAS_DISK_USAGE" -lt 90 ]; then
+    log_color "$GREEN" "✓ Media storage at $LOAS has adequate space ($LOAS_AVAILABLE available)"
+else
+    log_color "$RED" "✗ Media storage at $LOAS is nearly full (${LOAS_DISK_USAGE}% used, only $LOAS_AVAILABLE available)"
+    log_color "$YELLOW" "  Services may fail if disk space runs out"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Check config directory
+CONFIG_DISK_USAGE=$(df -h "$CONFIG_DIR" | awk 'NR==2 {print $5}' | tr -d '%')
+CONFIG_AVAILABLE=$(df -h "$CONFIG_DIR" | awk 'NR==2 {print $4}')
+
+if [ "$CONFIG_DISK_USAGE" -lt 90 ]; then
+    log_color "$GREEN" "✓ Config storage at $CONFIG_DIR has adequate space ($CONFIG_AVAILABLE available)"
+else
+    log_color "$RED" "✗ Config storage at $CONFIG_DIR is nearly full (${CONFIG_DISK_USAGE}% used, only $CONFIG_AVAILABLE available)"
+    log_color "$YELLOW" "  Services may fail if disk space runs out"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Check .env and env.sh consistency
+log_color "$YELLOW" "Checking environment file consistency..."
+
+# Extract variables from env.sh (excluding export statements)
+ENV_SH_VARS=$(grep -v "^#" "${HELIOS_ROOT}/env.sh" | grep "export" | sed 's/export //g' | sed 's/=.*//g')
+
+# Extract variables from .env
+ENV_FILE_VARS=$(grep -v "^#" "${HELIOS_ROOT}/.env" | grep -v "^$" | sed 's/=.*//g')
+
+# Compare variables
+for var in $ENV_SH_VARS; do
+    if echo "$ENV_FILE_VARS" | grep -q "$var"; then
+        log_color "$GREEN" "✓ Variable $var exists in both env.sh and .env"
+    else
+        log_color "$RED" "✗ Variable $var exists in env.sh but is missing from .env"
+        MISSING_VARS=$((MISSING_VARS+1))
+    fi
+done
+
+# ======== NEW ADDITIONS END HERE ========
+
 # Final report
 log_color "$YELLOW" "Verification complete"
 if [ $MISSING_VARS -gt 0 ]; then

@@ -27,12 +27,6 @@ networks:
     name: helios_network
     driver: bridge      # Standard bridge network driver
 
-# Shared volumes that can be accessed across services
-# These volumes persist data between container restarts and rebuilds
-volumes:
-  shared_config:
-    name: helios_shared_config  # Stores configuration that might be shared between services
-
 # Define secrets to securely handle sensitive information
 # These secrets can be accessed by services that need them
 secrets:
