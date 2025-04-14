@@ -191,10 +191,13 @@ services:
       - NVIDIA_DRIVER_CAPABILITIES=all   # Enable all NVIDIA driver capabilities
       - NVIDIA_VISIBLE_DEVICES=all       # Make all GPUs available to container
     volumes:
+      - ${CONFIG_DIR}/tdarr:/app/server                  # Server data
+      - ${CONFIG_DIR}/tdarr/configs:/app/configs         # Configuration 
+      - ${CONFIG_DIR}/tdarr/logs:/app/logs               # Logs
       - ${CONFIG_DIR}/tdarr:/config                      # Persistent configuration
       - ${CONFIG_DIR}/tdarr/temp:/temp                   # Temporary transcoding directory
-      - ${MOVIES_DIR}:/movies:ro                         # Movies library (read-only)
-      - ${TV_DIR}:/tv:ro                                 # TV library (read-only)
+      - ${MOVIES_DIR}:/movies                            # Movies library (writable)
+      - ${TV_DIR}:/tv                                    # TV library (writable)
       - ${DOWNLOADS_DIR}/complete:/downloads/complete:ro # Complete downloads directory (read-only)
       - ${DOWNLOADS_DIR}/incomplete:/downloads/incomplete:ro # Incomplete downloads directory (read-only)
     ports:
