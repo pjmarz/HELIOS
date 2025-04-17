@@ -63,7 +63,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Automated Language Management</td>
     </tr>
     <tr>
-      <td rowspan="6"><b>📊 Server Management</b></td>
+      <td rowspan="5"><b>📊 Server Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png" width="32" height="32" alt="Portainer"></td>
       <td><b><a href="https://github.com/portainer/portainer">Portainer</a></b></td>
       <td>Container Management</td>
@@ -89,11 +89,6 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Workflow Automation Platform</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared"></td>
-      <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
-      <td>Secure Remote Access</td>
-    </tr>
-    <tr>
       <td rowspan="4"><b>🔧 Infrastructure</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox"></td>
       <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
@@ -108,6 +103,11 @@ HELIOS is a self-hosted media management and server administration system built 
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="40" height="24" alt="FlareSolverr"></td>
       <td><b><a href="https://github.com/FlareSolverr/FlareSolverr">FlareSolverr</a></b></td>
       <td>Proxy & Anti-Bot Protection</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared"></td>
+      <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
+      <td>Secure Remote Access</td>
     </tr>
   </tbody>
 </table>
