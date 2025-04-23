@@ -142,33 +142,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  # ==== N8N ====
-  # Workflow automation platform for creating and running automations
-  # Node-based workflow engine for business process automation and integrations
-  n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
-    container_name: n8n
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - N8N_PORT=5678                  # Internal port n8n runs on
-      - NODE_ENV=production            # Run in production mode
-      - WEBHOOK_URL=http://localhost:${N8N_PORT} # URL for webhook access
-      - N8N_PROTOCOL=http              # Protocol for webhook URL
-      - N8N_HOST=localhost             # Hostname for webhook URL
-      - N8N_SECURE_COOKIE=false        # Disable secure cookie requirement for local use
-      - DB_TYPE=sqlite                 # Use SQLite for database
-      - DB_SQLITE_PATH=/home/node/.n8n/database.sqlite # Path to SQLite database
-    volumes:
-      - n8n_data:/home/node/.n8n       # Persistent storage for workflows and settings
-      - ${CONFIG_DIR}/n8n/files:/files # Directory for file operations
-    ports:
-      - ${N8N_PORT}:5678               # Web UI access port
-    restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
 # Networks defined for service isolation and communication
 networks:
   agent_network:  # Private network for Portainer and its agent
@@ -180,5 +153,3 @@ volumes:
     name: helios_portainer_data
   homarr_data:     # Stores Homarr dashboard configurations
     name: helios_homarr_data
-  n8n_data:        # Stores n8n workflows and credentials
-    name: helios_n8n_data

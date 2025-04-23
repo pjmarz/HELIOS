@@ -84,22 +84,6 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Dashboard & Service Management</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png" width="56" height="32" alt="n8n"></td>
-      <td><b><a href="https://github.com/n8n-io/n8n">n8n</a></b></td>
-      <td>Workflow Automation Platform</td>
-    </tr>
-    <tr>
-      <td rowspan="4"><b>🔧 Infrastructure</b></td>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox"></td>
-      <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
-      <td>Virtualization Platform</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker"></td>
-      <td><b><a href="https://www.docker.com/">Docker</a></b></td>
-      <td>Containerization Platform</td>
-    </tr>
-    <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="40" height="24" alt="FlareSolverr"></td>
       <td><b><a href="https://github.com/FlareSolverr/FlareSolverr">FlareSolverr</a></b></td>
       <td>Proxy & Anti-Bot Protection</td>

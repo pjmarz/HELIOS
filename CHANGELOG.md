@@ -8,12 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.6.0] - 2024-04-26
 
 ### Changed
-- Replaced Activepieces with n8n as the workflow automation platform
-- Configured n8n with SQLite database for persistent storage
-- Added Docker volume for n8n data to ensure workflow and credential persistence
-- Updated environment variables to support n8n configuration
-- Added support for n8n file operations with dedicated directory
-- Updated system-verify.sh to check for n8n environment variables
+- Removed workflow automation services from HELIOS
+- Updated environment variables in env.sh
+- Updated system-verify.sh to remove workflow automation checks
+- Streamlined service configuration
 
 ## [1.5.0] - 2024-04-14
 
