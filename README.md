@@ -89,6 +89,17 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Proxy & Anti-Bot Protection</td>
     </tr>
     <tr>
+      <td rowspan="3"><b>🔧 Infrastructure</b></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox"></td>
+      <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
+      <td>Virtualization Platform</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker"></td>
+      <td><b><a href="https://www.docker.com/">Docker</a></b></td>
+      <td>Containerization Platform</td>
+    </tr>
+    <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared"></td>
       <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
       <td>Secure Remote Access</td>
