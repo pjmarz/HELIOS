@@ -142,23 +142,29 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  # ==== ACTIVEPIECES ====
-  # Automation platform for creating and running workflow automations
-  # Low-code platform for building integrations and workflows
-  activepieces:
-    image: activepieces/activepieces:latest
-    container_name: activepieces
+  # ==== N8N ====
+  # Workflow automation platform for creating and running automations
+  # Node-based workflow engine for business process automation and integrations
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - AP_QUEUE_MODE=MEMORY           # Use in-memory queue for task processing
-      - AP_DB_TYPE=SQLITE3             # Use SQLite3 for database
-      - AP_FRONTEND_URL=http://localhost:${ACTIVEPIECES_PORT} # Frontend URL for webhook access
+      - N8N_PORT=5678                  # Internal port n8n runs on
+      - NODE_ENV=production            # Run in production mode
+      - WEBHOOK_URL=http://localhost:${N8N_PORT} # URL for webhook access
+      - N8N_PROTOCOL=http              # Protocol for webhook URL
+      - N8N_HOST=localhost             # Hostname for webhook URL
+      - N8N_SECURE_COOKIE=false        # Disable secure cookie requirement for local use
+      - DB_TYPE=sqlite                 # Use SQLite for database
+      - DB_SQLITE_PATH=/home/node/.n8n/database.sqlite # Path to SQLite database
     volumes:
-      - ${CONFIG_DIR}/activepieces:/root/.activepieces  # Persistent data storage
+      - n8n_data:/home/node/.n8n       # Persistent storage for workflows and settings
+      - ${CONFIG_DIR}/n8n/files:/files # Directory for file operations
     ports:
-      - ${ACTIVEPIECES_PORT}:80        # Web UI access port
+      - ${N8N_PORT}:5678               # Web UI access port
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
@@ -174,3 +180,5 @@ volumes:
     name: helios_portainer_data
   homarr_data:     # Stores Homarr dashboard configurations
     name: helios_homarr_data
+  n8n_data:        # Stores n8n workflows and credentials
+    name: helios_n8n_data

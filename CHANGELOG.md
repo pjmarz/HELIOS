@@ -5,12 +5,32 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.0] - 2024-04-26
 
-### Added
-- Added Activepieces workflow automation platform for system and media integrations
-- Configured Activepieces with SQLite3 database and in-memory queue for optimal performance
-- Added environment variable configuration for Activepieces service
+### Changed
+- Replaced Activepieces with n8n as the workflow automation platform
+- Configured n8n with SQLite database for persistent storage
+- Added Docker volume for n8n data to ensure workflow and credential persistence
+- Updated environment variables to support n8n configuration
+- Added support for n8n file operations with dedicated directory
+- Updated system-verify.sh to check for n8n environment variables
+
+## [1.5.0] - 2024-04-14
+
+### Changed
+- Implemented Docker Secrets for secure management of sensitive information
+- Added dedicated `/secrets/` directory with proper file permissions (600)
+- Created secret files for Plex token and Homarr password
+- Enhanced documentation with Docker Secrets usage information
+
+### Removed
+- Eliminated the use of .secrets file in favor of Docker Secrets
+- Removed sensitive information from environment variables files
+
+### Security
+- Improved security by isolating sensitive credentials in Docker Secrets
+- Implemented proper file permissions for secret files
+- Reduced attack surface by removing sensitive data from environment files
 
 ## [1.4.0] - 2024-03-30
 
