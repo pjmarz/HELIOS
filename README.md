@@ -84,7 +84,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Dashboard & Service Management</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png" width="46" height="32" alt="n8n"></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/n8n.png" width="50" height="32" alt="n8n"></td>
       <td><b><a href="https://github.com/n8n-io/n8n">n8n</a></b></td>
       <td>Workflow Automation Platform</td>
     </tr>
