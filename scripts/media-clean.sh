@@ -25,7 +25,7 @@ INCOMPLETE_DIR="${DOWNLOADS_DIR}/incomplete"
 COMPLETE_DIR="${DOWNLOADS_DIR}/complete"
 
 # Define specific folders to clean in the complete directory
-FOLDERS=("movies" "tv" "default")
+FOLDERS=("movies" "tv" "default" "books")
 
 # Logging configuration
 LOG_DIR="${HELIOS_ROOT}/logs"
