@@ -93,6 +93,9 @@ services:
       - TZ=${TZ}                      # Timezone setting
     ports:
       - ${FLARESOLVERR_PORT}:8191     # API access port
+    networks:
+      - default
+      - proxy
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
@@ -120,6 +123,9 @@ services:
       - homarr_password
     ports:
       - ${HOMARR_PORT}:7575  # Web UI access port
+    networks:
+      - default
+      - proxy
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
@@ -146,10 +152,15 @@ services:
 networks:
   agent_network:  # Private network for Portainer and its agent
     name: helios_console_agent_network
+    external: true
+  proxy:
+    name: helios_proxy
 
 # Persistent volumes for service data
 volumes:
   portainer_data:  # Stores Portainer configurations and settings
     name: helios_portainer_data
+    external: true
   homarr_data:     # Stores Homarr dashboard configurations
     name: helios_homarr_data
+    external: true

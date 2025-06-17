@@ -19,14 +19,6 @@ include:
   - path: ./deployments/media/docker-compose.yml
     project_directory: ./deployments/media
 
-# Shared networks for services that need to communicate across compose files
-# This ensures all services can communicate when needed while maintaining
-# appropriate isolation between service groups
-networks:
-  helios_network:
-    name: helios_network
-    driver: bridge      # Standard bridge network driver
-
 # Define secrets to securely handle sensitive information
 # These secrets can be accessed by services that need them
 secrets:
