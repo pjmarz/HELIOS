@@ -40,3 +40,4 @@ pids
 
 nvidia/secrets/
 logs/
+.envrc
