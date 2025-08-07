@@ -100,27 +100,24 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  # ==== HOMARR ====
+  # ==== HOMARR 1.0 ====
   # Dashboard for organizing and accessing all services
   # Provides a customizable homepage with service status and quick links
+  # UPGRADED TO HOMARR 1.0 - Complete rewrite with new architecture
   homarr:
     container_name: homarr
-    image: ghcr.io/ajnart/homarr:latest
+    image: ghcr.io/homarr-labs/homarr:latest
     restart: unless-stopped
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=${UMASK}
-      - PASSWORD_FILE=/run/secrets/homarr_password
+      - SECRET_ENCRYPTION_KEY=${HOMARR_ENCRYPTION_KEY}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for service discovery
-      - ${CONFIG_DIR}/homarr/config:/app/data/configs  # Configuration files
-      - ${CONFIG_DIR}/homarr/icons:/app/public/icons   # Custom icons
-      - ${CONFIG_DIR}/homarr/imgs:/app/public/imgs     # Custom images
-      - homarr_data:/data  # Persistent application data
-    secrets:
-      - homarr_password
+      - ${CONFIG_DIR}/homarr/imgs:/app/public/imgs     # Custom images (icons now managed via UI)
+      - homarr_data:/appdata  # Persistent application data (moved from /data to /appdata)
     ports:
       - ${HOMARR_PORT}:7575  # Web UI access port
     networks:
@@ -153,8 +150,9 @@ networks:
   agent_network:  # Private network for Portainer and its agent
     name: helios_console_agent_network
     external: true
-  proxy:
+  proxy:  # Shared proxy network for service communication
     name: helios_proxy
+    external: true
 
 # Persistent volumes for service data
 volumes:

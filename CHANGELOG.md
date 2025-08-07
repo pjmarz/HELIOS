@@ -5,6 +5,19 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2025-08-07
+
+### Added
+- Docs landing page updated with a Getting Started section and direct links to the README and Changelog
+
+### Changed
+- Upgraded dashboard to Homarr 1.0 (`ghcr.io/homarr-labs/homarr`) and adjusted persistent data paths
+- Consolidated orchestration using a top-level Docker Compose that includes `deployments/console` and `deployments/media`
+- Updated README with clearer setup, script usage, and secrets documentation
+
+### Security
+- Clarified Docker Secrets usage (`/secrets/plex_token.txt`, `/secrets/homarr_encryption_key.txt`) and recommended file permissions (600)
+
 ## [1.6.0] - 2024-04-26
 
 ### Changed

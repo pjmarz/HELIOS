@@ -6,6 +6,8 @@
 
 ---
 
+> Note: This repository is a showcase of the HELIOS architecture and user experience. It is not a turnkey deployment and is not intended to be cloned or run as-is.
+
 ## 🎯 Project Overview
 
 HELIOS is a self-hosted media management and server administration system built with Docker and Docker Compose ontop of Proxmox VE. The project aims to create a reliable, automated system for media collection, organization, and server management through containerized services.
@@ -106,6 +108,62 @@ HELIOS is a self-hosted media management and server administration system built 
     </tr>
   </tbody>
 </table>
+
+## ✅ Prerequisites (for reference only)
+
+- **Docker**: Engine installed and running
+- **Docker Compose v2 (with include support)**: `docker compose` CLI available
+- **Proxmox VE**: Recommended host environment (not strictly required)
+
+## 🔐 Secrets
+
+Create the following files with secure permissions:
+
+```bash
+mkdir -p secrets
+printf "<YOUR_PLEX_TOKEN>\n" > secrets/plex_token.txt
+printf "<32+ CHAR ENCRYPTION KEY>\n" > secrets/homarr_encryption_key.txt
+chmod 600 secrets/plex_token.txt secrets/homarr_encryption_key.txt
+```
+
+- **plex_token.txt**: used by `plexautolanguages`
+- **homarr_encryption_key.txt**: recommended to secure Homarr data (if configured to use secrets)
+
+## 🚀 Quickstart (for reference only)
+
+```bash
+# 1) Verify environment and generate .env
+./scripts/system-verify.sh
+
+# 2) Start all services
+./scripts/compose-up.sh
+
+# 3) Stop services (optional)
+./scripts/compose-down.sh
+```
+
+- Services are defined in the top-level `docker-compose.yml` which includes:
+  - `deployments/console/docker-compose.yml`
+  - `deployments/media/docker-compose.yml`
+
+## 🧰 Scripts (for reference only)
+
+Common operations (see `scripts/README.md` for full details):
+
+```bash
+./scripts/compose-up.sh      # Start all services
+./scripts/compose-down.sh    # Stop all services
+./scripts/compose-refresh.sh # Restart with prune
+./scripts/docker-rebuild.sh  # Pull latest images and prune
+./scripts/system-verify.sh   # Validate config & environment
+```
+
+## 🧩 Architecture & Compose Includes
+
+- Single project name: `helios`
+- Shared `helios_proxy` network (external)
+- Secrets stored in `./secrets/`
+- Uses Docker Compose "include" to orchestrate `console` and `media` stacks from the root
 
 ## 💡 Implementation Details
 
