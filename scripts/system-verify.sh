@@ -353,19 +353,67 @@ else
     MISSING_VARS=$((MISSING_VARS+1))
 fi
 
-# Docker Compose version check
-log_color "$YELLOW" "Checking Docker Compose version..."
+# Docker and Docker Compose version checks
+log_color "$YELLOW" "Checking Docker and Docker Compose versions..."
 
-COMPOSE_VERSION=$(docker compose version --short)
-COMPOSE_VERSION_MAJOR=$(echo "$COMPOSE_VERSION" | cut -d. -f1)
-COMPOSE_VERSION_MINOR=$(echo "$COMPOSE_VERSION" | cut -d. -f2)
-
-if [ "$COMPOSE_VERSION_MAJOR" -ge 2 ] || ([ "$COMPOSE_VERSION_MAJOR" -eq 1 ] && [ "$COMPOSE_VERSION_MINOR" -ge 28 ]); then
-    log_color "$GREEN" "✓ Docker Compose version $COMPOSE_VERSION is adequate"
+# Check Docker version
+DOCKER_VERSION=$(docker --version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' | head -1)
+if [ -n "$DOCKER_VERSION" ]; then
+    DOCKER_MAJOR=$(echo "$DOCKER_VERSION" | cut -d. -f1)
+    DOCKER_MINOR=$(echo "$DOCKER_VERSION" | cut -d. -f2)
+    
+    if [ "$DOCKER_MAJOR" -ge 20 ] && [ "$DOCKER_MINOR" -ge 10 ]; then
+        log_color "$GREEN" "✓ Docker version $DOCKER_VERSION is adequate"
+    else
+        log_color "$YELLOW" "⚠ Docker version $DOCKER_VERSION is older than recommended (20.10+)"
+        log_color "$YELLOW" "  Consider upgrading for better security and features"
+    fi
 else
-    log_color "$RED" "✗ Docker Compose version $COMPOSE_VERSION may be too old"
-    log_color "$YELLOW" "  Version 1.28.0 or higher is recommended for include feature support"
+    log_color "$RED" "✗ Could not determine Docker version"
     MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Check Docker Compose version
+COMPOSE_VERSION=$(docker compose version --short 2>/dev/null)
+if [ -n "$COMPOSE_VERSION" ]; then
+    COMPOSE_VERSION_MAJOR=$(echo "$COMPOSE_VERSION" | cut -d. -f1)
+    COMPOSE_VERSION_MINOR=$(echo "$COMPOSE_VERSION" | cut -d. -f2)
+    
+    if [ "$COMPOSE_VERSION_MAJOR" -ge 2 ] || ([ "$COMPOSE_VERSION_MAJOR" -eq 1 ] && [ "$COMPOSE_VERSION_MINOR" -ge 28 ]); then
+        log_color "$GREEN" "✓ Docker Compose version $COMPOSE_VERSION is adequate"
+    else
+        log_color "$RED" "✗ Docker Compose version $COMPOSE_VERSION may be too old"
+        log_color "$YELLOW" "  Version 1.28.0 or higher is recommended for include feature support"
+        log_color "$YELLOW" "  Update with: sudo curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose"
+        MISSING_VARS=$((MISSING_VARS+1))
+    fi
+else
+    log_color "$RED" "✗ Could not determine Docker Compose version"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
+
+# Check available system memory
+log_color "$YELLOW" "Checking system memory..."
+TOTAL_MEM_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+TOTAL_MEM_GB=$((TOTAL_MEM_KB / 1024 / 1024))
+AVAIL_MEM_KB=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
+AVAIL_MEM_GB=$((AVAIL_MEM_KB / 1024 / 1024))
+
+if [ "$TOTAL_MEM_GB" -ge 8 ]; then
+    log_color "$GREEN" "✓ System has adequate memory (${TOTAL_MEM_GB}GB total, ${AVAIL_MEM_GB}GB available)"
+else
+    log_color "$YELLOW" "⚠ System has limited memory (${TOTAL_MEM_GB}GB total, ${AVAIL_MEM_GB}GB available)"
+    log_color "$YELLOW" "  HELIOS services may perform better with 8GB+ RAM"
+fi
+
+# Check if swap is configured
+SWAP_TOTAL=$(grep SwapTotal /proc/meminfo | awk '{print $2}')
+if [ "$SWAP_TOTAL" -gt 0 ]; then
+    SWAP_GB=$((SWAP_TOTAL / 1024 / 1024))
+    log_color "$GREEN" "✓ Swap is configured (${SWAP_GB}GB)"
+else
+    log_color "$YELLOW" "⚠ No swap configured"
+    log_color "$YELLOW" "  Consider adding swap for better system stability under memory pressure"
 fi
 
 # Docker Volume verification
@@ -446,6 +494,120 @@ for var in $ENV_SH_VARS; do
         MISSING_VARS=$((MISSING_VARS+1))
     fi
 done
+
+# Service Health Checks
+log_color "$YELLOW" "Checking service health (if running)..."
+
+# Function to check if a service is healthy
+check_service_health() {
+    local service_name="$1"
+    local expected_port="$2"
+    
+    if docker ps --format '{{.Names}}' | grep -w "$service_name" >/dev/null; then
+        log_color "$GREEN" "✓ $service_name container is running"
+        
+        # Check if service responds on expected port
+        if curl --connect-timeout 5 --silent --head "http://localhost:$expected_port" >/dev/null 2>&1; then
+            log_color "$GREEN" "✓ $service_name is responding on port $expected_port"
+        else
+            log_color "$YELLOW" "⚠ $service_name container running but not responding on port $expected_port"
+        fi
+    else
+        log_color "$YELLOW" "⚠ $service_name container is not running (this is normal if services haven't been started)"
+    fi
+}
+
+# Check key services if they're running
+check_service_health "portainer" "$PORTAINER_PORT"
+check_service_health "homarr" "$HOMARR_PORT"
+check_service_health "tautulli" "$TAUTULLI_PORT"
+check_service_health "overseerr" "$OVERSEERR_PORT"
+check_service_health "radarr" "$RADARR_PORT"
+check_service_health "sonarr" "$SONARR_PORT"
+check_service_health "sabnzbd" "$SABNZBD_PORT"
+
+# Container Resource Usage Check
+log_color "$YELLOW" "Checking Docker system resource usage..."
+if command -v docker >/dev/null 2>&1 && docker ps >/dev/null 2>&1; then
+    DOCKER_STATS=$(docker system df --format "table {{.Type}}\t{{.TotalCount}}\t{{.Size}}\t{{.Reclaimable}}" 2>/dev/null || echo "")
+    if [ -n "$DOCKER_STATS" ]; then
+        log_color "$GREEN" "✓ Docker system resource usage obtained"
+        echo "$DOCKER_STATS" | tee -a "$LOG_FILE"
+    else
+        log_color "$YELLOW" "⚠ Could not get Docker system resource usage"
+    fi
+else
+    log_color "$YELLOW" "⚠ Docker not accessible for resource usage check"
+fi
+
+# Security and Configuration Best Practices
+log_color "$YELLOW" "Checking security and configuration best practices..."
+
+# Check for Docker socket exposure in compose files
+log_color "$YELLOW" "Checking for Docker socket exposure..."
+DOCKER_SOCKET_MOUNTS=$(grep -r "/var/run/docker.sock" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | wc -l)
+if [ "$DOCKER_SOCKET_MOUNTS" -gt 0 ]; then
+    log_color "$YELLOW" "⚠ Docker socket is mounted in $DOCKER_SOCKET_MOUNTS service(s)"
+    log_color "$YELLOW" "  This provides elevated privileges - ensure services are from trusted sources"
+    
+    # List which services expose the socket
+    grep -r "/var/run/docker.sock" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | while read -r line; do
+        service_file=$(echo "$line" | cut -d: -f1)
+        log_color "$YELLOW" "  Found in: $(basename "$service_file")"
+    done
+else
+    log_color "$GREEN" "✓ No Docker socket exposure detected"
+fi
+
+# Check for privileged containers
+log_color "$YELLOW" "Checking for privileged containers..."
+PRIVILEGED_CONTAINERS=$(grep -r "privileged.*true" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | wc -l)
+if [ "$PRIVILEGED_CONTAINERS" -gt 0 ]; then
+    log_color "$YELLOW" "⚠ Found $PRIVILEGED_CONTAINERS privileged container(s)"
+    log_color "$YELLOW" "  Privileged containers have elevated security risks"
+else
+    log_color "$GREEN" "✓ No privileged containers detected"
+fi
+
+# Check for host network mode
+log_color "$YELLOW" "Checking for host network mode usage..."
+HOST_NETWORK_USAGE=$(grep -r "network_mode.*host" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | wc -l)
+if [ "$HOST_NETWORK_USAGE" -gt 0 ]; then
+    log_color "$YELLOW" "⚠ Found $HOST_NETWORK_USAGE service(s) using host network mode"
+    log_color "$YELLOW" "  Host network mode reduces container isolation"
+else
+    log_color "$GREEN" "✓ No host network mode usage detected"
+fi
+
+# Check for plaintext sensitive data in compose files
+log_color "$YELLOW" "Checking for potential plaintext sensitive data..."
+POTENTIAL_SECRETS=$(grep -ri "password\|token\|secret\|key" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | grep -v "secrets:" | grep -v "_FILE" | wc -l)
+if [ "$POTENTIAL_SECRETS" -gt 5 ]; then  # Allow some normal configuration references
+    log_color "$YELLOW" "⚠ Found $POTENTIAL_SECRETS potential sensitive data references"
+    log_color "$YELLOW" "  Review compose files to ensure secrets use Docker Secrets or _FILE variables"
+else
+    log_color "$GREEN" "✓ No obvious plaintext sensitive data detected"
+fi
+
+# Check for missing restart policies
+log_color "$YELLOW" "Checking service restart policies..."
+NO_RESTART_SERVICES=$(grep -A 20 "services:" "${HELIOS_ROOT}/deployments/"*/docker-compose.yml 2>/dev/null | grep -B 15 -A 5 "image:" | grep -B 10 -A 10 "container_name" | grep -L "restart:" | wc -l)
+if [ "$NO_RESTART_SERVICES" -gt 0 ]; then
+    log_color "$YELLOW" "⚠ Some services may not have restart policies defined"
+    log_color "$YELLOW" "  Services without restart policies won't auto-recover from failures"
+else
+    log_color "$GREEN" "✓ Restart policies appear to be configured"
+fi
+
+# Check for external network dependencies
+log_color "$YELLOW" "Checking external network dependencies..."
+if docker network ls | grep -q "helios_proxy"; then
+    log_color "$GREEN" "✓ Required external network 'helios_proxy' exists"
+else
+    log_color "$RED" "✗ Required external network 'helios_proxy' does not exist"
+    log_color "$YELLOW" "  Create with: docker network create helios_proxy"
+    MISSING_VARS=$((MISSING_VARS+1))
+fi
 
 # ======== NEW ADDITIONS END HERE ========
 
