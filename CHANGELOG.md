@@ -5,6 +5,36 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.1] - 2025-08-27
+
+### Added
+- **Enhanced Tdarr Plugin Capabilities**:
+  - Comprehensive subtitle codec detection (WEBVTT, mov_text, subp, pgssub, tx3g, dvb_subtitle)
+  - Container-specific subtitle handling for MKV, MP4, TS containers
+  - Improved file size calculation with clean logging (no debug spam)
+  - Enhanced error handling and logging for transcoding failures
+
+### Changed
+- **Tdarr Plugin Improvements**:
+  - Optimized subtitle detection algorithm with two-tier system (always-problematic + container-specific)
+  - Cleaner log output with specific codec names instead of generic messages
+  - Maintained working file size calculation logic while removing debug code
+  - Enhanced FFmpeg command generation for better subtitle handling
+
+### Fixed
+- **Tdarr Processing Reliability**:
+  - Better handling of problematic subtitle codecs that cause FFmpeg failures
+  - Improved subtitle exclusion logic to prevent transcoding errors
+  - Enhanced plugin stability with comprehensive error handling
+  - Maintained accurate file size reporting without debug clutter
+
+### Performance
+- **Optimized Tdarr Workflow**:
+  - Reduced log verbosity while maintaining detailed diagnostics
+  - Faster subtitle analysis with improved detection algorithms
+  - Better resource utilization with cleaner plugin execution
+  - Enhanced transcoding success rate with comprehensive subtitle handling
+
 ## [1.8.0] - 2025-08-27
 
 ### Added
