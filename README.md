@@ -27,7 +27,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td rowspan="8"><b>🎬 Media Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tdarr.png" width="32" height="32" alt="Tdarr"></td>
       <td><b><a href="https://github.com/HaveAGitGat/Tdarr">Tdarr</a></b></td>
-      <td>Advanced Media Transcoding & Health Check with Custom Plugins</td>
+      <td>Advanced Media Transcoding & Health Check with Standards-Compliant Custom Plugins</td>
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="32" height="32" alt="Radarr"></td>
@@ -180,6 +180,7 @@ The project implements:
 - Resource-efficient container orchestration
 - Advanced Docker integration with Homarr dashboard (Docker socket access with proper permissions)
 - Optimized network architecture with purpose-built isolation for different service roles
+- **Standards-compliant custom Tdarr plugins** following official repository patterns and best practices
 
 ## 🔧 System Architecture
 

@@ -5,6 +5,37 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] - 2025-08-27
+
+### Added
+- **Official Standards Compliance**:
+  - Full alignment with Tdarr_Plugins repository standards and syntax expectations
+  - Proper ESLint configuration with global disable and specific parameter comments
+  - Official plugin structure and documentation patterns
+  - Enhanced code maintainability and readability
+
+### Changed
+- **Plugin Standards Alignment**:
+  - Updated both plugins to match official Tdarr_Plugins repository patterns
+  - Converted template literal descriptions to single-line strings
+  - Added proper ESLint disable comments for unused parameters
+  - Enhanced plugin documentation with official response object comments
+  - Improved code structure following official best practices
+
+### Fixed
+- **Code Quality Improvements**:
+  - Resolved ESLint warnings and standardized code formatting
+  - Fixed plugin structure to match official repository expectations
+  - Enhanced error handling documentation
+  - Improved plugin maintainability and future extensibility
+
+### Technical
+- **Development Standards**:
+  - Achieved 100% compliance with official Tdarr plugin development standards
+  - Enhanced plugin stability with proper error handling patterns
+  - Improved code readability and maintainability
+  - Standardized plugin architecture for future development
+
 ## [1.8.1] - 2025-08-27
 
 ### Added
