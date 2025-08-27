@@ -198,12 +198,12 @@ services:
       - ${CONFIG_DIR}/tdarr/temp:/temp                   # Temporary transcoding directory
       - ${MOVIES_DIR}:/movies                            # Movies library (writable)
       - ${TV_DIR}:/tv                                    # TV library (writable)
+      - ${BOOKS_DIR}:/books                              # Books library (writable)
       - ${DOWNLOADS_DIR}/complete:/downloads/complete:ro # Complete downloads directory (read-only)
       - ${DOWNLOADS_DIR}/incomplete:/downloads/incomplete:ro # Incomplete downloads directory (read-only)
     ports:
-      - 8265:8265  # WebUI port
-      - 8266:8266  # Server port
+      - ${TDARR_WEBUI_PORT}:8265   # WebUI port
+      - ${TDARR_SERVER_PORT}:8266  # Server port
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
-      

@@ -2,8 +2,37 @@
 
 All notable changes to the HELIOS project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.8.0] - 2025-08-27
+
+### Added
+- Configurable Tdarr ports (`TDARR_WEBUI_PORT`, `TDARR_SERVER_PORT`) for better port management
+- Enhanced Docker integration for Homarr with proper group permissions
+- Docker socket permission validation in system verification
+- Network architecture optimization with dedicated purpose-built networks
+
+### Changed
+- Optimized Docker network architecture:
+  - `helios_proxy`: External access network (Homarr, FlareSolverr, Tautulli)
+  - `helios_console_agent_network`: Management isolation (Portainer)
+  - `helios_default`: Main application network (all media services)
+- Removed unused `helios-console_default` network for cleaner architecture
+- Improved environment variable consistency between `env.sh` and `.env`
+- Enhanced Homarr Docker socket access with proper group permissions (GID 996)
+- Added explicit network configuration for Tautulli service
+
+### Fixed
+- Resolved Homarr Docker integration issues (EACCES permission errors)
+- Fixed Docker socket group access for privileged containers
+- Improved network isolation and service communication patterns
+- Enhanced configuration validation in `system-verify.sh`
+
+### Security
+- Maintained secure Docker socket permissions (660 root:docker)
+- Improved container isolation with purpose-built networks
+- Enhanced privileged container security practices
 
 ## [1.7.0] - 2025-08-07
 

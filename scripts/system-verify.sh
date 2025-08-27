@@ -158,6 +158,8 @@ check_var "SONARR_PORT"
 check_var "BAZARR_PORT"
 check_var "PROWLARR_PORT"
 check_var "SABNZBD_PORT"
+check_var "TDARR_WEBUI_PORT"
+check_var "TDARR_SERVER_PORT"
 
 # Check logging
 check_var "LOG_LEVEL"
@@ -601,13 +603,16 @@ fi
 
 # Check for external network dependencies
 log_color "$YELLOW" "Checking external network dependencies..."
-if docker network ls | grep -q "helios_proxy"; then
-    log_color "$GREEN" "✓ Required external network 'helios_proxy' exists"
-else
-    log_color "$RED" "✗ Required external network 'helios_proxy' does not exist"
-    log_color "$YELLOW" "  Create with: docker network create helios_proxy"
-    MISSING_VARS=$((MISSING_VARS+1))
-fi
+REQUIRED_NETWORKS=("helios_proxy" "helios_console_agent_network" "helios_default")
+for network in "${REQUIRED_NETWORKS[@]}"; do
+    if docker network ls | grep -q "$network"; then
+        log_color "$GREEN" "✓ Required external network '$network' exists"
+    else
+        log_color "$RED" "✗ Required external network '$network' does not exist"
+        log_color "$YELLOW" "  Create with: docker network create $network"
+        MISSING_VARS=$((MISSING_VARS+1))
+    fi
+done
 
 # ======== NEW ADDITIONS END HERE ========
 

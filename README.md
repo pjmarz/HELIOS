@@ -161,8 +161,12 @@ Common operations (see `scripts/README.md` for full details):
 ## 🧩 Architecture & Compose Includes
 
 - Single project name: `helios`
-- Shared `helios_proxy` network (external)
+- Optimized 3-network architecture:
+  - `helios_proxy`: External access network (Homarr, FlareSolverr)
+  - `helios_console_agent_network`: Management isolation (Portainer)
+  - `helios_default`: Main application network (all media services)
 - Secrets stored in `./secrets/`
+- Docker socket integration with proper group permissions for Homarr
 - Uses Docker Compose "include" to orchestrate `console` and `media` stacks from the root
 
 ## 💡 Implementation Details
@@ -174,6 +178,8 @@ The project implements:
 - Secure remote access through Cloudflare tunnels
 - Centralized logging and monitoring
 - Resource-efficient container orchestration
+- Advanced Docker integration with Homarr dashboard (Docker socket access with proper permissions)
+- Optimized network architecture with purpose-built isolation for different service roles
 
 ## 🔧 System Architecture
 

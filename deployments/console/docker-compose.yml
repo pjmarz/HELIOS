@@ -100,14 +100,14 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  # ==== HOMARR 1.0 ====
+  # ==== HOMARR ====
   # Dashboard for organizing and accessing all services
   # Provides a customizable homepage with service status and quick links
-  # UPGRADED TO HOMARR 1.0 - Complete rewrite with new architecture
   homarr:
     container_name: homarr
     image: ghcr.io/homarr-labs/homarr:latest
     restart: unless-stopped
+    privileged: true  # Required for reliable Docker socket access
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -115,7 +115,8 @@ services:
       - UMASK=${UMASK}
       - SECRET_ENCRYPTION_KEY=${HOMARR_ENCRYPTION_KEY}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for service discovery
+      - /var/run/docker.sock:/var/run/docker.sock:rw  # Docker socket for service discovery
+      - ${CONFIG_DIR}/homarr/config:/appdata/configs  # Configuration files for Homarr 1.0+
       - ${CONFIG_DIR}/homarr/imgs:/app/public/imgs     # Custom images (icons now managed via UI)
       - homarr_data:/appdata  # Persistent application data (moved from /data to /appdata)
     ports:
@@ -141,6 +142,9 @@ services:
       - ${CONFIG_DIR}/tautulli:/config  # Persistent configuration storage
     ports:
       - ${TAUTULLI_PORT}:8181  # Web UI access port
+    networks:
+      - default
+      - proxy
     restart: unless-stopped
     labels:
       - com.centurylinklabs.watchtower.enable=true
