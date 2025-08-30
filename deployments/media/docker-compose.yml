@@ -166,44 +166,44 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
 
-  # ==== TDARR ====
-  # Media transcoding and health check platform
-  # Automates video transcoding and performs health checks on media files
-  tdarr:
-    image: ghcr.io/haveagitgat/tdarr:latest
-    container_name: tdarr
-    runtime: nvidia                      # Uses NVIDIA runtime for GPU acceleration
-    environment:
-      # Standard environment variables
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
-      # Tdarr-specific settings
-      - serverIP=0.0.0.0                 # Listen on all interfaces
-      - serverPort=8266                  # Server API port
-      - webUIPort=8265                   # Web UI port
-      - internalNode=true                # Enable the internal transcoding node
-      - inContainer=true                 # Acknowledge container environment
-      - ffmpegVersion=7                  # FFmpeg version to use
-      - nodeName=HeliosNode              # Name for the internal node
-      # NVIDIA GPU settings
-      - NVIDIA_DRIVER_CAPABILITIES=all   # Enable all NVIDIA driver capabilities
-      - NVIDIA_VISIBLE_DEVICES=all       # Make all GPUs available to container
-    volumes:
-      - ${CONFIG_DIR}/tdarr:/app/server                  # Server data
-      - ${CONFIG_DIR}/tdarr/configs:/app/configs         # Configuration 
-      - ${CONFIG_DIR}/tdarr/logs:/app/logs               # Logs
-      - ${CONFIG_DIR}/tdarr:/config                      # Persistent configuration
-      - ${CONFIG_DIR}/tdarr/temp:/temp                   # Temporary transcoding directory
-      - ${MOVIES_DIR}:/movies                            # Movies library (writable)
-      - ${TV_DIR}:/tv                                    # TV library (writable)
-      - ${BOOKS_DIR}:/books                              # Books library (writable)
-      - ${DOWNLOADS_DIR}/complete:/downloads/complete:ro # Complete downloads directory (read-only)
-      - ${DOWNLOADS_DIR}/incomplete:/downloads/incomplete:ro # Incomplete downloads directory (read-only)
-    ports:
-      - ${TDARR_WEBUI_PORT}:8265   # WebUI port
-      - ${TDARR_SERVER_PORT}:8266  # Server port
-    restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
+  # # ==== TDARR ====
+  # # Media transcoding and health check platform
+  # # Automates video transcoding and performs health checks on media files
+  # tdarr:
+  #   image: ghcr.io/haveagitgat/tdarr:latest
+  #   container_name: tdarr
+  #   runtime: nvidia                      # Uses NVIDIA runtime for GPU acceleration
+  #   environment:
+  #     # Standard environment variables
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #     - TZ=${TZ}
+  #     - UMASK=${UMASK}
+  #     # Tdarr-specific settings
+  #     - serverIP=0.0.0.0                 # Listen on all interfaces
+  #     - serverPort=8266                  # Server API port
+  #     - webUIPort=8265                   # Web UI port
+  #     - internalNode=true                # Enable the internal transcoding node
+  #     - inContainer=true                 # Acknowledge container environment
+  #     - ffmpegVersion=7                  # FFmpeg version to use
+  #     - nodeName=HeliosNode              # Name for the internal node
+  #     # NVIDIA GPU settings
+  #     - NVIDIA_DRIVER_CAPABILITIES=all   # Enable all NVIDIA driver capabilities
+  #     - NVIDIA_VISIBLE_DEVICES=all       # Make all GPUs available to container
+  #   volumes:
+  #     - ${CONFIG_DIR}/tdarr:/app/server                  # Server data
+  #     - ${CONFIG_DIR}/tdarr/configs:/app/configs         # Configuration
+  #     - ${CONFIG_DIR}/tdarr/logs:/app/logs               # Logs
+  #     - ${CONFIG_DIR}/tdarr:/config                      # Persistent configuration
+  #     - ${CONFIG_DIR}/tdarr/temp:/temp                   # Temporary transcoding directory
+  #     - ${MOVIES_DIR}:/movies                            # Movies library (writable)
+  #     - ${TV_DIR}:/tv                                    # TV library (writable)
+  #     - ${BOOKS_DIR}:/books                              # Books library (writable)
+  #     - ${DOWNLOADS_DIR}/complete:/downloads/complete:ro # Complete downloads directory (read-only)
+  #     - ${DOWNLOADS_DIR}/incomplete:/downloads/incomplete:ro # Incomplete downloads directory (read-only)
+  #   ports:
+  #     - ${TDARR_WEBUI_PORT}:8265   # WebUI port
+  #     - ${TDARR_SERVER_PORT}:8266  # Server port
+  #   restart: unless-stopped
+  #   labels:
+  #     - com.centurylinklabs.watchtower.enable=true

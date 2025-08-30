@@ -5,6 +5,44 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2025-08-29
+
+### Removed
+- **Recyclarr Complete Removal**:
+  - Eliminated Recyclarr service from docker-compose.yml
+  - Removed recyclarr configuration directory and all files
+  - Deleted recyclarr-sync.sh management script
+  - Cleaned up RECYCLARR_PORT environment variable
+  - Removed all Recyclarr references from documentation
+  - Deleted Recyclarr Docker image and cleaned up system
+
+### Added
+- **Enhanced Documentation**:
+  - Updated index.html with current HELIOS architecture
+  - Refreshed CHANGELOG.md with all recent changes
+  - Updated README.md with current component status
+  - Improved documentation consistency across all files
+
+### Changed
+- **System Architecture Optimization**:
+  - Streamlined service configuration after Recyclarr removal
+  - Enhanced docker-compose.yml structure
+  - Improved environment variable management
+  - Updated scripts documentation
+
+### Fixed
+- **Documentation Synchronization**:
+  - Aligned all documentation files with current system state
+  - Updated service references and component listings
+  - Ensured consistent version information across files
+
+### Technical
+- **Clean System State**:
+  - Achieved 100% Recyclarr removal with no residual traces
+  - Maintained all other system functionality
+  - Preserved existing Custom Format configurations
+  - Kept manual language CFs intact for Radarr/Sonarr
+
 ## [1.8.2] - 2025-08-27
 
 ### Added
