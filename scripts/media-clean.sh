@@ -75,10 +75,15 @@ log "Checking sabnzbd container status"
 CONTAINER_RUNNING=$(docker ps --format '{{.Names}}' | grep -w "sabnzbd" || true)
 
 if [[ -n "$CONTAINER_RUNNING" ]]; then
-    # Container is running, need to stop it
-    log "Stopping running sabnzbd container"
+    # Container is running, need to stop and remove it
+    log "Stopping and removing sabnzbd container"
+    cd "$HELIOS_ROOT"
     docker compose stop sabnzbd || {
         log "Error: Failed to stop sabnzbd container"
+        exit 1
+    }
+    docker compose rm -f sabnzbd || {
+        log "Error: Failed to remove sabnzbd container"
         exit 1
     }
 else
@@ -116,8 +121,9 @@ done
 
 # Start the sabnzbd container
 log "Starting sabnzbd container"
-docker compose start sabnzbd || {
-    log "Error: Failed to start sabnzbd container. If the container doesn't exist, you may need to run docker compose up -d sabnzbd in the media deployment directory."
+cd "$HELIOS_ROOT"
+docker compose up -d sabnzbd || {
+    log "Error: Failed to start sabnzbd container."
     exit 1
 }
 

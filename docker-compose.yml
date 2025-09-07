@@ -24,12 +24,26 @@ networks:
   proxy:
     name: helios_proxy
     external: true
+  console_agent_network:
+    name: helios_console_agent_network
+    external: true
 
 # Define secrets to securely handle sensitive information
 # These secrets can be accessed by services that need them
 secrets:
   plex_token:
     file: ./secrets/plex_token.txt
+  homarr_encryption_key:
+    file: ./secrets/homarr_encryption_key.txt
+
+# Define shared volumes used across deployments
+volumes:
+  portainer_data:
+    name: helios_portainer_data
+    external: true
+  homarr_data:
+    name: helios_homarr_data
+    external: true
 
 # Common settings and environment variables
 # Using YAML anchors (&) for DRY (Don't Repeat Yourself) configuration

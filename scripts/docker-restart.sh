@@ -82,7 +82,12 @@ restart_all_services() {
         exit 1
     }
 
-    log "Running docker compose up with root docker-compose.yml in detached mode..."
+    log "Cleaning up any stale container state..."
+    docker compose down || {
+        log "Warning: docker compose down failed, continuing anyway"
+    }
+    
+    log "Starting all services with root docker-compose.yml in detached mode..."
     docker compose up -d || {
         log "Error: Failed to run docker compose up. Exiting."
         exit 1
