@@ -154,6 +154,7 @@ services:
   plexautolanguages:
     image: remirigal/plex-auto-languages:latest
     container_name: plexautolanguages
+    network_mode: host                   # Host network mode allows connection to external Plex server
     environment:
       - PLEX_URL=${PLEX_URL}             # Plex server URL for API access
       - TZ=${TZ}                         # Timezone setting
@@ -209,24 +210,3 @@ services:
   #       - com.centurylinklabs.watchtower.enable=true
   # 
   # # ===========================================================================
-  
-  # ==== THREADFIN ====
-  # M3U proxy for Plex DVR and Live TV integration
-  # Processes IPTV streams and provides EPG data for Plex
-  threadfin:
-    image: fyb3roptik/threadfin:latest
-    container_name: threadfin
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
-    volumes:
-      - ${CONFIG_DIR}/threadfin:/home/threadfin/conf
-      - /tmp/threadfin:/tmp/threadfin:rw
-    ports:
-      - ${THREADFIN_PORT}:34400
-    restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
