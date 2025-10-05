@@ -5,6 +5,38 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 2025-10-05
+
+### Removed
+- **Tdarr Complete Removal**:
+  - Eliminated Tdarr service from docker-compose.yml (42 lines of commented service definition)
+  - Removed Tdarr configuration directory and all files (2.2 GB freed)
+  - Deleted TDARR_WEBUI_PORT and TDARR_SERVER_PORT environment variables
+  - Cleaned up Tdarr references from documentation (README.md, index.html)
+  - Removed Tdarr variable checks from system-verify.sh script
+  - Updated GPU warning messages to be generic (no longer Tdarr-specific)
+
+### Changed
+- **System Architecture Optimization**:
+  - Streamlined service configuration after Tdarr removal
+  - Enhanced focus on quality-first media acquisition without transcoding
+  - Updated Media Management service count from 8 to 7 services
+  - Improved documentation clarity across all files
+
+### Technical
+- **Quality-Focused Architecture**:
+  - Eliminated transcoding layer in favor of original quality preservation
+  - Aligned system with 4K Remux priority approach
+  - Reduced storage overhead by 2.2 GB (config directory removal)
+  - Maintained backup at /tmp/tdarr-backup-YYYYMMDD.tar.gz (387 MB compressed)
+  - Preserved all other system functionality and integrations
+
+### Rationale
+- Project prioritizes 4K Remux and original quality content
+- No transcoding needed with quality-first download approach
+- Simplifies architecture and reduces resource overhead
+- Tdarr was commented out and unused in active configuration
+
 ## [1.10.0] - 2025-09-07
 
 ### Added

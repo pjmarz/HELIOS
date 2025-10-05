@@ -158,8 +158,6 @@ check_var "SONARR_PORT"
 check_var "BAZARR_PORT"
 check_var "PROWLARR_PORT"
 check_var "SABNZBD_PORT"
-check_var "TDARR_WEBUI_PORT"
-check_var "TDARR_SERVER_PORT"
 
 # Check logging
 check_var "LOG_LEVEL"
@@ -314,12 +312,12 @@ if command -v nvidia-smi &>/dev/null; then
         log_color "$GREEN" "✓ NVIDIA GPU detected: $nvidia_smi_output"
     else
         log_color "$RED" "✗ NVIDIA GPU detection failed, check driver installation"
-        log_color "$YELLOW" "  This may affect Tdarr's transcoding performance"
+        log_color "$YELLOW" "  This may affect GPU-accelerated applications"
         MISSING_VARS=$((MISSING_VARS+1))
     fi
 else
     log_color "$RED" "✗ nvidia-smi not found, NVIDIA driver not installed"
-    log_color "$YELLOW" "  GPU acceleration for Tdarr may not work properly"
+    log_color "$YELLOW" "  GPU acceleration may not work properly"
     MISSING_VARS=$((MISSING_VARS+1))
 fi
 
