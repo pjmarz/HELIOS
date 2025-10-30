@@ -22,6 +22,7 @@ Scripts follow a consistent prefix-based naming pattern:
 | `docker-restart.sh` | Restarts the Docker service and all containers |
 | `media-clean.sh` | Cleans up Usenet download directories and handles SABnzbd using direct Docker commands |
 | `system-verify.sh` | Verifies environment configuration and Docker Compose setup with detailed logging |
+| `test-api-connectivity.sh` | Tests API connectivity to all HELIOS services using secrets from ./secrets/
 
 ## Legacy Scripts (To Be Deprecated)
 
