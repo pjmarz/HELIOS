@@ -61,22 +61,25 @@ rebuild_docker_services() {
     }
 
     log "Stopping all containers"
-    docker compose down || {
+    docker compose down 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Failed to stop containers"
         return 1
-    }
+    fi
 
     log "Pulling latest images for all services"
-    docker compose pull || {
+    docker compose pull 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Failed to pull latest images"
         return 1
-    }
+    fi
 
     log "Starting all containers"
-    docker compose up -d || {
+    docker compose up -d 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Failed to start containers"
         return 1
-    }
+    fi
 
     return 0
 }
@@ -86,14 +89,16 @@ prune_docker_system() {
     log "Pruning unused Docker resources"
     
     log "Pruning stopped containers..."
-    docker container prune -f || {
+    docker container prune -f 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Warning: Container pruning failed"
-    }
+    fi
     
     log "Pruning unused images..."
-    docker image prune -f || {
+    docker image prune -f 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Warning: Image pruning failed"
-    }
+    fi
     
     log "Docker resources pruning completed"
     return 0

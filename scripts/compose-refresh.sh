@@ -62,23 +62,26 @@ refresh_docker_compose() {
 
     # Bring down all services
     log "Running docker compose down..."
-    docker compose down || {
+    docker compose down 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Error running docker compose down"
         return 1
-    }
+    fi
     
     # Prune stopped containers
     log "Pruning stopped containers..."
-    docker container prune -f || {
+    docker container prune -f 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Warning: Container pruning failed, continuing anyway"
-    }
+    fi
 
     # Bring up all services
     log "Running docker compose up -d..."
-    docker compose up -d || {
+    docker compose up -d 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Error running docker compose up"
         return 1
-    }
+    fi
 
     log "Successfully refreshed all Docker Compose services"
     return 0

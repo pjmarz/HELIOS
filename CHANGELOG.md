@@ -5,6 +5,27 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.1] - 2025-10-30
+
+### Changed
+- **Operational Script Improvements**:
+  - Enhanced logging in `compose-refresh.sh` with tee output redirection for dual console/file logging
+  - Enhanced logging in `docker-rebuild.sh` with tee output redirection for dual console/file logging
+  - Improved error detection using PIPESTATUS for more reliable script execution
+  - Better observability of Docker Compose operations during maintenance tasks
+
+### Fixed
+- **Code Quality**:
+  - Cleaned up whitespace formatting in `deployments/media/docker-compose.yml`
+  - Improved error handling consistency across maintenance scripts
+  - Enhanced script reliability with proper exit code detection
+
+### Technical
+- **Maintainability Improvements**:
+  - Maintained backward compatibility with all operational scripts
+  - Enhanced debugging capability with comprehensive logging
+  - Improved script robustness without changing user-facing functionality
+
 ## [1.11.0] - 2025-10-05
 
 ### Removed
