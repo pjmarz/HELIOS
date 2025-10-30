@@ -118,11 +118,15 @@ Create the following files with secure permissions:
 mkdir -p secrets
 printf "<YOUR_PLEX_TOKEN>\n" > secrets/plex_token.txt
 printf "<32+ CHAR ENCRYPTION KEY>\n" > secrets/homarr_encryption_key.txt
-chmod 600 secrets/plex_token.txt secrets/homarr_encryption_key.txt
+printf "<YOUR_HOMARR_API_KEY>\n" > secrets/homarr_api_key.txt
+printf "<YOUR_PORTAINER_ACCESS_TOKEN>\n" > secrets/portainer_api_token.txt
+chmod 600 secrets/plex_token.txt secrets/homarr_encryption_key.txt secrets/homarr_api_key.txt secrets/portainer_api_token.txt
 ```
 
 - **plex_token.txt**: used by `plexautolanguages`
 - **homarr_encryption_key.txt**: recommended to secure Homarr data (if configured to use secrets)
+- **homarr_api_key.txt**: Homarr API key for authenticated API requests (header `ApiKey`)
+- **portainer_api_token.txt**: Portainer access token for API (`X-API-Key` over HTTPS 9443)
 
 ## 🚀 Quickstart (for reference only)
 
@@ -151,6 +155,7 @@ Common operations (see `scripts/README.md` for full details):
 ./scripts/compose-refresh.sh # Restart with prune
 ./scripts/docker-rebuild.sh  # Pull latest images and prune
 ./scripts/system-verify.sh   # Validate config & environment
+./scripts/test-api-connectivity.sh # Verify API connectivity to all services (logs to logs/test-api-connectivity.log)
 ```
 
 ## 🧩 Architecture & Compose Includes

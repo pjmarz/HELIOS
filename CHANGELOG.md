@@ -2,8 +2,27 @@
 
 All notable changes to the HELIOS project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.11.2] - 2025-10-30
+
+### Added
+- API Connectivity Test Script:
+  - New `scripts/test-api-connectivity.sh` to verify API access to all HELIOS services
+  - Added Homarr API test using `ApiKey` header (`/api/users/selectable`)
+  - Added Portainer API test using `X-API-Key` over HTTPS 9443 (`/api/stacks`)
+
+### Changed
+- Logging and consistency:
+  - Unified Homarr and Portainer blocks in `test-api-connectivity.sh` to match existing service style
+  - Standardized output with timestamps and single-run log overwrite semantics
+
+### Docs
+- README updates:
+  - Documented `test-api-connectivity.sh` usage
+  - Added notes for `secrets/homarr_api_key.txt` and `secrets/portainer_api_token.txt`
+- Docs index: clarified Portainer and Homarr API connectivity as part of system health
 
 ## [1.11.1] - 2025-10-30
 
