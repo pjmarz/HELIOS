@@ -91,6 +91,11 @@ services:
       - LOG_HTML=false                # Don't log full HTML responses
       - CAPTCHA_SOLVER=none           # No automated CAPTCHA solving
       - TZ=${TZ}                      # Timezone setting
+      - PUID=${PUID}                  # Process User ID - Controls file ownership
+      - PGID=${PGID}                  # Process Group ID - Controls file ownership
+      - UMASK=${UMASK}                # Controls default file permissions
+    volumes:
+      - ${CONFIG_DIR}/flaresolverr:/config  # Persistent configuration storage
     ports:
       - ${FLARESOLVERR_PORT}:8191     # API access port
     networks:
