@@ -110,23 +110,46 @@ HELIOS is a self-hosted media management and server administration system built 
 - **Docker Compose v2 (with include support)**: `docker compose` CLI available
 - **Proxmox VE**: Recommended host environment (not strictly required)
 
-## 🔐 Secrets
+## 🔐 Secrets & Environment Configuration
 
-Create the following files with secure permissions:
+HELIOS uses a centralized architecture for managing environment files and secrets, following Docker best practices:
+
+### Centralized Architecture
+
+- **`/etc/HELIOS/env.sh`**: Centralized environment configuration file (actual file location)
+  - **`env.sh`** in project root is a symlink pointing to `/etc/HELIOS/env.sh`
+  - Excluded from git (tracked in `.gitignore`)
+  - Contains environment variable exports for local development
+  
+- **`/etc/HELIOS/secrets/`**: Centralized secrets directory (actual directory location)
+  - **`secrets/`** in project root is a symlink pointing to `/etc/HELIOS/secrets`
+  - Excluded from git (tracked in `.gitignore`)
+  - Contains sensitive credentials and keys managed via Docker Secrets
+
+### Setting Up Secrets
+
+Create the following files with secure permissions in `/etc/HELIOS/secrets/`:
 
 ```bash
-mkdir -p secrets
-printf "<YOUR_PLEX_TOKEN>\n" > secrets/plex_token.txt
-printf "<32+ CHAR ENCRYPTION KEY>\n" > secrets/homarr_encryption_key.txt
-printf "<YOUR_HOMARR_API_KEY>\n" > secrets/homarr_api_key.txt
-printf "<YOUR_PORTAINER_ACCESS_TOKEN>\n" > secrets/portainer_api_token.txt
-chmod 600 secrets/plex_token.txt secrets/homarr_encryption_key.txt secrets/homarr_api_key.txt secrets/portainer_api_token.txt
+mkdir -p /etc/HELIOS/secrets
+printf "<YOUR_PLEX_TOKEN>\n" > /etc/HELIOS/secrets/plex_token.txt
+printf "<32+ CHAR ENCRYPTION KEY>\n" > /etc/HELIOS/secrets/homarr_encryption_key.txt
+printf "<YOUR_HOMARR_API_KEY>\n" > /etc/HELIOS/secrets/homarr_api_key.txt
+printf "<YOUR_PORTAINER_ACCESS_TOKEN>\n" > /etc/HELIOS/secrets/portainer_api_token.txt
+chmod 700 /etc/HELIOS/secrets
+chmod 600 /etc/HELIOS/secrets/*
 ```
+
+The symlinks in the project root (`env.sh` and `secrets/`) will automatically point to these centralized locations.
+
+### Required Secrets
 
 - **plex_token.txt**: used by `plexautolanguages`
 - **homarr_encryption_key.txt**: recommended to secure Homarr data (if configured to use secrets)
 - **homarr_api_key.txt**: Homarr API key for authenticated API requests (header `ApiKey`)
 - **portainer_api_token.txt**: Portainer access token for API (`X-API-Key` over HTTPS 9443)
+
+This centralized approach ensures consistent configuration management across the system and aligns with industry best practices for Docker-based deployments.
 
 ## 🚀 Quickstart (for reference only)
 
@@ -165,7 +188,7 @@ Common operations (see `scripts/README.md` for full details):
   - `helios_proxy`: External access network (Homarr, FlareSolverr)
   - `helios_console_agent_network`: Management isolation (Portainer)
   - `helios_default`: Main application network (all media services)
-- Secrets stored in `./secrets/`
+- Secrets stored in `/etc/HELIOS/secrets/` (centralized location, symlinked from project root)
 - Docker socket integration with proper group permissions for Homarr
 - Uses Docker Compose "include" to orchestrate `console` and `media` stacks from the root
 
