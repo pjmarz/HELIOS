@@ -1,0 +1,178 @@
+# HELIOS Media Server Stack
+# Docker Compose configuration for HELIOS project
+
+services:
+  # ==== DOWNLOAD CLIENT ====
+  sabnzbd:
+    container_name: sabnzbd
+    image: lscr.io/linuxserver/sabnzbd:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+    volumes:
+      - /etc/HELIOS/config/sabnzbd:/config
+      - /mnt/usenet:/usenet
+    restart: unless-stopped
+
+  # ==== MEDIA MANAGEMENT ====
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+    volumes:
+      - /etc/HELIOS/config/radarr:/config
+      - /mnt/media/movies:/movies
+      - /mnt/usenet:/usenet
+    restart: unless-stopped
+
+  sonarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+    volumes:
+      - /etc/HELIOS/config/sonarr:/config
+      - /mnt/media/tv:/tv
+      - /mnt/usenet:/usenet
+    restart: unless-stopped
+
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+    volumes:
+      - /etc/HELIOS/config/prowlarr:/config
+    restart: unless-stopped
+
+  bazarr:
+    container_name: bazarr
+    image: lscr.io/linuxserver/bazarr:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+    volumes:
+      - /etc/HELIOS/config/bazarr:/config
+      - /mnt/media/movies:/movies
+      - /mnt/media/tv:/tv
+    restart: unless-stopped
+
+  # ==== MEDIA SERVER ====
+  plex:
+    container_name: plex-helios
+    image: lscr.io/linuxserver/plex:latest
+    ports:
+      - "32400:32400"
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - VERSION=docker
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+    volumes:
+      - /etc/HELIOS/config/plex:/config
+      - /mnt/media/movies:/movies
+      - /mnt/media/tv:/tv
+      - /tmp/plex-transcode:/transcode
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # ==== MONITORING & MANAGEMENT ====
+  tautulli:
+    container_name: tautulli
+    image: lscr.io/linuxserver/tautulli:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+    volumes:
+      - /etc/HELIOS/config/tautulli:/config
+    restart: unless-stopped
+
+  overseerr:
+    container_name: overseerr
+    image: lscr.io/linuxserver/overseerr:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+    volumes:
+      - /etc/HELIOS/config/overseerr:/config
+    restart: unless-stopped
+
+  homarr:
+    container_name: homarr
+    image: ghcr.io/homarr-labs/homarr:latest
+    environment:
+      - PUID=1000
+      - PGID=984
+      - TZ=America/New_York
+      - UMASK=002
+      - SECRET_ENCRYPTION_KEY=9094c89f538f19b4f78c64835554695408407f972fa71ad2e82fcf480b28d191
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/HELIOS/config/homarr/imgs:/app/public/imgs
+      - homarr_data:/appdata
+      - /etc/HELIOS/config/homarr/config:/appdata/configs
+    restart: unless-stopped
+
+  # ==== UTILITIES ====
+  flaresolverr:
+    container_name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    environment:
+      - TZ=America/New_York
+      - UMASK=002
+      - LOG_LEVEL=debug
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+    volumes:
+      - /etc/HELIOS/config/flaresolverr:/config
+    restart: unless-stopped
+
+  # ==== PORTAINER ====
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+  portaineragent:
+    container_name: portaineragent
+    image: portainer/agent:latest
+    environment:
+      - AGENT_CLUSTER_ADDR=tasks.agent
+    volumes:
+      - /:/host
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  homarr_data:
+  portainer_data:
