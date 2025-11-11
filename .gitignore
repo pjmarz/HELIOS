@@ -1,0 +1,44 @@
+# Ignore nvidia assets 
+/assets/nvidia/
+
+# Sensitive Configuration
+.secrets
+/secrets/
+env.sh
+*.env
+.env
+.env.*
+*credentials*
+*token*
+*password*
+*secret*
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# System Files
+.DS_Store
+Thumbs.db
+.vscode/
+.cursor/
+
+# Logs and Databases
+*.log
+*.sqlite
+*.db
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Backup files
+*.bak
+*.backup
+*~
+
+nvidia/secrets/
+logs/
+.envrc

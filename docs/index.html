@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELIOS - Media Management & Server Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #ffffff;
+            --card-bg: #2d2d2d;
+            --body-bg: #121212;
+            --muted-color: #a0a0a0;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+        }
+        
+        /* Glow effect for the HELIOS logo */
+        .hero-content img {
+            max-width: 200px;
+            transition: filter 0.3s ease;
+        }
+        
+        .hero-content img:hover {
+            filter: drop-shadow(0 0 10px var(--secondary-color));
+        }
+        
+        /* Animated gradient background for hero */
+        .hero {
+            background: linear-gradient(-45deg, var(--primary-color), #2c3e50, #34495e, var(--secondary-color));
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Animated icons in features section */
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .feature-icon:hover {
+            transform: scale(1.2);
+            color: var(--accent-color);
+        }
+        
+        /* Card hover effects */
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid #404040;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(52, 152, 219, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+        
+        .service-card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        /* Service icon hover effects */
+        .service-card img {
+            width: 32px;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Adjust specific icon sizes */
+        .service-card img[src*="watchtower.png"],
+        .service-card img[src*="cloudflare.png"],
+        .service-card img[src*="homarr.png"] {
+            width: 36px;
+        }
+        
+        /* Link hover effects */
+        .text-white {
+            transition: color 0.3s ease;
+        }
+        
+        .text-white:hover {
+            color: var(--secondary-color) !important;
+        }
+        
+        /* Animated footer */
+        .footer img {
+            transition: transform 0.3s ease;
+        }
+        
+        .footer img:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--secondary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(100px);
+        }
+        
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            color: white;
+        }
+        
+        .text-muted {
+            color: var(--muted-color) !important;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color) !important;
+            transition: background-color 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background-color: rgba(26, 26, 26, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid #404040;
+        }
+        
+        .bg-light {
+            background-color: #1a1a1a !important;
+        }
+        
+        .btn-light {
+            background-color: #404040;
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-light:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #404040;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="./media/HELIOS.gif" alt="HELIOS" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#components">Components</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/pjmarz/HELIOS">GitHub</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-3">
+      <div class="alert alert-warning text-center" role="alert">
+        <strong>Showcase:</strong> This repository demonstrates HELIOS and is not intended to be cloned or deployed as-is. See the README and Changelog for details.
+        <a href="https://github.com/pjmarz/HELIOS#readme" class="ms-2">README</a> · <a href="https://github.com/pjmarz/HELIOS/blob/main/CHANGELOG.md">Changelog</a>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container text-center hero-content">
+            <img src="./media/HELIOS.gif" alt="HELIOS" class="mb-4" style="max-width: 200px;">
+            <p class="lead">Self-hosted Media Management & Server Administration System</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Key Features</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-film feature-icon"></i>
+                    <h3>Media Management</h3>
+                    <p>Automated media collection and organization with popular tools like Radarr, Sonarr, and Bazarr.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-server feature-icon"></i>
+                    <h3>Server Administration</h3>
+                    <p>Comprehensive server management with Portainer, Watchtower, and Tautulli for monitoring and maintenance.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-shield-check feature-icon"></i>
+                    <h3>Secure & Automated</h3>
+                    <p>Built on Docker and Proxmox VE with automated updates, secure remote access through Cloudflare tunnels, and scripted API connectivity checks for all services.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Components Section -->
+    <section id="components" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">System Components</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card service-card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">🎬 Media Management</h5>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="32" height="32" alt="Radarr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/Radarr/Radarr" class="text-white text-decoration-none">Radarr</a>
+                                    <small class="d-block text-muted">Movie Collection</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sonarr.png" width="32" height="32" alt="Sonarr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/Sonarr/Sonarr" class="text-white text-decoration-none">Sonarr</a>
+                                    <small class="d-block text-muted">TV Series Collection</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/bazarr.png" width="32" height="32" alt="Bazarr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/morpheus65535/bazarr" class="text-white text-decoration-none">Bazarr</a>
+                                    <small class="d-block text-muted">Subtitle Management</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/overseerr.png" width="32" height="32" alt="Overseerr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/sct/overseerr" class="text-white text-decoration-none">Overseerr</a>
+                                    <small class="d-block text-muted">Media Request & Discovery</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prowlarr.png" width="32" height="32" alt="Prowlarr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/Prowlarr/Prowlarr" class="text-white text-decoration-none">Prowlarr</a>
+                                    <small class="d-block text-muted">Indexer Management</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png" width="32" height="32" alt="SABnzbd" class="me-3">
+                                <div>
+                                    <a href="https://github.com/sabnzbd/sabnzbd" class="text-white text-decoration-none">SABnzbd</a>
+                                    <small class="d-block text-muted">Usenet Download Client</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png" width="32" height="32" alt="Plex" class="me-3">
+                                <div>
+                                    <a href="https://github.com/RemiRigal/Plex-Auto-Languages" class="text-white text-decoration-none">Plex Auto Languages</a>
+                                    <small class="d-block text-muted">Automated Language Management</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">📊 Server Management</h5>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png" width="32" height="32" alt="Portainer" class="me-3">
+                                <div>
+                                    <a href="https://github.com/portainer/portainer" class="text-white text-decoration-none">Portainer</a>
+                                    <small class="d-block text-muted">Container Management</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/watchtower.png" width="32" height="32" alt="Watchtower" class="me-3">
+                                <div>
+                                    <a href="https://github.com/containrrr/watchtower" class="text-white text-decoration-none">Watchtower</a>
+                                    <small class="d-block text-muted">Automated Container Updates</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tautulli.png" width="32" height="32" alt="Tautulli" class="me-3">
+                                <div>
+                                    <a href="https://github.com/Tautulli/Tautulli" class="text-white text-decoration-none">Tautulli</a>
+                                    <small class="d-block text-muted">Media Server Analytics</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png" width="32" height="32" alt="Homarr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/ajnart/homarr" class="text-white text-decoration-none">Homarr</a>
+                                    <small class="d-block text-muted">Dashboard & Service Management</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">🔧 Infrastructure</h5>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox" class="me-3">
+                                <div>
+                                    <a href="https://www.proxmox.com/en/" class="text-white text-decoration-none">Proxmox VE</a>
+                                    <small class="d-block text-muted">Virtualization Platform</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="32" height="32" alt="Docker" class="me-3">
+                                <div>
+                                    <a href="https://www.docker.com/" class="text-white text-decoration-none">Docker</a>
+                                    <small class="d-block text-muted">Containerization Platform</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="32" height="32" alt="Cloudflared" class="me-3">
+                                <div>
+                                    <a href="https://github.com/cloudflare/cloudflared" class="text-white text-decoration-none">Cloudflared</a>
+                                    <small class="d-block text-muted">Secure Remote Access</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="32" height="32" alt="FlareSolverr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/FlareSolverr/FlareSolverr" class="text-white text-decoration-none">FlareSolverr</a>
+                                    <small class="d-block text-muted">Proxy & Anti-Bot Protection</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots & Demos Section -->
+    <section id="screenshots" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Screenshots & Demos</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <a href="./media/homarr.png" data-lightbox="screenshots" data-title="Dashboard Overview">
+                            <img src="./media/homarr.png" alt="Dashboard" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text text-center">Homarr Dashboard Overview</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <a href="./media/portainer.png" data-lightbox="screenshots" data-title="Portainer Management Dashboard">
+                            <img src="./media/portainer.png" alt="Portainer Management" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text text-center">Portainer Management Dashboard</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <a href="./media/pve.png" data-lightbox="screenshots" data-title="Proxmox Virtual Environment">
+                            <img src="./media/pve.png" alt="Proxmox Environment" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text text-center">Proxmox Virtual Environment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <a href="https://youtu.be/Nw_cdqQHGA8?t=1">
+                <img src="./media/GIR.gif" alt="GIR" width="120" height="120" class="mb-3">
+            </a>
+            <p class="mb-0">
+                <small><i>I'm gonna sing the doom song now</i></small>
+            </p>
+        </div>
+    </footer>
+
+    <a href="#" class="scroll-top">
+        <i class="bi bi-arrow-up"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script>
+        // Navbar color change on scroll
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollBtn = document.querySelector('.scroll-top');
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html> 

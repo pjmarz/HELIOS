@@ -1,0 +1,173 @@
+---
+# ===========================================================================
+# HELIOS CONSOLE SERVICES CONFIGURATION
+# ===========================================================================
+# This file defines all system management and monitoring services including:
+# - Container management (Portainer)
+# - Dashboard and service overview (Homarr)
+# - Automatic updates (Watchtower)
+# - Media analytics (Tautulli)
+# - Network utilities (FlareSolverr)
+# ===========================================================================
+
+name: helios-console
+
+# Common configuration shared across services
+# These anchors (&) allow for DRY (Don't Repeat Yourself) configuration
+x-common: &common-settings
+  restart: unless-stopped  # Ensures services automatically restart unless manually stopped
+  environment: &common-env
+    PUID: ${PUID}          # Process User ID - Controls file ownership
+    PGID: ${PGID}          # Process Group ID - Controls file ownership
+    TZ: ${TZ}              # Timezone setting for accurate scheduling/logs
+    UMASK: ${UMASK}        # Controls default file permissions
+  labels: &common-labels
+    - com.centurylinklabs.watchtower.enable=true  # Enables automatic updates via Watchtower
+
+services:
+  # ==== PORTAINER AGENT ====
+  # Provides remote management capabilities to Portainer
+  # This allows Portainer to manage the Docker environment
+  agent:
+    image: portainer/agent:latest
+    container_name: portaineragent
+    environment:
+      AGENT_CLUSTER_ADDR: tasks.agent  # Agent discovery service name
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for container management
+      - /var/lib/docker/volumes:/var/lib/docker/volumes  # Access to Docker volumes
+      - /:/host  # Host filesystem access for management
+    networks:
+      - agent_network  # Isolated network for secure agent-portainer communication
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  # ==== PORTAINER ====
+  # Container management UI with comprehensive Docker controls
+  # Provides a web interface to manage containers, images, networks, and volumes
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    privileged: true  # Required for full management capabilities
+    command: -H tcp://agent:9001 --tlsskipverify  # Connect to the agent
+    ports:
+      - ${PORTAINER_SSL_PORT}:9443  # HTTPS web access
+      - ${PORTAINER_PORT}:8000      # HTTP web access
+    volumes:
+      - portainer_data:/data  # Persistent storage for settings and configurations
+      - /var/run/docker.sock:/var/run/docker.sock  # Direct Docker socket access
+    networks:
+      - agent_network  # Isolated network for secure agent-portainer communication
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  # ==== WATCHTOWER ====
+  # Automatic container updater that keeps services up to date
+  # Monitors for image updates and automatically applies them
+  watchtower:
+    container_name: watchtower
+    hostname: watchtower
+    image: containrrr/watchtower:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for container management
+    restart: unless-stopped
+    command: --interval 3600 --label-enable --cleanup --remove-volumes
+    # Command explained:
+    # --interval 3600: Check for updates every hour (3600 seconds)
+    # --label-enable: Only update containers with the enable label
+    # --cleanup: Remove old images after updating
+    # --remove-volumes: Remove anonymous volumes attached to removed containers
+
+  # ==== FLARESOLVERR ====
+  # Proxy server that helps bypass Cloudflare and other anti-bot protections
+  # Used by various *arr services to access sites with protection
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}  # Logging verbosity with default
+      - LOG_HTML=false                # Don't log full HTML responses
+      - CAPTCHA_SOLVER=none           # No automated CAPTCHA solving
+      - TZ=${TZ}                      # Timezone setting
+      - PUID=${PUID}                  # Process User ID - Controls file ownership
+      - PGID=${PGID}                  # Process Group ID - Controls file ownership
+      - UMASK=${UMASK}                # Controls default file permissions
+    volumes:
+      - ${CONFIG_DIR}/flaresolverr:/config  # Persistent configuration storage
+    ports:
+      - ${FLARESOLVERR_PORT}:8191     # API access port
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  # ==== HOMARR ====
+  # Dashboard for organizing and accessing all services
+  # Provides a customizable homepage with service status and quick links
+  homarr:
+    container_name: homarr
+    image: ghcr.io/homarr-labs/homarr:latest
+    restart: unless-stopped
+    privileged: true  # Required for reliable Docker socket access
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+      - SECRET_ENCRYPTION_KEY=${HOMARR_ENCRYPTION_KEY}  # Homarr encryption key (populated via .env by system-verify.sh)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw  # Docker socket for service discovery
+      - ${CONFIG_DIR}/homarr/config:/appdata/configs  # Configuration files for Homarr 1.0+
+      - ${CONFIG_DIR}/homarr/imgs:/app/public/imgs     # Custom images (icons now managed via UI)
+      - homarr_data:/appdata  # Persistent application data (moved from /data to /appdata)
+    ports:
+      - ${HOMARR_PORT}:7575  # Web UI access port
+    networks:
+      - default
+      - proxy
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  # ==== TAUTULLI ====
+  # Monitor and track activity on your Plex Media Server
+  # Provides detailed statistics, history, and notifications
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+    volumes:
+      - ${CONFIG_DIR}/tautulli:/config  # Persistent configuration storage
+    ports:
+      - ${TAUTULLI_PORT}:8181  # Web UI access port
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+# Networks defined for service isolation and communication
+networks:
+  agent_network:  # Private network for Portainer and its agent
+    name: helios_console_agent_network
+    external: true
+  proxy:  # Shared proxy network for service communication
+    name: helios_proxy
+    external: true
+
+# Persistent volumes for service data
+volumes:
+  portainer_data:  # Stores Portainer configurations and settings
+    name: helios_portainer_data
+    external: true
+  homarr_data:     # Stores Homarr dashboard configurations
+    name: helios_homarr_data
+    external: true
