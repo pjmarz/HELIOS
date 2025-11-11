@@ -24,7 +24,7 @@ HELIOS is a self-hosted media management and server administration system built 
   </thead>
   <tbody>
     <tr>
-      <td rowspan="7"><b>🎬 Media Management</b></td>
+      <td rowspan="8"><b>🎬 Media Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="32" height="32" alt="Radarr"></td>
       <td><b><a href="https://github.com/Radarr/Radarr">Radarr</a></b></td>
       <td>Movie Collection & Downloads</td>
@@ -56,6 +56,11 @@ HELIOS is a self-hosted media management and server administration system built 
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png" width="32" height="32" alt="Plex"></td>
+      <td><b><a href="https://github.com/plexinc/pms-docker">Plex</a></b></td>
+      <td>Media Server & Streaming</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://avatars.githubusercontent.com/u/19256051?v=4" width="32" height="32" alt="Plex Auto Languages"></td>
       <td><b><a href="https://github.com/RemiRigal/Plex-Auto-Languages">Plex Auto Languages</a></b></td>
       <td>Automated Language Management</td>
     </tr>
