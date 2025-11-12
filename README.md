@@ -116,7 +116,8 @@ HELIOS is a self-hosted media management and server administration system built 
 - **Proxmox VE**: Recommended host environment (not strictly required)
 
 ## 🔐 Secrets & Environment Configuration
-## 🔄 Environment Variable ManagementHELIOS uses **direnv** for automatic environment variable loading:- ****: Automatically loads  (for Docker Compose) and  (for scripts)- **direnv hook**: Configured in  for seamless environment isolation- **Automatic loading**: Environment variables load automatically when you  into the project directory- **Script compatibility**: Scripts still source  explicitly for non-interactive execution (cron, etc.)This ensures consistent environment variable access across interactive shells, scripts, and Docker Compose commands.
+## 🔄 Environment Variable Management
+HELIOS uses **direnv** for automatic environment variable loading:- ****: Automatically loads  (for Docker Compose) and  (for scripts)- **direnv hook**: Configured in  for seamless environment isolation- **Automatic loading**: Environment variables load automatically when you  into the project directory- **Script compatibility**: Scripts still source  explicitly for non-interactive execution (cron, etc.)This ensures consistent environment variable access across interactive shells, scripts, and Docker Compose commands.
 
 HELIOS uses a centralized architecture for managing environment files and secrets, following Docker best practices:
 

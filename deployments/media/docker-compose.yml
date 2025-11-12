@@ -23,7 +23,6 @@ x-common: &common-settings
     TZ: ${TZ}              # Timezone setting for accurate scheduling/logs
     UMASK: ${UMASK}        # Controls default file permissions
   labels: &common-labels
-    - com.centurylinklabs.watchtower.enable=true  # Enables automatic updates via Watchtower
 
 services:
   
@@ -43,8 +42,6 @@ services:
     ports:
       - ${OVERSEERR_PORT}:5055  # Web UI access port
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== RADARR ====
   # Movie collection manager that works with various download clients
@@ -64,8 +61,6 @@ services:
     ports:
       - ${RADARR_PORT}:7878              # Web UI access port
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== SONARR ====
   # TV series collection manager that works with various download clients
@@ -85,8 +80,6 @@ services:
     ports:
       - ${SONARR_PORT}:8989              # Web UI access port
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== BAZARR ====
   # Companion app to Sonarr and Radarr for managing and downloading subtitles
@@ -106,8 +99,6 @@ services:
     ports:
       - ${BAZARR_PORT}:6767              # Web UI access port
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== PROWLARR ====
   # Indexer manager/proxy that integrates with the *arr stack
@@ -125,8 +116,6 @@ services:
     volumes:
       - ${CONFIG_DIR}/prowlarr:/config  # Persistent configuration storage
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== SABNZBD ====
   # Usenet binary downloader with extensive post-processing capabilities
@@ -145,8 +134,6 @@ services:
     ports:
       - ${SABNZBD_PORT}:8080             # Web UI access port
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== PLEX AUTO LANGUAGES ====
   # Automatically sets audio/subtitle preferences based on user language settings
@@ -163,8 +150,6 @@ services:
     secrets:
       - plex_token
     restart: unless-stopped
-    labels:
-        - com.centurylinklabs.watchtower.enable=true
 
   # ==== PLEX ====
   # Media server with GPU-accelerated transcoding support
@@ -195,6 +180,4 @@ services:
               count: 1
               capabilities: [gpu]
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
+    

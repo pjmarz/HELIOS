@@ -5,7 +5,6 @@
 # This file defines all system management and monitoring services including:
 # - Container management (Portainer)
 # - Dashboard and service overview (Homarr)
-# - Automatic updates (Watchtower)
 # - Media analytics (Tautulli)
 # - Network utilities (FlareSolverr)
 # ===========================================================================
@@ -22,7 +21,6 @@ x-common: &common-settings
     TZ: ${TZ}              # Timezone setting for accurate scheduling/logs
     UMASK: ${UMASK}        # Controls default file permissions
   labels: &common-labels
-    - com.centurylinklabs.watchtower.enable=true  # Enables automatic updates via Watchtower
 
 services:
   # ==== PORTAINER AGENT ====
@@ -40,8 +38,6 @@ services:
     networks:
       - agent_network  # Isolated network for secure agent-portainer communication
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== PORTAINER ====
   # Container management UI with comprehensive Docker controls
@@ -60,25 +56,6 @@ services:
     networks:
       - agent_network  # Isolated network for secure agent-portainer communication
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
-  # ==== WATCHTOWER ====
-  # Automatic container updater that keeps services up to date
-  # Monitors for image updates and automatically applies them
-  watchtower:
-    container_name: watchtower
-    hostname: watchtower
-    image: containrrr/watchtower:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for container management
-    restart: unless-stopped
-    command: --interval 3600 --label-enable --cleanup --remove-volumes
-    # Command explained:
-    # --interval 3600: Check for updates every hour (3600 seconds)
-    # --label-enable: Only update containers with the enable label
-    # --cleanup: Remove old images after updating
-    # --remove-volumes: Remove anonymous volumes attached to removed containers
 
   # ==== FLARESOLVERR ====
   # Proxy server that helps bypass Cloudflare and other anti-bot protections
@@ -102,8 +79,6 @@ services:
       - default
       - proxy
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== HOMARR ====
   # Dashboard for organizing and accessing all services
@@ -129,8 +104,6 @@ services:
     networks:
       - default
       - proxy
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   # ==== TAUTULLI ====
   # Monitor and track activity on your Plex Media Server
@@ -151,8 +124,6 @@ services:
       - default
       - proxy
     restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
 # Networks defined for service isolation and communication
 networks:

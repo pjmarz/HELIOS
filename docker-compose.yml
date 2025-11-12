@@ -55,4 +55,3 @@ x-common: &common-settings
     TZ: ${TZ}                  # Timezone setting for accurate scheduling/logs
     UMASK: ${UMASK}            # Controls default file permissions
   labels: &common-labels
-    - com.centurylinklabs.watchtower.enable=true  # Enables automatic updates via Watchtower 
