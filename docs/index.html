@@ -117,7 +117,6 @@
         }
         
         /* Adjust specific icon sizes */
-        .service-card img[src*="watchtower.png"],
         .service-card img[src*="cloudflare.png"],
         .service-card img[src*="homarr.png"] {
             width: 36px;
@@ -274,12 +273,12 @@
                 <div class="col-md-4 text-center">
                     <i class="bi bi-server feature-icon"></i>
                     <h3>Server Administration</h3>
-                    <p>Comprehensive server management with Portainer, Watchtower, and Tautulli for monitoring and maintenance.</p>
+                    <p>Comprehensive server management with Portainer and Tautulli for monitoring and maintenance.</p>
                 </div>
                 <div class="col-md-4 text-center">
                     <i class="bi bi-shield-check feature-icon"></i>
                     <h3>Secure & Automated</h3>
-                    <p>Built on Docker and Proxmox VE with automated updates, secure remote access through Cloudflare tunnels, and scripted API connectivity checks for all services.</p>
+                    <p>Built on Docker and Proxmox VE (runs inside a VM), with secure remote access through Cloudflare tunnels, and comprehensive API connectivity monitoring for all services.</p>
                 </div>
             </div>
         </div>
@@ -336,8 +335,15 @@
                                     <small class="d-block text-muted">Usenet Download Client</small>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center mb-3">
                                 <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png" width="32" height="32" alt="Plex" class="me-3">
+                                <div>
+                                    <a href="https://github.com/plexinc/pms-docker" class="text-white text-decoration-none">Plex</a>
+                                    <small class="d-block text-muted">Media Server & Streaming</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://avatars.githubusercontent.com/u/19256051?v=4" width="32" height="32" alt="Plex Auto Languages" class="me-3">
                                 <div>
                                     <a href="https://github.com/RemiRigal/Plex-Auto-Languages" class="text-white text-decoration-none">Plex Auto Languages</a>
                                     <small class="d-block text-muted">Automated Language Management</small>
@@ -358,13 +364,6 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/watchtower.png" width="32" height="32" alt="Watchtower" class="me-3">
-                                <div>
-                                    <a href="https://github.com/containrrr/watchtower" class="text-white text-decoration-none">Watchtower</a>
-                                    <small class="d-block text-muted">Automated Container Updates</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
                                 <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tautulli.png" width="32" height="32" alt="Tautulli" class="me-3">
                                 <div>
                                     <a href="https://github.com/Tautulli/Tautulli" class="text-white text-decoration-none">Tautulli</a>
@@ -378,6 +377,13 @@
                                     <small class="d-block text-muted">Dashboard & Service Management</small>
                                 </div>
                             </div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="40" height="24" alt="FlareSolverr" class="me-3">
+                                <div>
+                                    <a href="https://github.com/FlareSolverr/FlareSolverr" class="text-white text-decoration-none">FlareSolverr</a>
+                                    <small class="d-block text-muted">Proxy & Anti-Bot Protection</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -389,28 +395,21 @@
                                 <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox" class="me-3">
                                 <div>
                                     <a href="https://www.proxmox.com/en/" class="text-white text-decoration-none">Proxmox VE</a>
-                                    <small class="d-block text-muted">Virtualization Platform</small>
+                                    <small class="d-block text-muted">Virtualization Platform (hosts HELIOS VM)</small>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="32" height="32" alt="Docker" class="me-3">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker" class="me-3">
                                 <div>
                                     <a href="https://www.docker.com/" class="text-white text-decoration-none">Docker</a>
                                     <small class="d-block text-muted">Containerization Platform</small>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="32" height="32" alt="Cloudflared" class="me-3">
+                            <div class="d-flex align-items-center">
+                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared" class="me-3">
                                 <div>
                                     <a href="https://github.com/cloudflare/cloudflared" class="text-white text-decoration-none">Cloudflared</a>
                                     <small class="d-block text-muted">Secure Remote Access</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="32" height="32" alt="FlareSolverr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/FlareSolverr/FlareSolverr" class="text-white text-decoration-none">FlareSolverr</a>
-                                    <small class="d-block text-muted">Proxy & Anti-Bot Protection</small>
                                 </div>
                             </div>
                         </div>

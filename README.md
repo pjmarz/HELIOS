@@ -10,7 +10,7 @@
 
 ## 🎯 Project Overview
 
-HELIOS is a self-hosted media management and server administration system built with Docker and Docker Compose ontop of Proxmox VE. The project aims to create a reliable, automated system for media collection, organization, and server management through containerized services.
+HELIOS is a self-hosted media management and server administration system built with Docker and Docker Compose. The entire stack runs inside a virtual machine (VM) on Proxmox VE. The project aims to create a reliable, automated system for media collection, organization, and server management through containerized services.
 
 ## 🛠️ System Components
 
@@ -65,15 +65,10 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Automated Language Management</td>
     </tr>
     <tr>
-      <td rowspan="5"><b>📊 Server Management</b></td>
+      <td rowspan="4"><b>📊 Server Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png" width="32" height="32" alt="Portainer"></td>
       <td><b><a href="https://github.com/portainer/portainer">Portainer</a></b></td>
       <td>Container Management</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/watchtower.png" width="40" height="40" alt="Watchtower"></td>
-      <td><b><a href="https://github.com/containrrr/watchtower">Watchtower</a></b></td>
-      <td>Automated Container Updates</td>
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tautulli.png" width="32" height="32" alt="Tautulli"></td>
@@ -94,7 +89,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td rowspan="3"><b>🔧 Infrastructure</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox"></td>
       <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
-      <td>Virtualization Platform</td>
+      <td>Virtualization Platform (hosts HELIOS VM)</td>
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker"></td>
@@ -113,11 +108,20 @@ HELIOS is a self-hosted media management and server administration system built 
 
 - **Docker**: Engine installed and running
 - **Docker Compose v2 (with include support)**: `docker compose` CLI available
-- **Proxmox VE**: Recommended host environment (not strictly required)
+- **Proxmox VE**: Host virtualization platform (HELIOS runs inside a VM on Proxmox VE)
 
 ## 🔐 Secrets & Environment Configuration
-## 🔄 Environment Variable Management
-HELIOS uses **direnv** for automatic environment variable loading:- ****: Automatically loads  (for Docker Compose) and  (for scripts)- **direnv hook**: Configured in  for seamless environment isolation- **Automatic loading**: Environment variables load automatically when you  into the project directory- **Script compatibility**: Scripts still source  explicitly for non-interactive execution (cron, etc.)This ensures consistent environment variable access across interactive shells, scripts, and Docker Compose commands.
+
+### 🔄 Environment Variable Management
+
+HELIOS uses **direnv** for automatic environment variable loading:
+
+- **`.envrc`**: Automatically loads `.env` (for Docker Compose) and `env.sh` (for scripts)
+- **direnv hook**: Configured in shell for seamless environment isolation
+- **Automatic loading**: Environment variables load automatically when you `cd` into the project directory
+- **Script compatibility**: Scripts still source `env.sh` explicitly for non-interactive execution (cron, etc.)
+
+This ensures consistent environment variable access across interactive shells, scripts, and Docker Compose commands.
 
 HELIOS uses a centralized architecture for managing environment files and secrets, following Docker best practices:
 
@@ -199,13 +203,108 @@ Common operations (see `scripts/README.md` for full details):
 - Docker socket integration with proper group permissions for Homarr
 - Uses Docker Compose "include" to orchestrate `console` and `media` stacks from the root
 
+## 💾 Storage Configuration
+
+HELIOS uses a centralized storage architecture optimized for media management and service configuration:
+
+### Storage Architecture
+
+The storage layout follows a hierarchical structure with clear separation between media content, configuration data, and temporary files:
+
+```
+/mnt                          # Base storage location (LOAS - Location Of All Storage)
+├── media/                    # Media library root
+│   ├── movies/               # Movie library (mounted to Radarr, Bazarr, Plex)
+│   └── tv/                   # TV Shows library (mounted to Sonarr, Bazarr, Plex)
+└── usenet/                   # Download directory
+    ├── complete/             # Completed downloads (processed by *arr services)
+    └── incomplete/           # Active downloads (SABnzbd working directory)
+
+/etc/HELIOS/                  # Centralized configuration root
+├── config/                   # Service configuration directories
+│   ├── overseerr/           # Overseerr configuration
+│   ├── radarr/              # Radarr configuration
+│   ├── sonarr/              # Sonarr configuration
+│   ├── bazarr/              # Bazarr configuration
+│   ├── prowlarr/            # Prowlarr configuration
+│   ├── sabnzbd/             # SABnzbd configuration
+│   ├── plex/                # Plex Media Server configuration
+│   ├── plexautolanguages/   # Plex Auto Languages configuration
+│   ├── tautulli/            # Tautulli configuration
+│   ├── flaresolverr/        # FlareSolverr configuration
+│   └── homarr/              # Homarr configuration
+│       ├── config/          # Homarr config files
+│       └── imgs/            # Custom images/icons
+└── secrets/                  # Docker Secrets (symlinked from project root)
+
+/tmp/plex-transcode/          # Temporary Plex transcoding directory (RAM/SSD)
+```
+
+### Media Library Structure
+
+- **Movies Directory** (`/mnt/media/movies`): 
+  - Shared by Radarr (imports), Bazarr (subtitle management), and Plex (streaming)
+  - Organized by Radarr's naming conventions
+  
+- **TV Shows Directory** (`/mnt/media/tv`):
+  - Shared by Sonarr (imports), Bazarr (subtitle management), and Plex (streaming)
+  - Organized by Sonarr's naming conventions
+
+- **Downloads Directory** (`/mnt/usenet`):
+  - `complete/`: Processed downloads ready for import by Radarr/Sonarr
+  - `incomplete/`: Active downloads managed by SABnzbd
+  - Shared access for automated post-processing workflows
+
+### Configuration Storage
+
+- **Centralized Config** (`/etc/HELIOS/config/`):
+  - All service configurations stored in dedicated subdirectories
+  - Maintains service isolation while enabling centralized management
+  - Owned by `1000:984` (PUID:PGID) for consistent file permissions
+
+### Docker Named Volumes
+
+Persistent data for services that require Docker-managed storage:
+
+- **`helios_portainer_data`**: Portainer settings, configurations, and management data
+- **`helios_homarr_data`**: Homarr dashboard data and application state
+
+### Temporary Storage
+
+- **Plex Transcode Directory** (`/tmp/plex-transcode`):
+  - Temporary storage for Plex transcoding operations
+  - Typically mounted to fast storage (SSD) or RAM for optimal performance
+  - Automatically cleaned by Plex after transcoding completes
+
+### File Ownership & Permissions
+
+All storage follows LinuxServer.io best practices:
+
+- **Media Libraries**: Owned by `1000:984` with `755` permissions
+- **Configuration Directories**: Owned by `1000:984` with `755` permissions
+- **Download Directories**: Owned by `1000:984` with `755` permissions
+- **UMASK**: Set to `002` for group-writable files (enables multi-user access)
+
+This centralized approach ensures:
+- Consistent file ownership across all services
+- Simplified backup and maintenance operations
+- Clear separation between media content and configuration data
+- Efficient resource utilization within the Proxmox VM
+
 ## 💡 Implementation Details
-## 📁 Configuration Directory OwnershipHELIOS follows LinuxServer.io best practices for configuration directory ownership:- **Ownership**:  is owned by  (matches container PUID/PGID)- **Permissions**: All config directories use  permissions- **Rationale**: Ensures container-created files have consistent ownership- **Benefits**: Prevents permission issues, aligns with Docker ecosystem standards
+
+### 📁 Configuration Directory Ownership
+
+HELIOS follows LinuxServer.io best practices for configuration directory ownership:
+
+- **Ownership**: `/etc/HELIOS/config` is owned by `1000:984` (matches container PUID/PGID)
+- **Permissions**: All config directories use `755` permissions
+- **Rationale**: Ensures container-created files have consistent ownership
+- **Benefits**: Prevents permission issues, aligns with Docker ecosystem standards
 
 The project implements:
 - Containerized services using Docker and Docker Compose
 - Docker Secrets for secure management of sensitive information
-- Automated container updates and maintenance
 - Secure remote access through Cloudflare tunnels
 - Centralized logging and monitoring
 - Resource-efficient container orchestration
@@ -223,12 +322,10 @@ Key architectural features:
 
 ## 🛠️ Maintenance
 
-
 - Service orchestration (start/stop/refresh all containers)
 - Automated container rebuilds with latest images
 - Download directory cleanup and management
 - Docker service maintenance and recovery
-- Automated container updates via Watchtower
 - Centralized logging and monitoring
 
 

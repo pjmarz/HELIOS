@@ -5,6 +5,45 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.13.1] - 2025-11-12
+
+### Added
+- **Plex Media Server Entry**: Added Plex to Media Management section in README
+  - Plex now properly documented alongside other media services
+  - Uses official Plex Media Server Docker repository link
+  - Clarified distinction between Plex and Plex Auto Languages services
+
+- **Storage Configuration Documentation**: Comprehensive storage architecture documentation
+  - Added detailed storage layout with directory tree structure
+  - Documented media library structure and shared access patterns
+  - Explained configuration storage, Docker named volumes, and temporary storage
+  - Included file ownership and permissions best practices
+
+### Changed
+- **Documentation Updates**:
+  - Updated Project Overview to clarify HELIOS runs inside a VM on Proxmox VE
+  - Updated Prerequisites section to specify VM hosting architecture
+  - Updated Infrastructure table to note Proxmox VE hosts HELIOS VM
+  - Fixed formatting issues in Environment Variable Management section
+  - Improved section hierarchy and readability throughout README
+
+- **Service Configuration**:
+  - Removed Watchtower from Server Management section
+  - Updated Plex Auto Languages icon to use GitHub avatar instead of Plex logo
+  - Streamlined Server Management to 4 services (Portainer, Tautulli, Homarr, FlareSolverr)
+
+### Removed
+- **Watchtower Service**: Removed from documentation and system components
+  - Removed from README System Components table
+  - Removed from Maintenance section references
+  - Removed from Implementation Details section
+
+### Docs
+- **README Enhancements**:
+  - Added comprehensive Storage Configuration section with architecture details
+  - Improved formatting and section organization
+  - Enhanced clarity on VM-based deployment architecture
+
 ## [1.13.0] - 2025-11-10
 
 ### Added
