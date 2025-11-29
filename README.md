@@ -24,7 +24,7 @@ HELIOS is a self-hosted media management and server administration system built 
   </thead>
   <tbody>
     <tr>
-      <td rowspan="8"><b>🎬 Media Management</b></td>
+      <td rowspan="10"><b>🎬 Media Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="32" height="32" alt="Radarr"></td>
       <td><b><a href="https://github.com/Radarr/Radarr">Radarr</a></b></td>
       <td>Movie Collection & Downloads</td>
@@ -53,6 +53,16 @@ HELIOS is a self-hosted media management and server administration system built 
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png" width="32" height="32" alt="SABnzbd"></td>
       <td><b><a href="https://github.com/sabnzbd/sabnzbd">SABnzbd</a></b></td>
       <td>Usenet Download Client</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/dispatcharr.png" width="32" height="32" alt="Dispatcharr"></td>
+      <td><b><a href="https://github.com/dispatcharr/dispatcharr">Dispatcharr</a></b></td>
+      <td>IPTV & Stream Management</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://avatars.githubusercontent.com/u/55937028?s=200&v=4" width="32" height="32" alt="IPTV EPG"></td>
+      <td><b><a href="https://github.com/iptv-org/epg">IPTV EPG</a></b></td>
+      <td>Electronic Program Guide Generator</td>
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png" width="32" height="32" alt="Plex"></td>

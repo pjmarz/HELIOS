@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <!-- US Channels -->
+  <channel site="tvguide.com" lang="en" xmltv_id="NBC.us" site_id="2054006262">NBC (East)</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="ABC.us" site_id="2054006263">ABC (East)</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="CBS.us" site_id="2054006264">CBS (East)</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="FOX.us" site_id="2054006265">FOX (East)</channel>
+  
+
+</channels>

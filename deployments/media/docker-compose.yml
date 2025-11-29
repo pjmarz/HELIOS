@@ -16,16 +16,17 @@ name: helios-media
 # Common configuration shared across services
 # These anchors (&) allow for DRY (Don't Repeat Yourself) configuration
 x-common: &common-settings
-  restart: unless-stopped  # Ensures services automatically restart unless manually stopped
+  restart: unless-stopped # Ensures services automatically restart unless manually stopped
   environment: &common-env
-    PUID: ${PUID}          # Process User ID - Controls file ownership
-    PGID: ${PGID}          # Process Group ID - Controls file ownership
-    TZ: ${TZ}              # Timezone setting for accurate scheduling/logs
-    UMASK: ${UMASK}        # Controls default file permissions
-  labels: &common-labels
+    PUID: ${PUID} # Process User ID - Controls file ownership
+    PGID: ${PGID} # Process Group ID - Controls file ownership
+    TZ: ${TZ} # Timezone setting for accurate scheduling/logs
+    UMASK: ${UMASK} # Controls default file permissions
+  labels:
 
+    &common-labels 
 services:
-  
+
   # ==== OVERSEERR ====
   # Media request and discovery platform that integrates with Plex
   # Web UI for users to request content which is then processed by Radarr/Sonarr
@@ -38,9 +39,9 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/overseerr:/config  # Persistent configuration storage
+      - ${CONFIG_DIR}/overseerr:/config # Persistent configuration storage
     ports:
-      - ${OVERSEERR_PORT}:5055  # Web UI access port
+      - ${OVERSEERR_PORT}:5055 # Web UI access port
     restart: unless-stopped
 
   # ==== RADARR ====
@@ -55,11 +56,11 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/radarr:/config     # Persistent configuration storage
-      - ${MOVIES_DIR}:/movies            # Mount point for movie library
-      - ${DOWNLOADS_DIR}:/usenet         # Access to download directory
+      - ${CONFIG_DIR}/radarr:/config # Persistent configuration storage
+      - ${MOVIES_DIR}:/movies # Mount point for movie library
+      - ${DOWNLOADS_DIR}:/usenet # Access to download directory
     ports:
-      - ${RADARR_PORT}:7878              # Web UI access port
+      - ${RADARR_PORT}:7878 # Web UI access port
     restart: unless-stopped
 
   # ==== SONARR ====
@@ -74,11 +75,44 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/sonarr:/config     # Persistent configuration storage
-      - ${TV_DIR}:/tv                    # Mount point for TV series library
-      - ${DOWNLOADS_DIR}:/usenet         # Access to download directory
+      - ${CONFIG_DIR}/sonarr:/config # Persistent configuration storage
+      - ${TV_DIR}:/tv # Mount point for TV series library
+      - ${DOWNLOADS_DIR}:/usenet # Access to download directory
     ports:
-      - ${SONARR_PORT}:8989              # Web UI access port
+      - ${SONARR_PORT}:8989 # Web UI access port
+    restart: unless-stopped
+
+  # ==== DISPATCHARR ====
+  # IPTV and Stream management proxy
+  # Emulates HDHomeRun for Plex integration
+  dispatcharr:
+    image: ghcr.io/dispatcharr/dispatcharr:latest
+    container_name: dispatcharr
+    environment:
+      - DISPATCHARR_ENV=aio # All-in-one mode
+      - REDIS_HOST=localhost
+      - CELERY_BROKER_URL=redis://localhost:6379/0
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/dispatcharr:/data # Persistent data
+    ports:
+      - ${DISPATCHARR_PORT}:9191 # Web UI access port
+    restart: unless-stopped
+
+  # ==== IPTV EPG ====
+  # EPG Generator for IPTV channels
+  # Grabs program guide data based on channels.xml configuration
+  iptv-epg:
+    image: ghcr.io/iptv-org/epg:master
+    container_name: iptv-epg
+    environment:
+      - CRON_SCHEDULE=0 0 * * * # Run daily at midnight
+      - DAYS=3 # Download 3 days of guide data
+    volumes:
+      - ${CONFIG_DIR}/epg/channels.xml:/epg/channels.xml # Input channel list
+      - ${CONFIG_DIR}/epg/output:/epg/public # Output directory
+    ports:
+      - ${IPTV_EPG_PORT}:3000 # Access to guide.xml via HTTP
     restart: unless-stopped
 
   # ==== BAZARR ====
@@ -93,11 +127,11 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/bazarr:/config     # Persistent configuration storage
-      - ${MOVIES_DIR}:/movies            # Access to movie files for subtitle management
-      - ${TV_DIR}:/tv                    # Access to TV files for subtitle management
+      - ${CONFIG_DIR}/bazarr:/config # Persistent configuration storage
+      - ${MOVIES_DIR}:/movies # Access to movie files for subtitle management
+      - ${TV_DIR}:/tv # Access to TV files for subtitle management
     ports:
-      - ${BAZARR_PORT}:6767              # Web UI access port
+      - ${BAZARR_PORT}:6767 # Web UI access port
     restart: unless-stopped
 
   # ==== PROWLARR ====
@@ -107,14 +141,14 @@ services:
     container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
     ports:
-      - ${PROWLARR_PORT}:9696           # Web UI access port
+      - ${PROWLARR_PORT}:9696 # Web UI access port
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/prowlarr:/config  # Persistent configuration storage
+      - ${CONFIG_DIR}/prowlarr:/config # Persistent configuration storage
     restart: unless-stopped
 
   # ==== SABNZBD ====
@@ -129,10 +163,10 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     volumes:
-      - ${CONFIG_DIR}/sabnzbd:/config    # Persistent configuration storage
-      - ${DOWNLOADS_DIR}:/usenet         # Download storage location
+      - ${CONFIG_DIR}/sabnzbd:/config # Persistent configuration storage
+      - ${DOWNLOADS_DIR}:/usenet # Download storage location
     ports:
-      - ${SABNZBD_PORT}:8080             # Web UI access port
+      - ${SABNZBD_PORT}:8080 # Web UI access port
     restart: unless-stopped
 
   # ==== PLEX AUTO LANGUAGES ====
@@ -142,13 +176,15 @@ services:
     image: remirigal/plex-auto-languages:latest
     container_name: plexautolanguages
     environment:
-      - PLEX_URL=http://plex-helios:32400       # Plex server URL (Docker service name for container-to-container communication)
-      - TZ=${TZ}                         # Timezone setting
-      - PLEX_TOKEN_FILE=/run/secrets/plex_token  # Plex authentication token from secret
+      - PLEX_URL=http://plex-helios:32400 # Plex server URL (Docker service name for container-to-container communication)
+      - TZ=${TZ} # Timezone setting
+      - PLEX_TOKEN_FILE=/run/secrets/plex_token # Plex authentication token from secret
     volumes:
-      - ${CONFIG_DIR}/plexautolanguages:/config  # Persistent configuration storage
+      - ${CONFIG_DIR}/plexautolanguages:/config # Persistent configuration storage
     secrets:
       - plex_token
+    depends_on:
+      - plex
     restart: unless-stopped
 
   # ==== PLEX ====
@@ -159,7 +195,7 @@ services:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex-helios
     ports:
-      - "32400:32400"              # Standard Plex port
+      - "32400:32400" # Standard Plex port
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -168,16 +204,15 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
     volumes:
-      - ${PLEX_CONFIG}:/config           # Persistent configuration storage
-      - ${MOVIES_DIR}:/movies            # Mount point for movies library
-      - ${TV_DIR}:/tv                    # Mount point for TV shows library
-      - ${PLEX_TRANSCODE}:/transcode     # Temporary transcoding directory
+      - ${PLEX_CONFIG}:/config # Persistent configuration storage
+      - ${MOVIES_DIR}:/movies # Mount point for movies library
+      - ${TV_DIR}:/tv # Mount point for TV shows library
+      - ${PLEX_TRANSCODE}:/transcode # Temporary transcoding directory
     deploy:
       resources:
         reservations:
           devices:
-            - driver: nvidia                    # NVIDIA GPU acceleration for transcoding
+            - driver: nvidia # NVIDIA GPU acceleration for transcoding
               count: 1
-              capabilities: [gpu]
+              capabilities: [ gpu ]
     restart: unless-stopped
-    

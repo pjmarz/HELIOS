@@ -5,6 +5,30 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.0] - 2025-11-29
+
+### Added
+- **Dispatcharr Integration**: Added Dispatcharr service for centralized IPTV and stream management
+  - Acts as a proxy for Plex to consume M3U playlists as HDHomeRun tuners
+  - Provides centralized channel mapping and EPG management
+  - configured in `aio` (All-in-One) mode with Redis integration
+
+- **IPTV EPG Generator**: Added `iptv-org/epg` service for local EPG data generation
+  - Generates XMLTV guide data based on a configurable `channels.xml`
+  - Runs daily updates to ensure fresh guide data
+  - Integrated directly with Dispatcharr for seamless EPG availability
+
+### Changed
+- **Media Stack Configuration**:
+  - Updated `deployments/media/docker-compose.yml` to include Dispatcharr and IPTV EPG services
+  - Added `IPTV_EPG_PORT` (3000) and `DISPATCHARR_PORT` (9191) to environment configuration
+  - Configured volume mappings for persistent EPG and Dispatcharr data
+
+### Docs
+- **Documentation Updates**:
+  - Updated README and index.html to reflect new IPTV capabilities
+  - Documented Dispatcharr and EPG service integration
+
 ## [1.13.1] - 2025-11-12
 
 ### Added
