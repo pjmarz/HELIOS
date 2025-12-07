@@ -82,39 +82,6 @@ services:
       - ${SONARR_PORT}:8989 # Web UI access port
     restart: unless-stopped
 
-  # ==== DISPATCHARR ====
-  # IPTV and Stream management proxy
-  # Emulates HDHomeRun for Plex integration
-  dispatcharr:
-    image: ghcr.io/dispatcharr/dispatcharr:latest
-    container_name: dispatcharr
-    environment:
-      - DISPATCHARR_ENV=aio # All-in-one mode
-      - REDIS_HOST=localhost
-      - CELERY_BROKER_URL=redis://localhost:6379/0
-      - TZ=${TZ}
-    volumes:
-      - ${CONFIG_DIR}/dispatcharr:/data # Persistent data
-    ports:
-      - ${DISPATCHARR_PORT}:9191 # Web UI access port
-    restart: unless-stopped
-
-  # ==== IPTV EPG ====
-  # EPG Generator for IPTV channels
-  # Grabs program guide data based on channels.xml configuration
-  iptv-epg:
-    image: ghcr.io/iptv-org/epg:master
-    container_name: iptv-epg
-    environment:
-      - CRON_SCHEDULE=0 0 * * * # Run daily at midnight
-      - DAYS=3 # Download 3 days of guide data
-    volumes:
-      - ${CONFIG_DIR}/epg/channels.xml:/epg/channels.xml # Input channel list
-      - ${CONFIG_DIR}/epg/output:/epg/public # Output directory
-    ports:
-      - ${IPTV_EPG_PORT}:3000 # Access to guide.xml via HTTP
-    restart: unless-stopped
-
   # ==== BAZARR ====
   # Companion app to Sonarr and Radarr for managing and downloading subtitles
   # Automatically searches for missing subtitles and downloads them
