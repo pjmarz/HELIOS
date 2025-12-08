@@ -89,7 +89,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td rowspan="3"><b>🔧 Infrastructure</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox"></td>
       <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
-      <td>Virtualization Platform (hosts HELIOS VM)</td>
+      <td>Virtualization Platform</td>
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker"></td>
@@ -147,6 +147,7 @@ printf "<YOUR_PLEX_TOKEN>\n" > /etc/HELIOS/secrets/plex_token.txt
 printf "<32+ CHAR ENCRYPTION KEY>\n" > /etc/HELIOS/secrets/homarr_encryption_key.txt
 printf "<YOUR_HOMARR_API_KEY>\n" > /etc/HELIOS/secrets/homarr_api_key.txt
 printf "<YOUR_PORTAINER_ACCESS_TOKEN>\n" > /etc/HELIOS/secrets/portainer_api_token.txt
+
 chmod 700 /etc/HELIOS/secrets
 chmod 600 /etc/HELIOS/secrets/*
 ```
@@ -159,6 +160,7 @@ The symlinks in the project root (`env.sh` and `secrets/`) will automatically po
 - **homarr_encryption_key.txt**: recommended to secure Homarr data (if configured to use secrets)
 - **homarr_api_key.txt**: Homarr API key for authenticated API requests (header `ApiKey`)
 - **portainer_api_token.txt**: Portainer access token for API (`X-API-Key` over HTTPS 9443)
+
 
 This centralized approach ensures consistent configuration management across the system and aligns with industry best practices for Docker-based deployments.
 
