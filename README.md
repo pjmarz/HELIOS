@@ -54,7 +54,6 @@ HELIOS is a self-hosted media management and server administration system built 
       <td><b><a href="https://github.com/sabnzbd/sabnzbd">SABnzbd</a></b></td>
       <td>Usenet Download Client</td>
     </tr>
-
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png" width="32" height="32" alt="Plex"></td>
       <td><b><a href="https://github.com/plexinc/pms-docker">Plex</a></b></td>
