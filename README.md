@@ -77,7 +77,7 @@ HELIOS is a self-hosted media management and server administration system built 
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png" width="40" height="24" alt="Homarr"></td>
-      <td><b><a href="https://github.com/ajnart/homarr">Homarr</a></b></td>
+      <td><b><a href="https://github.com/homarr-labs/homarr">Homarr</a></b></td>
       <td>Dashboard & Service Management</td>
     </tr>
     <tr>
@@ -88,7 +88,7 @@ HELIOS is a self-hosted media management and server administration system built 
     <tr>
       <td rowspan="3"><b>🔧 Infrastructure</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox"></td>
-      <td><b><a href="https://www.proxmox.com/en/">Proxmox VE</a></b></td>
+      <td><b><a href="https://www.proxmox.com/en/products/proxmox-virtual-environment/overview">Proxmox VE</a></b></td>
       <td>Virtualization Platform</td>
     </tr>
     <tr>

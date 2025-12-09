@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # Exit on error
 set -e
@@ -126,6 +125,10 @@ docker compose up -d sabnzbd || {
     log "Error: Failed to start sabnzbd container."
     exit 1
 }
+
+# Run fstrim to reclaim space on host ZFS pool
+log "Running fstrim on /mnt/usenet"
+fstrim -v /mnt/usenet || log "Warning: fstrim failed"
 
 # Cleanup function
 cleanup() {
