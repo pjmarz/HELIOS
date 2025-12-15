@@ -1,416 +1,635 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELIOS - Media Management & Server Administration</title>
+    <title>HELIOS - Self-Hosted Media Management & Server Administration</title>
+    <meta name="description" content="Self-hosted media management and server administration system built with Docker">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #1a1a1a;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --text-color: #ffffff;
-            --card-bg: #2d2d2d;
-            --body-bg: #121212;
-            --muted-color: #a0a0a0;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --card-bg: #1a1a24;
+            --card-border: #2a2a3a;
+            --text-primary: #ffffff;
+            --text-body: #e5e7eb;
+            --text-muted: #d1d5db;
+            --secondary-color: #6366f1;
+            --helios-color: #f59e0b;
+            --accent-color: #f59e0b;
         }
-        
-        html {
-            scroll-behavior: smooth;
+
+        /* Override Bootstrap text colors - make ALL text visible */
+        .text-muted {
+            color: #d1d5db !important;
         }
-        
+
+        p.text-muted,
+        .card p.text-muted,
+        .small.text-muted,
+        small.text-muted {
+            color: #c4c8cc !important;
+        }
+
+        /* Card headings and content */
+        .card h4,
+        .card h5,
+        .card h6,
+        .card strong {
+            color: #ffffff !important;
+        }
+
+        .feature-card h5,
+        .skill-card h6 {
+            color: #ffffff !important;
+        }
+
+        /* System components - service names */
+        .card-body strong {
+            color: #ffffff !important;
+        }
+
+        /* Screenshot card captions */
+        .screenshot-card p,
+        .screenshot-card .card-body p {
+            color: #e5e7eb !important;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--body-bg);
-            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
-        
-        /* Glow effect for the HELIOS logo */
-        .hero-content img {
-            max-width: 200px;
-            transition: filter 0.3s ease;
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 0;
         }
-        
-        .hero-content img:hover {
-            filter: drop-shadow(0 0 10px var(--secondary-color));
+
+        .navbar-brand img {
+            height: 32px;
         }
-        
-        /* Animated gradient background for hero */
+
+        .nav-link {
+            color: var(--text-muted) !important;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--helios-color) !important;
+        }
+
+        /* Hero Section */
         .hero {
-            background: linear-gradient(-45deg, var(--primary-color), #2c3e50, #34495e, var(--secondary-color));
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-        }
-        
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-        
-        /* Animated icons in features section */
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-        
-        .feature-icon:hover {
-            transform: scale(1.2);
-            color: var(--accent-color);
-        }
-        
-        /* Card hover effects */
-        .service-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 1.5rem;
-            background-color: var(--card-bg);
-            border: 1px solid #404040;
+            padding: 6rem 0 4rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
             position: relative;
             overflow: hidden;
         }
-        
-        .service-card::before {
+
+        .hero::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(52, 152, 219, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+            pointer-events: none;
         }
-        
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
         }
-        
-        .service-card:hover::before {
-            transform: translateX(100%);
+
+        .hero .lead {
+            font-size: 1.25rem;
+            color: var(--text-body);
         }
-        
-        /* Service icon hover effects */
-        .service-card img {
-            width: 32px;
-            height: auto;
-            object-fit: contain;
-            transition: transform 0.3s ease;
+
+        .hero .subtitle {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
         }
-        
-        .service-card:hover img {
-            transform: scale(1.1);
+
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
         }
-        
-        /* Adjust specific icon sizes */
-        .service-card img[src*="cloudflare.png"],
-        .service-card img[src*="homarr.png"] {
-            width: 36px;
+
+        section h2 {
+            font-weight: 600;
+            margin-bottom: 3rem;
         }
-        
-        /* Link hover effects */
-        .text-white {
-            transition: color 0.3s ease;
+
+        .section-dark {
+            background: var(--card-bg);
         }
-        
-        .text-white:hover {
-            color: var(--secondary-color) !important;
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        
-        /* Animated footer */
-        .footer img {
-            transition: transform 0.3s ease;
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.15);
         }
-        
-        .footer img:hover {
-            transform: scale(1.1);
+
+        /* Feature Cards */
+        .feature-card {
+            padding: 2rem;
+            text-align: center;
         }
-        
-        /* Scroll to top button */
-        .scroll-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--secondary-color);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--helios-color));
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            text-decoration: none;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform: translateY(100px);
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
         }
-        
-        .scroll-top.visible {
-            opacity: 1;
-            transform: translateY(0);
+
+        .feature-card h5 {
+            color: #ffffff;
+            font-weight: 600;
         }
-        
-        .scroll-top:hover {
-            transform: translateY(-5px);
-            color: white;
+
+        .feature-card p {
+            color: #d0d0e0;
         }
-        
-        .text-muted {
-            color: var(--muted-color) !important;
+
+        /* HELIOS Section */
+        .helios-section {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border-top: 1px solid rgba(245, 158, 11, 0.2);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
         }
-        
-        .navbar {
-            background-color: var(--primary-color) !important;
-            transition: background-color 0.3s ease;
+
+        .helios-badge {
+            background: linear-gradient(135deg, var(--helios-color), #d97706);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
-        .navbar.scrolled {
-            background-color: rgba(26, 26, 26, 0.95) !important;
-            backdrop-filter: blur(10px);
+
+        /* Service Pills */
+        .service-pill {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            display: inline-block;
+            margin: 0.25rem;
+            color: #fbbf24;
         }
-        
-        .card {
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid #404040;
+
+        /* Architecture section text */
+        .helios-section p.text-muted {
+            color: #c0c0d0 !important;
         }
-        
-        .bg-light {
-            background-color: #1a1a1a !important;
+
+        .helios-section .small.text-muted {
+            color: #b8b8c8 !important;
         }
-        
-        .btn-light {
-            background-color: #404040;
-            color: white;
-            border: none;
-            transition: all 0.3s ease;
+
+        .helios-section ul li {
+            color: #c8c8d8;
         }
-        
-        .btn-light:hover {
-            background-color: var(--secondary-color);
-            color: white;
-            transform: translateY(-2px);
+
+        /* Architecture Diagram */
+        .arch-cluster-box {
+            border: 2px dashed rgba(245, 158, 11, 0.4);
+            border-radius: 16px;
+            padding: 1.25rem;
+            background: rgba(245, 158, 11, 0.05);
         }
-        
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #404040;
+
+        .arch-cluster-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            text-align: center;
         }
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+
+        .arch-cluster-title strong {
+            color: #fbbf24 !important;
         }
-        .card-img-top {
-            height: 200px;
+
+        .arch-vm-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.1) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .arch-vm-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-vm-path {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            font-family: 'Monaco', 'Consolas', monospace;
+            margin-bottom: 1rem;
+        }
+
+        .arch-stacks-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-stack-box {
+            flex: 1;
+            min-width: 140px;
+            border-radius: 10px;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .arch-stack-box.console {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+        }
+
+        .arch-stack-box.media {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .arch-stack-title {
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #e5e7eb;
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            justify-content: center;
+        }
+
+        .arch-service-tag {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            color: #fbbf24;
+        }
+
+        .arch-stack-box.console .arch-service-tag {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.35);
+            color: #a5b4fc;
+        }
+
+        .arch-box.vm-box {
+            border-color: rgba(245, 158, 11, 0.5);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.1) 100%);
+        }
+
+        .arch-box-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--helios-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-box-content {
+            font-size: 0.8rem;
+            color: #c4c8cc;
+        }
+
+        .services-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .service-tag {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            color: #fbbf24;
+        }
+
+        /* Component Cards */
+        .component-card {
+            padding: 1.5rem;
+        }
+
+        .component-card h5 {
+            color: #ffffff;
+        }
+
+        .component-card strong {
+            color: #e8e8e8;
+        }
+
+        .component-card h6 {
+            color: #e0e0e0;
+        }
+
+        .component-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        /* Deployment Cards */
+        .deployment-url {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            color: var(--helios-color);
+        }
+
+        /* Skill Cards */
+        .skill-card {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .skill-card h6 {
+            color: #ffffff;
+        }
+
+        .skill-card p {
+            color: #c8c8d8;
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Screenshots Section */
+        .screenshot-card {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .screenshot-card img {
+            width: 100%;
+            height: 180px;
             object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .screenshot-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--card-border);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--helios-color);
+        }
+
+        /* GIR Footer */
+        .gir-footer img {
+            width: 80px;
+            height: 80px;
+            transition: transform 0.3s;
+        }
+
+        .gir-footer img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Buttons */
+        .btn-helios {
+            background: linear-gradient(135deg, var(--helios-color), #d97706);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-helios:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="./media/HELIOS.gif" alt="HELIOS" height="40">
+                <img src="./media/HELIOS.gif" alt="HELIOS">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#components">Components</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/pjmarz/HELIOS">GitHub</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#architecture">Architecture</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#components">Components</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#screenshots">Screenshots</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/pjmarz/HELIOS">GitHub</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="container mt-3">
-      <div class="alert alert-warning text-center" role="alert">
-        <strong>Showcase:</strong> This repository demonstrates HELIOS and is not intended to be cloned or deployed as-is. See the README and Changelog for details.
-        <a href="https://github.com/pjmarz/HELIOS#readme" class="ms-2">README</a> · <a href="https://github.com/pjmarz/HELIOS/blob/main/CHANGELOG.md">Changelog</a>
-      </div>
-    </div>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="container text-center hero-content">
-            <img src="./media/HELIOS.gif" alt="HELIOS" class="mb-4" style="max-width: 200px;">
-            <p class="lead">Self-hosted Media Management & Server Administration System</p>
+        <div class="container text-center">
+            <span class="helios-badge mb-4 d-inline-block">SHOWCASE PROJECT</span>
+            <div class="mb-3">
+                <img src="./media/HELIOS.gif" alt="HELIOS" style="max-width: 280px;">
+            </div>
+            <p class="lead">Self-Hosted Media Management & Server Administration System</p>
+            <p class="subtitle mt-3">Automated media collection, organization, and server management through
+                containerized services — running inside a Proxmox VM with Docker.</p>
+            <a href="https://github.com/pjmarz/HELIOS" class="btn-helios mt-4">
+                <i class="bi bi-github me-2"></i>View on GitHub
+            </a>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-5">
+    <!-- Key Features Section -->
+    <section id="features">
         <div class="container">
-            <h2 class="text-center mb-5">Key Features</h2>
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <i class="bi bi-film feature-icon"></i>
-                    <h3>Media Management</h3>
-                    <p>Automated media collection and organization with popular tools like Radarr, Sonarr, and Bazarr.</p>
+            <h2 class="text-center">Key Features</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="bi bi-film text-white"></i>
+                        </div>
+                        <h5>Media Management</h5>
+                        <p class="text-muted small">Automated media collection and organization with Radarr, Sonarr,
+                            Bazarr, and Plex for seamless streaming.</p>
+                    </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="bi bi-server feature-icon"></i>
-                    <h3>Server Administration</h3>
-                    <p>Comprehensive server management with Portainer and Tautulli for monitoring and maintenance.</p>
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="bi bi-server text-white"></i>
+                        </div>
+                        <h5>Server Administration</h5>
+                        <p class="text-muted small">Comprehensive management with Portainer, Tautulli, and Homarr
+                            dashboard for monitoring and maintenance.</p>
+                    </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="bi bi-shield-check feature-icon"></i>
-                    <h3>Secure & Automated</h3>
-                    <p>Built on Docker and Proxmox VE (runs inside a VM), with secure remote access through Cloudflare tunnels, and comprehensive API connectivity monitoring for all services.</p>
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check text-white"></i>
+                        </div>
+                        <h5>Secure & Automated</h5>
+                        <p class="text-muted small">Docker Secrets, Cloudflare tunnels, and GPU-accelerated transcoding
+                            in a containerized environment.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Components Section -->
-    <section id="components" class="py-5 bg-light">
+    <!-- Architecture Section -->
+    <section id="architecture" class="helios-section">
         <div class="container">
-            <h2 class="text-center mb-5">System Components</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card service-card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-4">🎬 Media Management</h5>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="32" height="32" alt="Radarr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/Radarr/Radarr" class="text-white text-decoration-none">Radarr</a>
-                                    <small class="d-block text-muted">Movie Collection</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sonarr.png" width="32" height="32" alt="Sonarr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/Sonarr/Sonarr" class="text-white text-decoration-none">Sonarr</a>
-                                    <small class="d-block text-muted">TV Series Collection</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/bazarr.png" width="32" height="32" alt="Bazarr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/morpheus65535/bazarr" class="text-white text-decoration-none">Bazarr</a>
-                                    <small class="d-block text-muted">Subtitle Management</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/overseerr.png" width="32" height="32" alt="Overseerr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/sct/overseerr" class="text-white text-decoration-none">Overseerr</a>
-                                    <small class="d-block text-muted">Media Request & Discovery</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prowlarr.png" width="32" height="32" alt="Prowlarr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/Prowlarr/Prowlarr" class="text-white text-decoration-none">Prowlarr</a>
-                                    <small class="d-block text-muted">Indexer Management</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png" width="32" height="32" alt="SABnzbd" class="me-3">
-                                <div>
-                                    <a href="https://github.com/sabnzbd/sabnzbd" class="text-white text-decoration-none">SABnzbd</a>
-                                    <small class="d-block text-muted">Usenet Download Client</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png" width="32" height="32" alt="Plex" class="me-3">
-                                <div>
-                                    <a href="https://github.com/plexinc/pms-docker" class="text-white text-decoration-none">Plex</a>
-                                    <small class="d-block text-muted">Media Server & Streaming</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <img src="https://avatars.githubusercontent.com/u/19256051?v=4" width="32" height="32" alt="Plex Auto Languages" class="me-3">
-                                <div>
-                                    <a href="https://github.com/RemiRigal/Plex-Auto-Languages" class="text-white text-decoration-none">Plex Auto Languages</a>
-                                    <small class="d-block text-muted">Automated Language Management</small>
-                                </div>
-                            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <span class="helios-badge mb-3 d-inline-block">MODULAR ARCHITECTURE</span>
+                    <h2 class="mb-3">Docker Compose Stack</h2>
+                    <p class="text-muted mb-4">HELIOS uses Docker Compose's include feature to organize services into
+                        logical modules with purpose-built network isolation.</p>
 
-                        </div>
+                    <h6 class="text-uppercase mb-3" style="color: var(--text-muted); font-size: 0.75rem;">Network
+                        Architecture</h6>
+                    <div class="mb-4">
+                        <span class="service-pill">helios_proxy</span>
+                        <span class="service-pill">helios_default</span>
+                        <span class="service-pill">helios_console_agent</span>
                     </div>
+
+                    <h6 class="text-uppercase mb-3" style="color: var(--text-muted); font-size: 0.75rem;">Key Features
+                    </h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle me-2"
+                                style="color: var(--helios-color);"></i>GPU-accelerated Plex transcoding</li>
+                        <li class="mb-2"><i class="bi bi-check-circle me-2"
+                                style="color: var(--helios-color);"></i>Docker Secrets for credentials</li>
+                        <li class="mb-2"><i class="bi bi-check-circle me-2"
+                                style="color: var(--helios-color);"></i>Cloudflare tunnel remote access</li>
+                        <li class="mb-2"><i class="bi bi-check-circle me-2"
+                                style="color: var(--helios-color);"></i>Centralized config at /etc/HELIOS</li>
+                    </ul>
                 </div>
-                <div class="col-md-4">
-                    <div class="card service-card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-4">📊 Server Management</h5>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png" width="32" height="32" alt="Portainer" class="me-3">
-                                <div>
-                                    <a href="https://github.com/portainer/portainer" class="text-white text-decoration-none">Portainer</a>
-                                    <small class="d-block text-muted">Container Management</small>
+                <div class="col-lg-7">
+                    <!-- Proxmox Host Diagram -->
+                    <div class="arch-cluster-box">
+                        <div class="arch-cluster-title">🖥️ PROXMOX VE HOST: <strong>virgil</strong></div>
+
+                        <!-- HELIOS VM Box -->
+                        <div class="arch-vm-box">
+                            <div class="arch-vm-name">docker</div>
+                            <div class="arch-vm-path">/root/HELIOS/</div>
+
+                            <!-- Docker Stacks Row -->
+                            <div class="arch-stacks-row">
+                                <!-- Console Stack -->
+                                <div class="arch-stack-box console">
+                                    <div class="arch-stack-title">Console Stack</div>
+                                    <div class="arch-services">
+                                        <span class="arch-service-tag">Portainer</span>
+                                        <span class="arch-service-tag">Homarr</span>
+                                        <span class="arch-service-tag">Tautulli</span>
+                                        <span class="arch-service-tag">FlareSolverr</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tautulli.png" width="32" height="32" alt="Tautulli" class="me-3">
-                                <div>
-                                    <a href="https://github.com/Tautulli/Tautulli" class="text-white text-decoration-none">Tautulli</a>
-                                    <small class="d-block text-muted">Media Server Analytics</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png" width="32" height="32" alt="Homarr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/ajnart/homarr" class="text-white text-decoration-none">Homarr</a>
-                                    <small class="d-block text-muted">Dashboard & Service Management</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png" width="40" height="24" alt="FlareSolverr" class="me-3">
-                                <div>
-                                    <a href="https://github.com/FlareSolverr/FlareSolverr" class="text-white text-decoration-none">FlareSolverr</a>
-                                    <small class="d-block text-muted">Proxy & Anti-Bot Protection</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card service-card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-4">🔧 Infrastructure</h5>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox" class="me-3">
-                                <div>
-                                    <a href="https://www.proxmox.com/en/" class="text-white text-decoration-none">Proxmox VE</a>
-                                    <small class="d-block text-muted">Virtualization Platform (hosts HELIOS VM)</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker" class="me-3">
-                                <div>
-                                    <a href="https://www.docker.com/" class="text-white text-decoration-none">Docker</a>
-                                    <small class="d-block text-muted">Containerization Platform</small>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared" class="me-3">
-                                <div>
-                                    <a href="https://github.com/cloudflare/cloudflared" class="text-white text-decoration-none">Cloudflared</a>
-                                    <small class="d-block text-muted">Secure Remote Access</small>
+
+                                <!-- Media Stack -->
+                                <div class="arch-stack-box media">
+                                    <div class="arch-stack-title">Media Stack</div>
+                                    <div class="arch-services">
+                                        <span class="arch-service-tag">Plex</span>
+                                        <span class="arch-service-tag">Radarr</span>
+                                        <span class="arch-service-tag">Sonarr</span>
+                                        <span class="arch-service-tag">Bazarr</span>
+                                        <span class="arch-service-tag">SABnzbd</span>
+                                        <span class="arch-service-tag">Prowlarr</span>
+                                        <span class="arch-service-tag">Overseerr</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -420,39 +639,338 @@
         </div>
     </section>
 
-    <!-- Screenshots & Demos Section -->
-    <section id="screenshots" class="py-5">
+    <!-- System Components Section -->
+    <section id="components">
         <div class="container">
-            <h2 class="text-center mb-5">Screenshots & Demos</h2>
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <a href="./media/homarr.png" data-lightbox="screenshots" data-title="Dashboard Overview">
-                            <img src="./media/homarr.png" alt="Dashboard" class="card-img-top">
-                        </a>
-                        <div class="card-body">
-                            <p class="card-text text-center">Homarr Dashboard Overview</p>
+            <h2 class="text-center">System Components</h2>
+            <div class="row g-4">
+                <!-- Media Management -->
+                <div class="col-md-4">
+                    <div class="card component-card h-100">
+                        <h5 class="mb-4">🎬 Media Management</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png"
+                                class="component-icon me-3" alt="Radarr">
+                            <div>
+                                <strong>Radarr</strong>
+                                <small class="d-block text-muted">Movie Collection</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sonarr.png"
+                                class="component-icon me-3" alt="Sonarr">
+                            <div>
+                                <strong>Sonarr</strong>
+                                <small class="d-block text-muted">TV Series Collection</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/bazarr.png"
+                                class="component-icon me-3" alt="Bazarr">
+                            <div>
+                                <strong>Bazarr</strong>
+                                <small class="d-block text-muted">Subtitle Management</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/overseerr.png"
+                                class="component-icon me-3" alt="Overseerr">
+                            <div>
+                                <strong>Overseerr</strong>
+                                <small class="d-block text-muted">Media Request & Discovery</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prowlarr.png"
+                                class="component-icon me-3" alt="Prowlarr">
+                            <div>
+                                <strong>Prowlarr</strong>
+                                <small class="d-block text-muted">Indexer Management</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png"
+                                class="component-icon me-3" alt="SABnzbd">
+                            <div>
+                                <strong>SABnzbd</strong>
+                                <small class="d-block text-muted">Usenet Download Client</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/plex.png"
+                                class="component-icon me-3" alt="Plex">
+                            <div>
+                                <strong>Plex</strong>
+                                <small class="d-block text-muted">Media Server & Streaming</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img src="https://avatars.githubusercontent.com/u/19256051?v=4" class="component-icon me-3"
+                                alt="Plex Auto Languages" style="border-radius: 4px;">
+                            <div>
+                                <strong>Plex Auto Languages</strong>
+                                <small class="d-block text-muted">Automated Language Management</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <a href="./media/portainer.png" data-lightbox="screenshots" data-title="Portainer Management Dashboard">
-                            <img src="./media/portainer.png" alt="Portainer Management" class="card-img-top">
-                        </a>
-                        <div class="card-body">
-                            <p class="card-text text-center">Portainer Management Dashboard</p>
+
+                <!-- Server Management -->
+                <div class="col-md-4">
+                    <div class="card component-card h-100">
+                        <h5 class="mb-4">📊 Server Management</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png"
+                                class="component-icon me-3" alt="Portainer">
+                            <div>
+                                <strong>Portainer</strong>
+                                <small class="d-block text-muted">Container Management</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tautulli.png"
+                                class="component-icon me-3" alt="Tautulli">
+                            <div>
+                                <strong>Tautulli</strong>
+                                <small class="d-block text-muted">Media Server Analytics</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homarr.png"
+                                class="component-icon me-3" alt="Homarr">
+                            <div>
+                                <strong>Homarr</strong>
+                                <small class="d-block text-muted">Dashboard & Service Management</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/flaresolverr.png"
+                                class="component-icon me-3" alt="FlareSolverr">
+                            <div>
+                                <strong>FlareSolverr</strong>
+                                <small class="d-block text-muted">Proxy & Anti-Bot Protection</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <a href="./media/pve.png" data-lightbox="screenshots" data-title="Proxmox Virtual Environment">
-                            <img src="./media/pve.png" alt="Proxmox Environment" class="card-img-top">
-                        </a>
-                        <div class="card-body">
-                            <p class="card-text text-center">Proxmox Virtual Environment</p>
+
+                <!-- Infrastructure -->
+                <div class="col-md-4">
+                    <div class="card component-card h-100">
+                        <h5 class="mb-4">🔧 Infrastructure</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png"
+                                class="component-icon me-3" alt="Proxmox">
+                            <div>
+                                <strong>Proxmox VE</strong>
+                                <small class="d-block text-muted">Virtualization Platform (hosts HELIOS VM)</small>
+                            </div>
                         </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png"
+                                class="component-icon me-3" alt="Docker">
+                            <div>
+                                <strong>Docker</strong>
+                                <small class="d-block text-muted">Container Orchestration</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png"
+                                class="component-icon me-3" alt="Cloudflared">
+                            <div>
+                                <strong>Cloudflared</strong>
+                                <small class="d-block text-muted">Secure Remote Access</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/nvidia.png"
+                                class="component-icon me-3" alt="NVIDIA">
+                            <div>
+                                <strong>NVIDIA GPU</strong>
+                                <small class="d-block text-muted">Hardware Transcoding</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Example Deployment Section -->
+    <section id="deployment" class="section-dark">
+        <div class="container">
+            <h2 class="text-center">Example Deployment</h2>
+            <p class="text-center text-muted mb-5">Service endpoints for a typical HELIOS deployment</p>
+            <div class="row g-3">
+                <!-- Media Services -->
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Plex</h6>
+                            <span class="deployment-url">:32400</span>
+                            <p class="text-muted small mt-2 mb-0">Media streaming</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Overseerr</h6>
+                            <span class="deployment-url">:5055</span>
+                            <p class="text-muted small mt-2 mb-0">Media requests</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Radarr</h6>
+                            <span class="deployment-url">:7878</span>
+                            <p class="text-muted small mt-2 mb-0">Movie management</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Sonarr</h6>
+                            <span class="deployment-url">:8989</span>
+                            <p class="text-muted small mt-2 mb-0">TV management</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Bazarr</h6>
+                            <span class="deployment-url">:6767</span>
+                            <p class="text-muted small mt-2 mb-0">Subtitles</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Prowlarr</h6>
+                            <span class="deployment-url">:9696</span>
+                            <p class="text-muted small mt-2 mb-0">Indexer management</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>SABnzbd</h6>
+                            <span class="deployment-url">:8080</span>
+                            <p class="text-muted small mt-2 mb-0">Usenet downloads</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Console Services -->
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Homarr</h6>
+                            <span class="deployment-url">:7575</span>
+                            <p class="text-muted small mt-2 mb-0">Dashboard</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Portainer</h6>
+                            <span class="deployment-url">:9443</span>
+                            <p class="text-muted small mt-2 mb-0">Container management</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>Tautulli</h6>
+                            <span class="deployment-url">:8181</span>
+                            <p class="text-muted small mt-2 mb-0">Plex analytics</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body p-3 text-center">
+                            <h6>FlareSolverr</h6>
+                            <span class="deployment-url">:8191</span>
+                            <p class="text-muted small mt-2 mb-0">Anti-bot proxy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots">
+        <div class="container">
+            <h2 class="text-center">Screenshots & Demos</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card screenshot-card h-100">
+                        <img src="./media/homarr.png" alt="Homarr Dashboard">
+                        <div class="card-body text-center">
+                            <p class="mb-0">Homarr Dashboard Overview</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card screenshot-card h-100">
+                        <img src="./media/portainer.png" alt="Portainer Dashboard">
+                        <div class="card-body text-center">
+                            <p class="mb-0">Portainer Management Dashboard</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card screenshot-card h-100">
+                        <img src="./media/pve.png" alt="Proxmox VE">
+                        <div class="card-body text-center">
+                            <p class="mb-0">Proxmox Virtual Environment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section id="skills" class="section-dark">
+        <div class="container">
+            <h2 class="text-center">Technical Skills Demonstrated</h2>
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <div class="card skill-card h-100">
+                        <i class="bi bi-server skill-icon" style="color: var(--secondary-color);"></i>
+                        <h6>Infrastructure & DevOps</h6>
+                        <p class="small text-muted mb-0">Docker, GPU passthrough, orchestration</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card skill-card h-100">
+                        <i class="bi bi-film skill-icon" style="color: var(--helios-color);"></i>
+                        <h6>Media Automation</h6>
+                        <p class="small text-muted mb-0">*arr stack, Plex, automated workflows</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card skill-card h-100">
+                        <i class="bi bi-shield-lock skill-icon" style="color: var(--accent-color);"></i>
+                        <h6>Security</h6>
+                        <p class="small text-muted mb-0">Docker Secrets, Cloudflare tunnels</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card skill-card h-100">
+                        <i class="bi bi-terminal skill-icon" style="color: var(--secondary-color);"></i>
+                        <h6>Scripting & Ops</h6>
+                        <p class="small text-muted mb-0">Bash automation, API connectivity</p>
                     </div>
                 </div>
             </div>
@@ -460,42 +978,22 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <div class="container text-center">
-            <a href="https://youtu.be/Nw_cdqQHGA8?t=1">
-                <img src="./media/GIR.gif" alt="GIR" width="120" height="120" class="mb-3">
-            </a>
+            <div class="gir-footer mb-3">
+                <a href="https://youtu.be/Nw_cdqQHGA8?t=1">
+                    <img src="./media/GIR.gif" alt="GIR">
+                </a>
+            </div>
+            <p class="text-muted small mb-3"><i>I'm gonna sing the doom song now</i></p>
             <p class="mb-0">
-                <small><i>I'm gonna sing the doom song now</i></small>
+                <a href="https://github.com/pjmarz/HELIOS" class="me-3"><i class="bi bi-github me-1"></i>GitHub</a>
+                <a href="https://github.com/pjmarz/HELIOS#readme"><i class="bi bi-book me-1"></i>Documentation</a>
             </p>
         </div>
     </footer>
 
-    <a href="#" class="scroll-top">
-        <i class="bi bi-arrow-up"></i>
-    </a>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-    <script>
-        // Navbar color change on scroll
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                document.querySelector('.navbar').classList.add('scrolled');
-            } else {
-                document.querySelector('.navbar').classList.remove('scrolled');
-            }
-        });
-
-        // Scroll to top button
-        window.addEventListener('scroll', function() {
-            const scrollBtn = document.querySelector('.scroll-top');
-            if (window.scrollY > 300) {
-                scrollBtn.classList.add('visible');
-            } else {
-                scrollBtn.classList.remove('visible');
-            }
-        });
-    </script>
 </body>
-</html> 
+
+</html>
