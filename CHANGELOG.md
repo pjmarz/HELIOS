@@ -5,6 +5,25 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.15.1] - 2025-12-16
+
+### Changed
+- **Documentation Redesign**: Complete overhaul of `docs/index.html` to match LUMINAL's modern style
+  - Modern dark theme with amber/gold HELIOS branding
+  - HELIOS.gif animated logo in hero section
+  - Visual architecture diagram showing Proxmox host, VM, and Docker stacks (Console/Media)
+  - Expanded Example Deployment section with all 11 service ports
+  - Improved text readability with Bootstrap color overrides
+  - Responsive 3-column component cards layout
+  - Cleaned up footer (removed redundant title/subtitle)
+
+### Added
+- **Screenshot Lightbox**: Click-to-expand feature for Screenshots & Demos section
+  - Fullscreen overlay with dark background
+  - Close via X button, click outside image, or Escape key
+  - Caption display below expanded image
+  - Smooth animations and hover effects
+
 ## [1.15.0] - 2025-12-06
 
 ### Removed
