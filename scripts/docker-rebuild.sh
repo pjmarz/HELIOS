@@ -1,10 +1,13 @@
 #!/bin/bash
+# ===========================================================================
+# HELIOS DOCKER REBUILD SCRIPT
+# ===========================================================================
+# Rebuilds all Docker containers by pulling latest images and restarting
+# services. Includes cleanup of unused Docker resources.
+# ===========================================================================
 
 # Exit on error
 set -e
-
-# Script Description
-# Rebuilds all Docker containers by pulling latest images and restarting services using the root docker-compose.yml
 
 # Get the script's directory path and the project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -49,44 +52,52 @@ handle_error() {
 trap 'handle_error $LINENO' ERR
 
 # Log script start
-log "=== Script Start ==="
+log "=== HELIOS Docker Rebuild Script Start ==="
+log "Project root: $HELIOS_ROOT"
 
 # Function to rebuild all docker services using the root compose file
 rebuild_docker_services() {
-    log "Rebuilding all services using root docker-compose.yml"
+    log "Rebuilding all services using docker-compose.yml"
 
     cd "$HELIOS_ROOT" || {
         log "Failed to change directory to $HELIOS_ROOT"
         return 1
     }
 
-    log "Stopping all containers"
+    log "Stopping all containers..."
     docker compose down 2>&1 | tee -a "$LOG_FILE"
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Failed to stop containers"
         return 1
     fi
 
-    log "Pulling latest images for all services"
+    log "Pulling latest images for all services..."
     docker compose pull 2>&1 | tee -a "$LOG_FILE"
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Failed to pull latest images"
         return 1
     fi
 
-    log "Starting all containers"
+    log "Starting all containers..."
     docker compose up -d 2>&1 | tee -a "$LOG_FILE"
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Failed to start containers"
         return 1
     fi
 
+    log "Waiting for services to be healthy..."
+    sleep 5
+
+    # Show container status
+    log "Container status:"
+    docker compose ps 2>&1 | tee -a "$LOG_FILE"
+
     return 0
 }
 
 # Function to prune unused docker resources
 prune_docker_system() {
-    log "Pruning unused Docker resources"
+    log "Pruning unused Docker resources..."
     
     log "Pruning stopped containers..."
     docker container prune -f 2>&1 | tee -a "$LOG_FILE"
@@ -99,16 +110,34 @@ prune_docker_system() {
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Warning: Image pruning failed"
     fi
+
+    log "Pruning unused networks..."
+    docker network prune -f 2>&1 | tee -a "$LOG_FILE"
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
+        log "Warning: Network pruning failed"
+    fi
     
     log "Docker resources pruning completed"
     return 0
 }
 
+# Function to display disk usage after cleanup
+show_disk_usage() {
+    log "Docker disk usage:"
+    docker system df 2>&1 | tee -a "$LOG_FILE"
+}
+
+# Main execution
+log "Starting HELIOS rebuild process..."
+
 # Rebuild all services
 rebuild_docker_services
 
-# Clean up any unused images, containers, networks, and volumes
+# Clean up any unused images, containers, and networks
 prune_docker_system
+
+# Show disk usage
+show_disk_usage
 
 # Cleanup function
 cleanup() {

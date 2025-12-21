@@ -1,10 +1,13 @@
 #!/bin/bash
+# ===========================================================================
+# HELIOS COMPOSE UP SCRIPT
+# ===========================================================================
+# Starts all Docker Compose services in HELIOS system using the root
+# docker-compose.yml
+# ===========================================================================
 
 # Exit on error
 set -e
-
-# Script Description
-# Starts all Docker Compose services in HELIOS system using the root docker-compose.yml
 
 # Get the script's directory path and the project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

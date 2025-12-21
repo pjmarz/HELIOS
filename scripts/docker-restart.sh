@@ -1,10 +1,12 @@
 #!/bin/bash
+# ===========================================================================
+# HELIOS DOCKER RESTART SCRIPT
+# ===========================================================================
+# Restarts Docker service and all Docker Compose services in HELIOS system.
+# ===========================================================================
 
 # Exit on error
 set -e
-
-# Script Description
-# Restarts Docker service and all Docker Compose services in HELIOS system
 
 # Get the script's directory path and the project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

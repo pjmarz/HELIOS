@@ -1,9 +1,13 @@
+#!/bin/bash
+# ===========================================================================
+# HELIOS MEDIA CLEAN SCRIPT
+# ===========================================================================
+# Cleans Usenet download directories by removing contents of incomplete
+# and completed folders.
+# ===========================================================================
 
 # Exit on error
 set -e
-
-# Script Description
-# Cleans Usenet download directories by removing contents of incomplete and completed folders
 
 # Get the script's directory path and the project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

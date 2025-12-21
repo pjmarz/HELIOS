@@ -1,10 +1,13 @@
 #!/bin/bash
+# ===========================================================================
+# HELIOS SYSTEM VERIFY SCRIPT
+# ===========================================================================
+# Verifies the HELIOS system configuration, environment variables, and
+# Docker setup.
+# ===========================================================================
 
 # Exit on error
 set -e
-
-# Script Description
-# Verifies the HELIOS system configuration, environment variables, and Docker setup
 
 # Get the script's directory path and the project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
