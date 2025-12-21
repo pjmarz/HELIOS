@@ -335,11 +335,5 @@ Key architectural features:
 ---
 
 <div align="center">
-  <a href="https://youtu.be/Nw_cdqQHGA8?t=1">
-    <img src="docs/media/GIR.gif" alt="HELIOS" width="120" height="120">
-  </a>
-  
-  <p align="center">
-    <sub><i> I'm gonna sing the doom song now </i></sub>
-  </p>
+  <img src="docs/media/sun.apng" alt="HELIOS" width="200" height="200">
 </div>
