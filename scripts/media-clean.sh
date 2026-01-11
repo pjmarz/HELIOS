@@ -131,8 +131,8 @@ docker compose up -d sabnzbd || {
 }
 
 # Run fstrim to reclaim space on host ZFS pool
-# log "Running fstrim on /mnt/usenet"
-# fstrim -v /mnt/usenet || log "Warning: fstrim failed"
+log "Running fstrim on /mnt/usenet"
+fstrim -v /mnt/usenet || log "Warning: fstrim failed"
 
 # Cleanup function
 cleanup() {

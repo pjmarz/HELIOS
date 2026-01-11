@@ -22,154 +22,132 @@ x-common: &common-settings
     PGID: ${PGID} # Process Group ID - Controls file ownership
     TZ: ${TZ} # Timezone setting for accurate scheduling/logs
     UMASK: ${UMASK} # Controls default file permissions
-  labels:
 
-    &common-labels 
 services:
-
   # ==== OVERSEERR ====
   # Media request and discovery platform that integrates with Plex
   # Web UI for users to request content which is then processed by Radarr/Sonarr
   overseerr:
+    <<: *common-settings
     image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
+      <<: *common-env
     volumes:
       - ${CONFIG_DIR}/overseerr:/config # Persistent configuration storage
     ports:
       - ${OVERSEERR_PORT}:5055 # Web UI access port
-    restart: unless-stopped
 
   # ==== RADARR ====
   # Movie collection manager that works with various download clients
   # Monitors RSS feeds for new movies and manages download/import
   radarr:
+    <<: *common-settings
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
+      <<: *common-env
     volumes:
       - ${CONFIG_DIR}/radarr:/config # Persistent configuration storage
       - ${MOVIES_DIR}:/movies # Mount point for movie library
       - ${DOWNLOADS_DIR}:/usenet # Access to download directory
     ports:
       - ${RADARR_PORT}:7878 # Web UI access port
-    restart: unless-stopped
 
   # ==== SONARR ====
   # TV series collection manager that works with various download clients
   # Monitors RSS feeds for new episodes and manages download/import
   sonarr:
+    <<: *common-settings
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
+      <<: *common-env
     volumes:
       - ${CONFIG_DIR}/sonarr:/config # Persistent configuration storage
       - ${TV_DIR}:/tv # Mount point for TV series library
       - ${DOWNLOADS_DIR}:/usenet # Access to download directory
     ports:
       - ${SONARR_PORT}:8989 # Web UI access port
-    restart: unless-stopped
 
   # ==== BAZARR ====
   # Companion app to Sonarr and Radarr for managing and downloading subtitles
   # Automatically searches for missing subtitles and downloads them
   bazarr:
+    <<: *common-settings
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
+      <<: *common-env
     volumes:
       - ${CONFIG_DIR}/bazarr:/config # Persistent configuration storage
       - ${MOVIES_DIR}:/movies # Access to movie files for subtitle management
       - ${TV_DIR}:/tv # Access to TV files for subtitle management
     ports:
       - ${BAZARR_PORT}:6767 # Web UI access port
-    restart: unless-stopped
 
   # ==== PROWLARR ====
   # Indexer manager/proxy that integrates with the *arr stack
   # Manages all your indexers in one place with integration to Sonarr/Radarr
   prowlarr:
+    <<: *common-settings
     container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
     ports:
       - ${PROWLARR_PORT}:9696 # Web UI access port
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
+      <<: *common-env
     volumes:
       - ${CONFIG_DIR}/prowlarr:/config # Persistent configuration storage
-    restart: unless-stopped
 
   # ==== SABNZBD ====
   # Usenet binary downloader with extensive post-processing capabilities
   # Automatically processes downloads and passes to Radarr/Sonarr
   sabnzbd:
+    <<: *common-settings
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
+      <<: *common-env
     volumes:
       - ${CONFIG_DIR}/sabnzbd:/config # Persistent configuration storage
       - ${DOWNLOADS_DIR}:/usenet # Download storage location
     ports:
       - ${SABNZBD_PORT}:8080 # Web UI access port
-    restart: unless-stopped
 
   # ==== PLEX AUTO LANGUAGES ====
   # Automatically sets audio/subtitle preferences based on user language settings
   # Enhances Plex experience by ensuring correct language tracks are selected
   plexautolanguages:
+    <<: *common-settings
     image: remirigal/plex-auto-languages:latest
     container_name: plexautolanguages
     environment:
-      - PLEX_URL=http://plex-helios:32400 # Plex server URL (Docker service name for container-to-container communication)
-      - TZ=${TZ} # Timezone setting
-      - PLEX_TOKEN_FILE=/run/secrets/plex_token # Plex authentication token from secret
+      PLEX_URL: http://plex-helios:32400 # Plex server URL (Docker service name for container-to-container communication)
+      TZ: ${TZ} # Timezone setting
+      PLEX_TOKEN_FILE: /run/secrets/plex_token # Plex authentication token from secret
     volumes:
       - ${CONFIG_DIR}/plexautolanguages:/config # Persistent configuration storage
     secrets:
       - plex_token
     depends_on:
       - plex
-    restart: unless-stopped
 
   # ==== PLEX ====
   # Media server with GPU-accelerated transcoding support
   # Provides media streaming and organization for movies and TV shows
   # Migrated from LXC container to Docker for better integration with HELIOS stack
   plex:
+    <<: *common-settings
     image: lscr.io/linuxserver/plex:latest
     container_name: plex-helios
     ports:
       - "32400:32400" # Standard Plex port
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - VERSION=docker
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+      <<: *common-env
+      VERSION: docker
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
     volumes:
       - ${PLEX_CONFIG}:/config # Persistent configuration storage
       - ${MOVIES_DIR}:/movies # Mount point for movies library
@@ -182,4 +160,3 @@ services:
             - driver: nvidia # NVIDIA GPU acceleration for transcoding
               count: 1
               capabilities: [ gpu ]
-    restart: unless-stopped

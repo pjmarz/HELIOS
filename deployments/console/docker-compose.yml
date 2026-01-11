@@ -20,13 +20,13 @@ x-common: &common-settings
     PGID: ${PGID}          # Process Group ID - Controls file ownership
     TZ: ${TZ}              # Timezone setting for accurate scheduling/logs
     UMASK: ${UMASK}        # Controls default file permissions
-  labels: &common-labels
 
 services:
   # ==== PORTAINER AGENT ====
   # Provides remote management capabilities to Portainer
   # This allows Portainer to manage the Docker environment
   agent:
+    <<: *common-settings
     image: portainer/agent:latest
     container_name: portaineragent
     environment:
@@ -37,12 +37,12 @@ services:
       - /:/host  # Host filesystem access for management
     networks:
       - agent_network  # Isolated network for secure agent-portainer communication
-    restart: unless-stopped
 
   # ==== PORTAINER ====
   # Container management UI with comprehensive Docker controls
   # Provides a web interface to manage containers, images, networks, and volumes
   portainer:
+    <<: *common-settings
     image: portainer/portainer-ce:latest
     container_name: portainer
     privileged: true  # Required for full management capabilities
@@ -55,22 +55,19 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock  # Direct Docker socket access
     networks:
       - agent_network  # Isolated network for secure agent-portainer communication
-    restart: unless-stopped
 
   # ==== FLARESOLVERR ====
   # Proxy server that helps bypass Cloudflare and other anti-bot protections
   # Used by various *arr services to access sites with protection
   flaresolverr:
+    <<: *common-settings
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
     environment:
-      - LOG_LEVEL=${LOG_LEVEL:-info}  # Logging verbosity with default
-      - LOG_HTML=false                # Don't log full HTML responses
-      - CAPTCHA_SOLVER=none           # No automated CAPTCHA solving
-      - TZ=${TZ}                      # Timezone setting
-      - PUID=${PUID}                  # Process User ID - Controls file ownership
-      - PGID=${PGID}                  # Process Group ID - Controls file ownership
-      - UMASK=${UMASK}                # Controls default file permissions
+      <<: *common-env
+      LOG_LEVEL: ${LOG_LEVEL:-info}  # Logging verbosity with default
+      LOG_HTML: false                # Don't log full HTML responses
+      CAPTCHA_SOLVER: none           # No automated CAPTCHA solving
     volumes:
       - ${CONFIG_DIR}/flaresolverr:/config  # Persistent configuration storage
     ports:
@@ -78,22 +75,18 @@ services:
     networks:
       - default
       - proxy
-    restart: unless-stopped
 
   # ==== HOMARR ====
   # Dashboard for organizing and accessing all services
   # Provides a customizable homepage with service status and quick links
   homarr:
+    <<: *common-settings
     container_name: homarr
     image: ghcr.io/homarr-labs/homarr:latest
-    restart: unless-stopped
     privileged: true  # Required for reliable Docker socket access
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
-      - SECRET_ENCRYPTION_KEY=${HOMARR_ENCRYPTION_KEY}  # Homarr encryption key (populated via .env by system-verify.sh)
+      <<: *common-env
+      SECRET_ENCRYPTION_KEY: ${HOMARR_ENCRYPTION_KEY}  # Homarr encryption key (populated via .env by system-verify.sh)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw  # Docker socket for service discovery
       - ${CONFIG_DIR}/homarr/config:/appdata/configs  # Configuration files for Homarr 1.0+
@@ -109,13 +102,11 @@ services:
   # Monitor and track activity on your Plex Media Server
   # Provides detailed statistics, history, and notifications
   tautulli:
+    <<: *common-settings
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK=${UMASK}
+      <<: *common-env
     volumes:
       - ${CONFIG_DIR}/tautulli:/config  # Persistent configuration storage
     ports:
@@ -123,7 +114,6 @@ services:
     networks:
       - default
       - proxy
-    restart: unless-stopped
 
 # Networks defined for service isolation and communication
 networks:
