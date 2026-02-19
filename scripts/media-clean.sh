@@ -6,61 +6,15 @@
 # and completed folders.
 # ===========================================================================
 
-# Exit on error
-set -e
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
 
-# Get the script's directory path and the project root
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HELIOS_ROOT="$(dirname "$SCRIPT_DIR")"
-
-# Source environment variables
-ENV_FILE="${HELIOS_ROOT}/env.sh"
-if [ -f "$ENV_FILE" ]; then
-    source "$ENV_FILE"
-else
-    echo "Environment file $ENV_FILE not found. Exiting."
-    exit 1
-fi
-
-# Configuration
+# Configuration (depends on DOWNLOADS_DIR from env.sh, sourced by _common.sh)
 MEDIA_DEPLOYMENT="${HELIOS_ROOT}/deployments/media"
 INCOMPLETE_DIR="${DOWNLOADS_DIR}/incomplete"
 COMPLETE_DIR="${DOWNLOADS_DIR}/complete"
 
 # Define specific folders to clean in the complete directory
 FOLDERS=("movies" "tv" "default" "books")
-
-# Logging configuration
-LOG_DIR="${HELIOS_ROOT}/logs"
-LOG_FILE="${LOG_DIR}/$(basename "$0" .sh).log"
-
-# Create logs directory if it doesn't exist
-mkdir -p "$LOG_DIR"
-
-# Initialize log file
-: > "$LOG_FILE"
-
-# Logging function
-log() {
-    local msg="$*"
-    local timestamp
-    timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
-}
-
-# Error handling function
-handle_error() {
-    local exit_code=$?
-    local line_number=$1
-    log "Error on line $line_number: Exit code $exit_code"
-    exit $exit_code
-}
-
-# Set error trap
-trap 'handle_error $LINENO' ERR
-
-# Log script start
-log "=== Script Start ==="
 
 # Validate paths to ensure they exist
 if [[ ! -d "$HELIOS_ROOT" ]]; then
@@ -133,11 +87,3 @@ docker compose up -d sabnzbd || {
 # Run fstrim to reclaim space on host ZFS pool
 log "Running fstrim on /mnt/usenet"
 fstrim -v /mnt/usenet || log "Warning: fstrim failed"
-
-# Cleanup function
-cleanup() {
-    local exit_code=$?
-    log "=== Script Complete (Exit Code: $exit_code) ==="
-}
-
-trap cleanup EXIT

@@ -10,48 +10,53 @@ Scripts follow a consistent prefix-based naming pattern:
 - `docker-*.sh` - Docker engine management
 - `media-*.sh` - Media management operations
 - `system-*.sh` - System configuration and verification
+- `test-*.sh` - Connectivity and health testing
+- `_common.sh` - Shared library (sourced, not executed directly)
 
 ## Script Overview
 
 | Script | Description |
 |--------|-------------|
+| `_common.sh` | Shared library providing shell options, path detection, env sourcing, logging, colors, error handling, and traps |
 | `compose-up.sh` | Starts all Docker Compose services using the root docker-compose.yml |
 | `compose-down.sh` | Stops all Docker Compose services and prunes stopped containers |
-| `compose-refresh.sh` | Refreshes all services by stopping and starting them with container pruning |
-| `docker-rebuild.sh` | Rebuilds containers by pulling latest images and prunes unused images and containers |
+| `compose-refresh.sh` | Refreshes all services by delegating to `compose-down.sh` and `compose-up.sh` |
+| `docker-rebuild.sh` | Rebuilds containers by pulling latest images and prunes unused images, containers, and networks |
 | `docker-restart.sh` | Restarts the Docker service and all containers |
-| `media-clean.sh` | Cleans up Usenet download directories and handles SABnzbd using direct Docker commands |
-| `system-verify.sh` | Verifies environment configuration and Docker Compose setup with detailed logging |
-| `test-api-connectivity.sh` | Tests API connectivity to all HELIOS services using secrets from ./secrets/
+| `media-clean.sh` | Cleans Usenet download directories and handles SABnzbd stop/start |
+| `system-verify.sh` | Verifies environment configuration, Docker setup, secrets, networking, and security best practices |
+| `test-api-connectivity.sh` | Tests API connectivity to all HELIOS services using secrets from `./secrets/` |
 
-## Legacy Scripts (To Be Deprecated)
+## Shared Library (`_common.sh`)
 
-The following scripts are kept for backward compatibility and will be deprecated:
+All scripts source `_common.sh` for common boilerplate:
 
-- `master-compose-up.sh` → use `compose-up.sh` instead
-- `master-compose-down.sh` → use `compose-down.sh` instead
-- `master-compose-refresh.sh` → use `compose-refresh.sh` instead
-- `docker-container-rebuild.sh` → use `docker-rebuild.sh` instead
-- `clean-usenet.sh` → use `media-clean.sh` instead
-- `restart-docker.sh` → use `docker-restart.sh` instead
-- `verify-config.sh` → use `system-verify.sh` instead
+```bash
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
+```
 
-## Features
+The library provides (in order):
 
-- **Automatic Path Detection**: Scripts use relative paths for portability
-- **Environment Loading**: Automatically loads variables from env.sh with fallback paths
-- **.env Generation**: Creates .env file for Docker Compose with proper secrets inclusion
-- **Detailed Logging**: All operations are logged to the logs/ directory with timestamps
-- **Error Handling**: Comprehensive error checking and reporting with standardized messages
-- **Container Pruning**: Automatic clean-up of stopped containers and unused images
-- **Consistent Formatting**: Standardized output and logging format across all scripts
-- **Permissions Management**: Validates and ensures correct permissions for configuration directories
-- **Symlink Validation**: Checks and repairs symbolic links for sensitive files
-- **Self-Healing Configuration**: Automatically creates missing directories and repairs broken links
+1. **Shell options** — `set -euo pipefail` by default
+2. **Path detection** — `HELIOS_ROOT` and `SCRIPT_DIR`
+3. **Environment sourcing** — loads `env.sh`
+4. **Logging setup** — `LOG_DIR`, `LOG_FILE`, log directory creation
+5. **Color constants** — `GREEN`, `RED`, `YELLOW`, `NC`
+6. **Logging functions** — `log()` (tee to file) and `log_color()` (colored console + plain file)
+7. **Error handling** — `handle_error()` with ERR trap
+8. **Cleanup** — `cleanup()` with EXIT trap
+9. **Start banner** — `=== Script Start ===`
+
+### Optional variables (set before sourcing)
+
+| Variable | Effect |
+|----------|--------|
+| `HELIOS_NO_ERREXIT=1` | Uses `set +e` instead of `set -e`, skips ERR trap. Used by `test-api-connectivity.sh`. |
+| `HELIOS_START_MSG="…"` | Customizes the start banner text. Used by `docker-rebuild.sh`. |
 
 ## Usage
 
-All scripts are designed to be run from the command line:
+All scripts are designed to be run from the project root:
 
 ```bash
 ./scripts/compose-up.sh    # Start all services
@@ -61,23 +66,10 @@ All scripts are designed to be run from the command line:
 
 ## Logs
 
-All scripts generate logs in the `logs/` directory, named after the script (e.g., `compose-up.log`).
-
-## Docker Resource Management
-
-- `compose-down.sh` - Prunes stopped containers after stopping services
-- `compose-refresh.sh` - Prunes stopped containers between down and up operations
-- `docker-rebuild.sh` - Uses targeted pruning for both containers and images
-- `media-clean.sh` - Uses direct Docker commands to reliably stop/start containers without conflicts
+All scripts generate logs in the `logs/` directory, named after the script (e.g., `compose-up.log`). `compose-refresh.sh` produces three log files: `compose-refresh.log`, `compose-down.log`, and `compose-up.log`.
 
 ## Environment Management
 
-- `.env` - Auto-generated from env.sh for Docker Compose with proper secrets
-- `env.sh` - Centralized environment variables with export statements
-- `/secrets/` - Directory containing Docker Secrets files for sensitive credentials
-
-## Configuration Directory Standards
-
-The system uses standardized permissions for service directories:
-- Regular services: UID=1000, GID=984, with 755 directory permissions
-- Data files: 644 permissions for database and configuration files
+- **`env.sh`** — Symlink to `/etc/HELIOS/env.sh`. Centralized environment variables with export statements.
+- **`.env`** — Auto-generated by `system-verify.sh` for Docker Compose consumption. Never edit manually.
+- **`secrets/`** — Symlink to `/etc/HELIOS/secrets/`. Contains Docker Secrets files (chmod 600).

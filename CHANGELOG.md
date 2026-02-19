@@ -5,6 +5,45 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.17.0] - 2026-02-18
+
+### Changed
+- **Overseerr → Seerr Migration**: Replaced Overseerr with Seerr (v3.0.0), the unified successor
+  - Updated Docker image from `lscr.io/linuxserver/overseerr:latest` to `ghcr.io/seerr-team/seerr:latest`
+  - Added `init: true` (required — Seerr does not ship its own init process)
+  - Updated container config mount from `/config` to `/app/config`
+  - Renamed environment variable `OVERSEERR_PORT` → `SEERR_PORT` (port 5055 unchanged)
+  - Renamed config directory from `overseerr/` to `seerr/` (post-migration)
+  - Container now runs as non-root `node` user (UID 1000) natively
+  - Seerr automatically migrates Overseerr database on first start
+
+### Docs
+- Updated README.md, docs/index.html with Seerr branding and links
+- Updated scripts (system-verify.sh, test-api-connectivity.sh) for new service name
+
+## [1.16.0] - 2026-02-05
+
+### Added
+- **Shared Script Library (`scripts/_common.sh`)**: Extracted ~55 lines of duplicated boilerplate from all 8 scripts into a single sourced library
+  - Shell options (`set -euo pipefail`) with opt-out via `HELIOS_NO_ERREXIT=1`
+  - Path detection (`HELIOS_ROOT`, `SCRIPT_DIR`), environment sourcing, logging setup
+  - Color constants (`GREEN`, `RED`, `YELLOW`, `NC`), `log()` and `log_color()` functions
+  - Error handling (`handle_error` with ERR trap), cleanup with EXIT trap, start banner
+  - Customizable start banner via `HELIOS_START_MSG` variable
+
+### Changed
+- **Script Refactoring**: All 8 scripts now source `_common.sh` instead of duplicating boilerplate
+  - Each script reduced by ~55 lines while preserving identical behavior
+  - `compose-refresh.sh` refactored to delegate to `compose-down.sh` and `compose-up.sh` as subprocesses, producing separate log files for each phase
+  - `docker-rebuild.sh` uses `HELIOS_START_MSG` for its custom start banner
+  - `test-api-connectivity.sh` uses `HELIOS_NO_ERREXIT=1` to opt out of `set -e`
+  - Standardized `YELLOW` to bold (`\033[1;33m`) across all scripts
+
+### Docs
+- **Scripts README**: Rewritten to document `_common.sh`, its provisions, optional variables, and updated script descriptions
+  - Removed stale "Legacy Scripts" section referencing deleted scripts
+  - Added shared library documentation with usage examples
+
 ## [1.15.1] - 2025-12-16
 
 ### Changed

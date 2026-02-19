@@ -6,54 +6,29 @@
 # services. Includes cleanup of unused Docker resources.
 # ===========================================================================
 
-# Exit on error
-set -e
+HELIOS_START_MSG="HELIOS Docker Rebuild Script Start"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
 
-# Get the script's directory path and the project root
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HELIOS_ROOT="$(dirname "$SCRIPT_DIR")"
-
-# Source environment variables
-ENV_FILE="${HELIOS_ROOT}/env.sh"
-if [ -f "$ENV_FILE" ]; then
-    source "$ENV_FILE"
-else
-    echo "Environment file $ENV_FILE not found. Exiting."
-    exit 1
-fi
-
-# Logging configuration
-LOG_DIR="${HELIOS_ROOT}/logs"
-LOG_FILE="${LOG_DIR}/$(basename "$0" .sh).log"
-
-# Create logs directory if it doesn't exist
-mkdir -p "$LOG_DIR"
-
-# Initialize log file
-: > "$LOG_FILE"
-
-# Logging function
-log() {
-    local msg="$*"
-    local timestamp
-    timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
-}
-
-# Error handling function
-handle_error() {
-    local exit_code=$?
-    local line_number=$1
-    log "Error on line $line_number: Exit code $exit_code"
-    exit $exit_code
-}
-
-# Set error trap
-trap 'handle_error $LINENO' ERR
-
-# Log script start
-log "=== HELIOS Docker Rebuild Script Start ==="
 log "Project root: $HELIOS_ROOT"
+
+# Function to ensure required external networks exist
+ensure_external_networks() {
+    log "Ensuring required external networks exist..."
+
+    local networks=("helios_proxy" "helios_console_agent_network")
+
+    for net in "${networks[@]}"; do
+        if ! docker network inspect "$net" &>/dev/null; then
+            log "Creating missing network: $net"
+            docker network create "$net" 2>&1 | tee -a "$LOG_FILE"
+        else
+            log "Network already exists: $net"
+        fi
+    done
+
+    log "External networks check complete"
+    return 0
+}
 
 # Function to rebuild all docker services using the root compose file
 rebuild_docker_services() {
@@ -98,13 +73,13 @@ rebuild_docker_services() {
 # Function to prune unused docker resources
 prune_docker_system() {
     log "Pruning unused Docker resources..."
-    
+
     log "Pruning stopped containers..."
     docker container prune -f 2>&1 | tee -a "$LOG_FILE"
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Warning: Container pruning failed"
     fi
-    
+
     log "Pruning unused images..."
     docker image prune -f 2>&1 | tee -a "$LOG_FILE"
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
@@ -116,7 +91,7 @@ prune_docker_system() {
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
         log "Warning: Network pruning failed"
     fi
-    
+
     log "Docker resources pruning completed"
     return 0
 }
@@ -130,6 +105,9 @@ show_disk_usage() {
 # Main execution
 log "Starting HELIOS rebuild process..."
 
+# Ensure external networks exist before rebuild
+ensure_external_networks
+
 # Rebuild all services
 rebuild_docker_services
 
@@ -138,11 +116,3 @@ prune_docker_system
 
 # Show disk usage
 show_disk_usage
-
-# Cleanup function
-cleanup() {
-    local exit_code=$?
-    log "=== Script Complete (Exit Code: $exit_code) ==="
-}
-
-trap cleanup EXIT

@@ -6,54 +6,8 @@
 # ===========================================================================
 
 # Don't exit on error - we want to test all services
-set +e
-
-# Get the script's directory path and the project root
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HELIOS_ROOT="$(dirname "$SCRIPT_DIR")"
-
-# Source environment variables
-ENV_FILE="${HELIOS_ROOT}/env.sh"
-if [ -f "$ENV_FILE" ]; then
-    source "$ENV_FILE"
-else
-    echo "Environment file $ENV_FILE not found. Exiting."
-    exit 1
-fi
-
-# Logging configuration
-LOG_DIR="${HELIOS_ROOT}/logs"
-LOG_FILE="${LOG_DIR}/$(basename "$0" .sh).log"
-
-# Create logs directory if it doesn't exist
-mkdir -p "$LOG_DIR"
-
-# Initialize log file (overwrite previous output)
-: > "$LOG_FILE"
-
-# Logging function
-log() {
-    local msg="$*"
-    local timestamp
-    timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "${timestamp} - ${msg}" | tee -a "$LOG_FILE"
-}
-
-# Color output function that also logs to file without color codes
-log_color() {
-    local color="$1"
-    local msg="$2"
-    local timestamp
-    timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    echo -e "${color}${timestamp} - ${msg}${NC}"
-    echo "${timestamp} - ${msg}" >> "$LOG_FILE"
-}
-
-# Set colors for output
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+HELIOS_NO_ERREXIT=1
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
 
 # Secrets directory
 SECRETS_DIR="${HELIOS_ROOT}/secrets"
@@ -61,8 +15,9 @@ SECRETS_DIR="${HELIOS_ROOT}/secrets"
 # Service host (assuming localhost)
 HOST="localhost"
 
-# Log script start
-log "=== Script Start ==="
+# Initialize counters
+PASSED=0
+FAILED=0
 
 log_color "$YELLOW" "╔════════════════════════════════════════════════════════════════╗"
 log_color "$YELLOW" "║     🔍 HELIOS API CONNECTIVITY TEST                         ║"
@@ -76,29 +31,29 @@ test_api() {
     local base_url=$3
     local api_path=$4
     local api_key_param=$5
-    
+
     # Read API key
     if [ ! -f "${SECRETS_DIR}/${api_key_file}" ]; then
         log_color "$RED" "✗ ${service_name}: Missing API key file"
         return 1
     fi
-    
+
     local api_key=$(cat "${SECRETS_DIR}/${api_key_file}" | tr -d '\n\r ')
-    
+
     if [ -z "$api_key" ]; then
         log_color "$RED" "✗ ${service_name}: Empty API key"
         return 1
     fi
-    
+
     # Build URL
     local url="${base_url}${api_path}"
     if [ -n "$api_key_param" ]; then
         url="${url}${api_key_param}${api_key}"
     fi
-    
+
     # Test connection
     local http_code=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 --max-time 10 "$url" 2>/dev/null || echo "000")
-    
+
     if [ "$http_code" = "200" ] || [ "$http_code" = "201" ]; then
         log_color "$GREEN" "✓ ${service_name}: Connected (HTTP ${http_code})"
         return 0
@@ -115,32 +70,32 @@ test_api_header() {
     local base_url=$3
     local api_path=$4
     local header_name=$5
-    
+
     # Read API key
     if [ ! -f "${SECRETS_DIR}/${api_key_file}" ]; then
         log_color "$RED" "✗ ${service_name}: Missing API key file"
         return 1
     fi
-    
+
     local api_key=$(cat "${SECRETS_DIR}/${api_key_file}" | tr -d '\n\r ')
-    
+
     if [ -z "$api_key" ]; then
         log_color "$RED" "✗ ${service_name}: Empty API key"
         return 1
     fi
-    
+
     # Build URL
     local url="${base_url}${api_path}"
-    
+
     # Determine if HTTPS (for self-signed certificates, use -k flag)
     local curl_opts=""
     if [[ "$base_url" == https://* ]]; then
         curl_opts="-k"  # Skip SSL certificate verification for self-signed certs
     fi
-    
+
     # Test connection with header
     local http_code=$(curl -s $curl_opts -o /dev/null -w "%{http_code}" -H "${header_name}: ${api_key}" --connect-timeout 5 --max-time 10 "$url" 2>/dev/null || echo "000")
-    
+
     if [ "$http_code" = "200" ] || [ "$http_code" = "201" ]; then
         log_color "$GREEN" "✓ ${service_name}: Connected (HTTP ${http_code})"
         return 0
@@ -151,9 +106,6 @@ test_api_header() {
 }
 
 # Test each service
-PASSED=0
-FAILED=0
-
 log ""
 log_color "$YELLOW" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 log_color "$YELLOW" "MEDIA SERVICES:"
@@ -194,8 +146,8 @@ else
     ((FAILED++))
 fi
 
-# Overseerr
-if test_api "Overseerr" "overseerr_api_key.txt" "http://${HOST}:${OVERSEERR_PORT:-5055}" "/api/v1/status" ""; then
+# Seerr
+if test_api_header "Seerr" "seerr_api_key.txt" "http://${HOST}:${SEERR_PORT:-5055}" "/api/v1/status" "X-Api-Key"; then
     ((PASSED++))
 else
     ((FAILED++))
@@ -248,15 +200,5 @@ if [ $FAILED -gt 0 ]; then
 fi
 log_color "$YELLOW" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Cleanup function
-cleanup() {
-    local final_exit_code=0
-    if [ $FAILED -gt 0 ]; then
-        final_exit_code=1
-    fi
-    log "=== Script Complete (Exit Code: $final_exit_code) ==="
-    exit $final_exit_code
-}
-
-trap cleanup EXIT
-
+# Exit with failure if any tests failed
+[ $FAILED -gt 0 ] && exit 1

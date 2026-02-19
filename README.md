@@ -40,8 +40,8 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Subtitle Management</td>
     </tr>
     <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/overseerr.png" width="32" height="32" alt="Overseerr"></td>
-      <td><b><a href="https://github.com/sct/overseerr">Overseerr</a></b></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/overseerr.png" width="32" height="32" alt="Seerr"></td>
+      <td><b><a href="https://github.com/seerr-team/seerr">Seerr</a></b></td>
       <td>Media Request & Discovery</td>
     </tr>
     <tr>
@@ -183,15 +183,15 @@ This centralized approach ensures consistent configuration management across the
 
 ## 🧰 Scripts (for reference only)
 
-Common operations (see `scripts/README.md` for full details):
+All scripts share common boilerplate via `scripts/_common.sh` (logging, error handling, environment sourcing). See `scripts/README.md` for full details.
 
 ```bash
 ./scripts/compose-up.sh      # Start all services
 ./scripts/compose-down.sh    # Stop all services
-./scripts/compose-refresh.sh # Restart with prune
-./scripts/docker-rebuild.sh  # Pull latest images and prune
+./scripts/compose-refresh.sh # Stop and start (delegates to down + up)
+./scripts/docker-rebuild.sh  # Pull latest images and recreate containers
 ./scripts/system-verify.sh   # Validate config & environment
-./scripts/test-api-connectivity.sh # Verify API connectivity to all services (logs to logs/test-api-connectivity.log)
+./scripts/test-api-connectivity.sh # Verify API connectivity to all services
 ```
 
 ## 🧩 Architecture & Compose Includes
@@ -224,7 +224,7 @@ The storage layout follows a hierarchical structure with clear separation betwee
 
 /etc/HELIOS/                  # Centralized configuration root
 ├── config/                   # Service configuration directories
-│   ├── overseerr/           # Overseerr configuration
+│   ├── seerr/               # Seerr configuration
 │   ├── radarr/              # Radarr configuration
 │   ├── sonarr/              # Sonarr configuration
 │   ├── bazarr/              # Bazarr configuration

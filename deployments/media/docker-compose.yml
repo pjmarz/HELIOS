@@ -7,7 +7,7 @@
 # - Download clients (SABnzbd)
 # - Subtitle management (Bazarr)
 # - Indexers (Prowlarr)
-# - Request management (Overseerr)
+# - Request management (Seerr)
 # - Media processing (Plex Auto Languages)
 # ===========================================================================
 
@@ -24,19 +24,21 @@ x-common: &common-settings
     UMASK: ${UMASK} # Controls default file permissions
 
 services:
-  # ==== OVERSEERR ====
-  # Media request and discovery platform that integrates with Plex
-  # Web UI for users to request content which is then processed by Radarr/Sonarr
-  overseerr:
+  # ==== SEERR ====
+  # Unified media request and discovery platform (successor to Overseerr)
+  # Supports Plex, Jellyfin, and Emby with Sonarr/Radarr integration
+  seerr:
     <<: *common-settings
-    image: lscr.io/linuxserver/overseerr:latest
-    container_name: overseerr
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
     environment:
       <<: *common-env
+      LOG_LEVEL: ${LOG_LEVEL:-debug}
     volumes:
-      - ${CONFIG_DIR}/overseerr:/config # Persistent configuration storage
+      - ${CONFIG_DIR}/seerr:/app/config # Persistent configuration storage
     ports:
-      - ${OVERSEERR_PORT}:5055 # Web UI access port
+      - ${SEERR_PORT}:5055 # Web UI access port
 
   # ==== RADARR ====
   # Movie collection manager that works with various download clients
