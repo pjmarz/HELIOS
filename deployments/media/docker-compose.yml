@@ -102,6 +102,21 @@ services:
     volumes:
       - ${CONFIG_DIR}/prowlarr:/config # Persistent configuration storage
 
+
+  # ==== RECYCLARR ====
+  # Automatically syncs TRaSH Guide custom formats and quality profiles
+  # Currently in manual mode — use `${COMPOSE_CMD} run --rm recyclarr sync` to trigger
+  recyclarr:
+    <<: *common-settings
+    image: ghcr.io/recyclarr/recyclarr:8
+    container_name: recyclarr
+    user: ${PUID}:${PGID}
+    environment:
+      <<: *common-env
+      CRON_SCHEDULE: "@weekly" # Syncs TRaSH Guide custom formats every Sunday at midnight
+    volumes:
+      - ${CONFIG_DIR}/recyclarr:/config # Persistent configuration storage
+
   # ==== SABNZBD ====
   # Usenet binary downloader with extensive post-processing capabilities
   # Automatically processes downloads and passes to Radarr/Sonarr
@@ -144,17 +159,29 @@ services:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex-helios
     ports:
-      - "32400:32400" # Standard Plex port
+      - "32400:32400/tcp" # Primary Plex web access and streaming
+      - "1900:1900/udp" # DLNA discovery
+      - "3005:3005/tcp" # Plex Companion
+      - "5353:5353/udp" # Bonjour/Avahi network discovery
+      - "8324:8324/tcp" # Roku via Plex Companion
+      - "32410:32410/udp" # GDM network discovery
+      - "32412:32412/udp" # GDM network discovery
+      - "32413:32413/udp" # GDM network discovery
+      - "32414:32414/udp" # GDM network discovery
+      - "32469:32469/tcp" # DLNA server
     environment:
       <<: *common-env
       VERSION: docker
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+      # Treat all RFC1918 subnets as LAN (prevents Docker bridge traffic from being treated as remote)
+      PLEX_ALLOWED_NETWORKS: "172.16.0.0/12,192.168.0.0/16,10.0.0.0/8"
     volumes:
       - ${PLEX_CONFIG}:/config # Persistent configuration storage
       - ${MOVIES_DIR}:/movies # Mount point for movies library
       - ${TV_DIR}:/tv # Mount point for TV shows library
-      - ${PLEX_TRANSCODE}:/transcode # Temporary transcoding directory
+      - plex_transcode:/transcode # RAM-backed tmpfs for faster transcoding
+      - plex_downloads:/downloads # Disk-backed persistent storage for download staging
     deploy:
       resources:
         reservations:
@@ -162,3 +189,16 @@ services:
             - driver: nvidia # NVIDIA GPU acceleration for transcoding
               count: 1
               capabilities: [ gpu ]
+
+# Persistent volumes for media services
+volumes:
+  plex_transcode:
+    # RAM-backed temporary storage for Plex transcoding
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=16g
+  plex_downloads:
+    # Disk-backed persistent storage for Plex download staging
+    driver: local

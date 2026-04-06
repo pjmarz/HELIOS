@@ -5,6 +5,39 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.18.0] - 2026-04-06
+
+### Added
+- **Recyclarr Re-added**: Restored Recyclarr service (removed in v1.9.0) for automated TRaSH Guide custom format and quality profile syncing
+  - Image: `ghcr.io/recyclarr/recyclarr:8`
+  - Runs on `@weekly` cron schedule (Sunday midnight)
+  - Config persisted at `${CONFIG_DIR}/recyclarr`
+- **Plex Network Discovery Ports**: Expanded Plex port bindings to enable DLNA, GDM, and Companion features
+  - DLNA: 1900/udp, 32469/tcp
+  - GDM network discovery: 32410–32414/udp
+  - Plex Companion / Roku: 3005/tcp, 8324/tcp
+  - Bonjour/Avahi: 5353/udp
+- **`PLEX_ALLOWED_NETWORKS`**: Added env var treating all RFC1918 subnets as LAN (`172.16.0.0/12`, `192.168.0.0/16`, `10.0.0.0/8`) — prevents Docker bridge traffic from being classified as remote/relay
+
+### Changed
+- **Plex Transcode Volume**: Replaced `${PLEX_TRANSCODE}` bind mount with an inline-defined `plex_transcode` tmpfs volume (16 GB, RAM-backed) for faster transcoding and automatic cleanup on container stop
+- **`plex_downloads` Volume**: Added disk-backed Docker volume for Plex download staging (`/downloads` inside container)
+- **`docker-rebuild.sh` — Full Rewrite (non-destructive safe mode)**:
+  - Never runs `docker compose down` — only `pull` + `up --remove-orphans`; containers with unchanged images are left running
+  - CLI flags: `--project-dir DIR`, `--skip-prune`, `--skip-health-check`, `--dry-run`
+  - `--project-dir` makes the script reusable for VENUS or any project following the same conventions
+  - NVIDIA CDI spec regeneration (`nvidia-ctk cdi generate`) to handle stale library paths after driver updates
+  - `up` retries up to 3 times (15s delay) to handle transient D-state container failures
+  - `jq`-based post-update health check: detects unhealthy/restarting/exited containers with severity assessment
+  - Structured exit codes: `0` = all healthy, `1` = partial failure, `2` = complete failure
+  - Plex internal update check: compares running version against PlexPass/public channel, restarts container if behind
+  - `COMPOSE_HTTP_TIMEOUT=120` to prevent SIGKILL on NVENC session cleanup during GPU container stops
+
+### Removed
+- **`fstrim` from `media-clean.sh`**: Removed `fstrim -v /mnt/usenet` — ZFS on thin-provisioned storage does not benefit from fstrim
+
+---
+
 ## [1.17.0] - 2026-02-18
 
 ### Changed
