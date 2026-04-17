@@ -616,7 +616,7 @@
                             <i class="bi bi-shield-check text-white"></i>
                         </div>
                         <h5>Secure & Automated</h5>
-                        <p class="text-muted small">Docker Secrets, Cloudflare tunnels, and GPU-accelerated transcoding
+                        <p class="text-muted small">Docker Secrets and GPU-accelerated transcoding
                             in a containerized environment.</p>
                     </div>
                 </div>
@@ -649,8 +649,6 @@
                                 style="color: var(--helios-color);"></i>GPU-accelerated Plex transcoding</li>
                         <li class="mb-2"><i class="bi bi-check-circle me-2"
                                 style="color: var(--helios-color);"></i>Docker Secrets for credentials</li>
-                        <li class="mb-2"><i class="bi bi-check-circle me-2"
-                                style="color: var(--helios-color);"></i>Cloudflare tunnel remote access</li>
                         <li class="mb-2"><i class="bi bi-check-circle me-2"
                                 style="color: var(--helios-color);"></i>Centralized config at /etc/HELIOS</li>
                     </ul>
@@ -688,6 +686,7 @@
                                         <span class="arch-service-tag">Bazarr</span>
                                         <span class="arch-service-tag">SABnzbd</span>
                                         <span class="arch-service-tag">Prowlarr</span>
+                                        <span class="arch-service-tag">Recyclarr</span>
                                         <span class="arch-service-tag">Seerr</span>
                                     </div>
                                 </div>
@@ -746,6 +745,14 @@
                             <div>
                                 <strong>Prowlarr</strong>
                                 <small class="d-block text-muted">Indexer Management</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/recyclarr.png"
+                                class="component-icon me-3" alt="Recyclarr">
+                            <div>
+                                <strong>Recyclarr</strong>
+                                <small class="d-block text-muted">TRaSH Guide Sync</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-center mb-3">
@@ -832,14 +839,6 @@
                             <div>
                                 <strong>Docker</strong>
                                 <small class="d-block text-muted">Container Orchestration</small>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png"
-                                class="component-icon me-3" alt="Cloudflared">
-                            <div>
-                                <strong>Cloudflared</strong>
-                                <small class="d-block text-muted">Secure Remote Access</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-center">
@@ -1026,7 +1025,7 @@
                     <div class="card skill-card h-100">
                         <i class="bi bi-shield-lock skill-icon" style="color: var(--accent-color);"></i>
                         <h6>Security</h6>
-                        <p class="small text-muted mb-0">Docker Secrets, Cloudflare tunnels</p>
+                        <p class="small text-muted mb-0">Docker Secrets, isolated networks</p>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
