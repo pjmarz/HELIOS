@@ -6,7 +6,7 @@
 
 ---
 
-> Note: This repository is a showcase of the HELIOS architecture and user experience. It is not a turnkey deployment and is not intended to be cloned or run as-is.
+> Note: This repository is a portfolio project demonstrating the HELIOS architecture and user experience. It is not a turnkey deployment and is not intended to be cloned or run as-is.
 
 ## 🎯 Project Overview
 
@@ -24,7 +24,7 @@ HELIOS is a self-hosted media management and server administration system built 
   </thead>
   <tbody>
     <tr>
-      <td rowspan="8"><b>🎬 Media Management</b></td>
+      <td rowspan="9"><b>🎬 Media Management</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="32" height="32" alt="Radarr"></td>
       <td><b><a href="https://github.com/Radarr/Radarr">Radarr</a></b></td>
       <td>Movie Collection & Downloads</td>
@@ -48,6 +48,11 @@ HELIOS is a self-hosted media management and server administration system built 
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prowlarr.png" width="32" height="32" alt="Prowlarr"></td>
       <td><b><a href="https://github.com/Prowlarr/Prowlarr">Prowlarr</a></b></td>
       <td>Indexer Management</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/recyclarr.png" width="32" height="32" alt="Recyclarr"></td>
+      <td><b><a href="https://github.com/recyclarr/recyclarr">Recyclarr</a></b></td>
+      <td>TRaSH Guide Sync</td>
     </tr>
     <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png" width="32" height="32" alt="SABnzbd"></td>
@@ -86,7 +91,7 @@ HELIOS is a self-hosted media management and server administration system built 
       <td>Proxy & Anti-Bot Protection</td>
     </tr>
     <tr>
-      <td rowspan="3"><b>🔧 Infrastructure</b></td>
+      <td rowspan="2"><b>🔧 Infrastructure</b></td>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png" width="32" height="32" alt="Proxmox"></td>
       <td><b><a href="https://www.proxmox.com/en/products/proxmox-virtual-environment/overview">Proxmox VE</a></b></td>
       <td>Virtualization Platform</td>
@@ -95,11 +100,6 @@ HELIOS is a self-hosted media management and server administration system built 
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png" width="36" height="24" alt="Docker"></td>
       <td><b><a href="https://www.docker.com/">Docker</a></b></td>
       <td>Containerization Platform</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/cloudflare.png" width="46" height="24" alt="Cloudflared"></td>
-      <td><b><a href="https://github.com/cloudflare/cloudflared">Cloudflared</a></b></td>
-      <td>Secure Remote Access</td>
     </tr>
   </tbody>
 </table>
@@ -198,7 +198,7 @@ All scripts share common boilerplate via `scripts/_common.sh` (logging, error ha
 
 - Single project name: `helios`
 - Optimized 3-network architecture:
-  - `helios_proxy`: External access network (Homarr, FlareSolverr)
+  - `helios_proxy`: External access network (Homarr, FlareSolverr, Tautulli)
   - `helios_console_agent_network`: Management isolation (Portainer)
   - `helios_default`: Main application network (all media services)
 - Secrets stored in `/etc/HELIOS/secrets/` (centralized location, symlinked from project root)
@@ -238,8 +238,6 @@ The storage layout follows a hierarchical structure with clear separation betwee
 │       ├── config/          # Homarr config files
 │       └── imgs/            # Custom images/icons
 └── secrets/                  # Docker Secrets (symlinked from project root)
-
-/tmp/plex-transcode/          # Temporary Plex transcoding directory (RAM/SSD)
 ```
 
 ### Media Library Structure
@@ -270,13 +268,8 @@ Persistent data for services that require Docker-managed storage:
 
 - **`helios_portainer_data`**: Portainer settings, configurations, and management data
 - **`helios_homarr_data`**: Homarr dashboard data and application state
-
-### Temporary Storage
-
-- **Plex Transcode Directory** (`/tmp/plex-transcode`):
-  - Temporary storage for Plex transcoding operations
-  - Typically mounted to fast storage (SSD) or RAM for optimal performance
-  - Automatically cleaned by Plex after transcoding completes
+- **`plex_transcode`**: Inline `tmpfs` volume (16 GB, RAM-backed) used by Plex for transcoding — automatically cleaned on container stop
+- **`plex_downloads`**: Disk-backed volume for Plex download staging (`/downloads` inside the container)
 
 ### File Ownership & Permissions
 

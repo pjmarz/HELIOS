@@ -5,6 +5,15 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.18.1] - 2026-04-17
+
+### Added
+- `LICENSE` file (MIT).
+
+### Docs
+- **README sync with v1.17/v1.18**: added Recyclarr row to Media Management, removed Cloudflared (migrated to a separate Raspberry Pi and no longer part of HELIOS), replaced "showcase" wording with "portfolio project", updated storage docs to reflect the inline `plex_transcode` tmpfs volume, and added Tautulli to the `helios_proxy` network description.
+- **CHANGELOG cleanup**: fixed chronological ordering of v1.11.2 and v1.12.0, reparented the orphaned API-connectivity entries under v1.11.2, and restored inline-code backticks that had been stripped from v1.12.0 entries.
+
 ## [1.18.0] - 2026-04-06
 
 ### Added
@@ -216,32 +225,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced project structure for better developer experience
   - Improved documentation organization
 
-## [1.11.2] - 2025-10-30
-
 ## [1.12.0] - 2025-11-08
 
 ### Added
 - **direnv Integration**: Automatic environment variable loading
-  - Added  file for automatic  and  loading
-  - Configured direnv hook in  for seamless environment isolation
+  - Added `.envrc` file for automatic `.env` and `env.sh` loading
+  - Configured direnv hook in shell rc for seamless environment isolation
   - Environment variables automatically load when entering project directory
-  - Enhanced script reliability with explicit  sourcing for non-interactive execution
+  - Enhanced script reliability with explicit `env.sh` sourcing for non-interactive execution
 
 ### Changed
 - **Container Naming**: Updated Plex container name for clarity
-  - Changed  to 
-  - Updated container-to-container URL references ()
+  - Changed `plex` to `plex-helios`
+  - Updated container-to-container URL references (`http://plex-helios:32400`)
   - Improved container identification and conflict prevention
-  - Maintained service name () for docker compose commands
+  - Maintained service name (`plex`) for docker compose commands
 
 - **Configuration Ownership**: Standardized to LinuxServer.io best practices
-  - Updated  ownership to  (matches container user)
-  - Standardized permissions to  across all config directories
+  - Updated `/etc/HELIOS/config` ownership to `1000:984` (matches container user)
+  - Standardized permissions to `755` across all config directories
   - Ensures consistent ownership for container-created files
   - Aligns with Docker ecosystem standards
 
-- **Environment Configuration**: Enhanced  for better reliability
-  - Updated to use absolute path  for clarity
+- **Environment Configuration**: Enhanced `env.sh` for better reliability
+  - Updated to use absolute path `/etc/HELIOS/env.sh` for clarity
   - Maintains backward compatibility with symlink structure
   - Improved environment variable loading consistency
 
@@ -252,6 +259,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced script reliability for cron and non-interactive execution
   - Maintained backward compatibility with existing workflows
 
+## [1.11.2] - 2025-10-30
 
 ### Added
 - API Connectivity Test Script:
