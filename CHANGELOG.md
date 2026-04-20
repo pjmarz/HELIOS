@@ -5,6 +5,12 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0] - 2026-04-19
+
+### Docs
+- **README restructure**: shifted the README from deployment guide to portfolio narrative. Removed Prerequisites, Secrets setup recipe, Quickstart, and Scripts cheat-sheet (repo is not meant to be cloned). Added "How It Fits Together" service-flow section describing the request → download → import → stream pipeline, and "What's in the Repo" framing `_common.sh`, `docker-rebuild.sh`, `system-verify.sh`, and `test-api-connectivity.sh` as engineering artifacts. Folded Implementation Details, System Architecture, and Maintenance grab-bag sections into a tighter Architecture Notes block. Trimmed the Storage Configuration prose that repeated information already in the directory tree.
+- Removed stale "Secure remote access through Cloudflare tunnels" reference that survived the v1.18.1/v1.18.2 sync passes.
+
 ## [1.18.2] - 2026-04-17
 
 ### Docs
