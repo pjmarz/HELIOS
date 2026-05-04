@@ -24,6 +24,21 @@ x-common: &common-settings
     UMASK: ${UMASK} # Controls default file permissions
 
 services:
+  # ==== WIZARR ====
+  # User invitation and onboarding portal for Plex (and future Jellyfin/Emby)
+  # Self-serve invite links with expiry, one-time use, library-tier access, and OIDC SSO
+  wizarr:
+    <<: *common-settings
+    image: ghcr.io/wizarrrr/wizarr:latest
+    container_name: wizarr
+    environment:
+      <<: *common-env
+      DISABLE_BUILTIN_AUTH: "false" # Built-in auth on; set "true" only when fronting with OIDC
+    volumes:
+      - ${CONFIG_DIR}/wizarr:/data # SQLite DB + config (single mount, ships in-image)
+    ports:
+      - ${WIZARR_PORT}:5690 # Web UI access port
+
   # ==== SEERR ====
   # Unified media request and discovery platform (successor to Overseerr)
   # Supports Plex, Jellyfin, and Emby with Sonarr/Radarr integration

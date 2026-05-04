@@ -26,7 +26,12 @@ This repository showcases the architecture and engineering around that system: m
   </thead>
   <tbody>
     <tr>
-      <td rowspan="9"><b>🎬 Media Management</b></td>
+      <td rowspan="10"><b>🎬 Media Management</b></td>
+      <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/wizarr.png" width="32" height="32" alt="Wizarr"></td>
+      <td><b><a href="https://github.com/wizarrrr/wizarr">Wizarr</a></b></td>
+      <td>User Invitation & Onboarding</td>
+    </tr>
+    <tr>
       <td align="center"><img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png" width="32" height="32" alt="Radarr"></td>
       <td><b><a href="https://github.com/Radarr/Radarr">Radarr</a></b></td>
       <td>Movie Collection & Downloads</td>
@@ -108,16 +113,17 @@ This repository showcases the architecture and engineering around that system: m
 
 ## 🔄 How It Fits Together
 
-The media stack forms a request-to-streaming pipeline:
+The media stack forms an invite-to-streaming pipeline:
 
-1. **Seerr** — users browse and request content. Requests are routed to Radarr (movies) or Sonarr (TV).
-2. **Prowlarr** — centralized indexer manager. Feeds indexers and API keys into Sonarr and Radarr so each *arr doesn't maintain its own.
-3. **Radarr / Sonarr** — monitor requests, search Prowlarr-fed indexers, hand releases to SABnzbd, then import and rename finished files into the media libraries.
-4. **SABnzbd** — Usenet client. Downloads into `/mnt/usenet/incomplete/`, moves to `/mnt/usenet/complete/` on success for *arr post-processing.
-5. **Recyclarr** — runs weekly (`@weekly` cron). Syncs TRaSH Guide custom formats and quality profiles into Sonarr/Radarr so their release scoring stays current without manual tuning.
-6. **Bazarr** — watches Sonarr/Radarr for imports, pulls subtitles from configured providers, writes them alongside the media files.
-7. **Plex** — serves the finished libraries at `/mnt/media/movies` and `/mnt/media/tv`. Transcodes via NVIDIA GPU when clients can't direct-play.
-8. **Plex Auto Languages** — watches Plex sessions and auto-sets audio and subtitle preferences per user based on their configured language.
+1. **Wizarr** — admins generate self-serve invite links with optional expiry, one-time use, and library-tier access. Invitees click the link, sign in via Plex OAuth, and walk through a multi-step onboarding wizard that hands them off to Seerr and surfaces server-status channels. Wizarr auto-adds the user as a Plex friend in the background — no manual invite handling.
+2. **Seerr** — users browse and request content. Requests are routed to Radarr (movies) or Sonarr (TV). New Plex sign-ins are auto-imported with default permissions.
+3. **Prowlarr** — centralized indexer manager. Feeds indexers and API keys into Sonarr and Radarr so each *arr doesn't maintain its own.
+4. **Radarr / Sonarr** — monitor requests, search Prowlarr-fed indexers, hand releases to SABnzbd, then import and rename finished files into the media libraries.
+5. **SABnzbd** — Usenet client. Downloads into `/mnt/usenet/incomplete/`, moves to `/mnt/usenet/complete/` on success for *arr post-processing.
+6. **Recyclarr** — runs weekly (`@weekly` cron). Syncs TRaSH Guide custom formats and quality profiles into Sonarr/Radarr so their release scoring stays current without manual tuning.
+7. **Bazarr** — watches Sonarr/Radarr for imports, pulls subtitles from configured providers, writes them alongside the media files.
+8. **Plex** — serves the finished libraries at `/mnt/media/movies` and `/mnt/media/tv`. Transcodes via NVIDIA GPU when clients can't direct-play.
+9. **Plex Auto Languages** — watches Plex sessions and auto-sets audio and subtitle preferences per user based on their configured language.
 
 Operational services run alongside the pipeline:
 
@@ -164,6 +170,7 @@ All scripts log dual-output to console and `logs/<script>.log`.
 
 /etc/HELIOS/                  # Centralized configuration root
 ├── config/                   # Service configuration directories
+│   ├── wizarr/               # Wizarr configuration (SQLite DB + onboarding state)
 │   ├── seerr/                # Seerr configuration
 │   ├── radarr/               # Radarr configuration
 │   ├── sonarr/               # Sonarr configuration

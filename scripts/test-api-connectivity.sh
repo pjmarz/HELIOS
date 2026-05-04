@@ -153,6 +153,13 @@ else
     ((FAILED++))
 fi
 
+# Wizarr
+if test_api_header "Wizarr" "wizarr_api_key.txt" "http://${HOST}:${WIZARR_PORT:-5690}" "/api/users" "X-API-Key"; then
+    ((PASSED++))
+else
+    ((FAILED++))
+fi
+
 log ""
 log_color "$YELLOW" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 log_color "$YELLOW" "CONSOLE SERVICES:"

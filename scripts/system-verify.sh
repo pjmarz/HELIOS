@@ -99,6 +99,7 @@ check_var "SONARR_PORT"
 check_var "BAZARR_PORT"
 check_var "PROWLARR_PORT"
 check_var "SABNZBD_PORT"
+check_var "WIZARR_PORT"
 
 # Check logging
 check_var "LOG_LEVEL"
@@ -226,6 +227,7 @@ SONARR_PORT=${SONARR_PORT}
 BAZARR_PORT=${BAZARR_PORT}
 PROWLARR_PORT=${PROWLARR_PORT}
 SABNZBD_PORT=${SABNZBD_PORT}
+WIZARR_PORT=${WIZARR_PORT}
 
 # Plex Configuration
 PLEX_URL=${PLEX_URL}
@@ -490,6 +492,7 @@ check_service_health "seerr" "$SEERR_PORT"
 check_service_health "radarr" "$RADARR_PORT"
 check_service_health "sonarr" "$SONARR_PORT"
 check_service_health "sabnzbd" "$SABNZBD_PORT"
+check_service_health "wizarr" "$WIZARR_PORT"
 
 # Container Resource Usage Check
 log_color "$YELLOW" "Checking Docker system resource usage..."
@@ -510,7 +513,7 @@ log_color "$YELLOW" "Checking security and configuration best practices..."
 
 # Check for Docker socket exposure in compose files
 log_color "$YELLOW" "Checking for Docker socket exposure..."
-DOCKER_SOCKET_MOUNTS=$(grep -r "/var/run/docker.sock" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | wc -l)
+DOCKER_SOCKET_MOUNTS=$({ grep -r "/var/run/docker.sock" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null || true; } | wc -l)
 if [ "$DOCKER_SOCKET_MOUNTS" -gt 0 ]; then
     log_color "$YELLOW" "⚠ Docker socket is mounted in $DOCKER_SOCKET_MOUNTS service(s)"
     log_color "$YELLOW" "  This provides elevated privileges - ensure services are from trusted sources"
@@ -526,7 +529,7 @@ fi
 
 # Check for privileged containers
 log_color "$YELLOW" "Checking for privileged containers..."
-PRIVILEGED_CONTAINERS=$(grep -r "privileged.*true" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | wc -l)
+PRIVILEGED_CONTAINERS=$({ grep -r "privileged.*true" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null || true; } | wc -l)
 if [ "$PRIVILEGED_CONTAINERS" -gt 0 ]; then
     log_color "$YELLOW" "⚠ Found $PRIVILEGED_CONTAINERS privileged container(s)"
     log_color "$YELLOW" "  Privileged containers have elevated security risks"
@@ -536,7 +539,7 @@ fi
 
 # Check for host network mode
 log_color "$YELLOW" "Checking for host network mode usage..."
-HOST_NETWORK_USAGE=$(grep -r "network_mode.*host" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | wc -l)
+HOST_NETWORK_USAGE=$({ grep -r "network_mode.*host" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null || true; } | wc -l)
 if [ "$HOST_NETWORK_USAGE" -gt 0 ]; then
     log_color "$YELLOW" "⚠ Found $HOST_NETWORK_USAGE service(s) using host network mode"
     log_color "$YELLOW" "  Host network mode reduces container isolation"
@@ -546,7 +549,7 @@ fi
 
 # Check for plaintext sensitive data in compose files
 log_color "$YELLOW" "Checking for potential plaintext sensitive data..."
-POTENTIAL_SECRETS=$(grep -ri "password\|token\|secret\|key" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null | grep -v "secrets:" | grep -v "_FILE" | wc -l)
+POTENTIAL_SECRETS=$({ grep -ri "password\|token\|secret\|key" "${HELIOS_ROOT}/deployments/" "${HELIOS_ROOT}/docker-compose.yml" 2>/dev/null || true; } | { grep -v "secrets:" || true; } | { grep -v "_FILE" || true; } | wc -l)
 if [ "$POTENTIAL_SECRETS" -gt 5 ]; then  # Allow some normal configuration references
     log_color "$YELLOW" "⚠ Found $POTENTIAL_SECRETS potential sensitive data references"
     log_color "$YELLOW" "  Review compose files to ensure secrets use Docker Secrets or _FILE variables"
@@ -556,7 +559,7 @@ fi
 
 # Check for missing restart policies
 log_color "$YELLOW" "Checking service restart policies..."
-NO_RESTART_SERVICES=$(grep -A 20 "services:" "${HELIOS_ROOT}/deployments/"*/docker-compose.yml 2>/dev/null | grep -B 15 -A 5 "image:" | grep -B 10 -A 10 "container_name" | grep -L "restart:" | wc -l)
+NO_RESTART_SERVICES=$({ grep -A 20 "services:" "${HELIOS_ROOT}/deployments/"*/docker-compose.yml 2>/dev/null || true; } | { grep -B 15 -A 5 "image:" || true; } | { grep -B 10 -A 10 "container_name" || true; } | { grep -L "restart:" || true; } | wc -l)
 if [ "$NO_RESTART_SERVICES" -gt 0 ]; then
     log_color "$YELLOW" "⚠ Some services may not have restart policies defined"
     log_color "$YELLOW" "  Services without restart policies won't auto-recover from failures"

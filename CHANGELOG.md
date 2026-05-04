@@ -5,6 +5,25 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.0] - 2026-05-04
+
+### Added
+- **Wizarr Integration**: Added Wizarr as the user invitation and onboarding portal for the Plex stack
+  - Image: `ghcr.io/wizarrrr/wizarr:latest` (v2026.4.0, MIT)
+  - Slotted into `deployments/media/docker-compose.yml` above Seerr so the media compose owns the full invite → request → streaming pipeline
+  - Inherits the existing `x-common` / `x-common-env` anchor pattern (PUID/PGID/TZ/UMASK + `restart: unless-stopped`); single `/data` mount at `${CONFIG_DIR}/wizarr` (SQLite DB ships in-image, no external Postgres required)
+  - New env var `WIZARR_PORT=5690` in `env.sh`; wired into the `.env` heredoc, the `check_var` port-check list, and the `check_service_health` running-service check in `scripts/system-verify.sh`
+  - New API probe in `scripts/test-api-connectivity.sh` using the existing `test_api_header` helper against `/api/users` with the `X-API-Key` header (mirrors the Seerr probe pattern)
+  - Wizard configured: 1 Before-invite step (`Welcome to {{ server_name }}`) and 8 After-invite steps (Initial Onboard, Download Plex Clients, Seerr, WhatsApp Channel, Plex Docs, Plex Pass, Disclaimer with `Require User Interaction` gate, That's it!), each using Wizarr's `{{ widget:button url="..." text="..." }}` shortcode for CTAs
+  - Discord widget integration via `discord_id` setting; auto-renders a join-our-Discord card during onboarding using Discord's widget API (no manual never-expiring invitation required)
+
+### Fixed
+- **`system-verify.sh` security-check pipefail bug**: 5 of the security/best-practices `grep | wc -l` patterns aborted the script with exit 1 when zero matches were found, since `_common.sh` enables `set -euo pipefail` and `pipefail` propagated `grep`'s no-match exit code through the pipe. Latent since v1.18.0 when Plex switched off `network_mode: host`, eliminating the only match for the host-network check. Wrapped each `grep` in `{ ... || true; }` so a no-match condition returns 0 and `wc -l` still produces a valid count. Applied to docker-socket, privileged-container, host-network, plaintext-secrets, and missing-restart-policy checks for consistency.
+
+### Docs
+- README updated: Wizarr added to the Media Management table; pipeline narrative renamed from "request-to-streaming" to "invite-to-streaming" with Wizarr inserted as step 1 and subsequent steps renumbered; `wizarr/` added to the `/etc/HELIOS/config/` directory tree.
+- `docs/index.html` synced with current stack: Wizarr added to the Media Stack architecture diagram, the Media Management component card (with `User Invitation & Onboarding` caption), and the Example Deployment grid (port `:5690`).
+
 ## [1.19.0] - 2026-04-19
 
 ### Docs
