@@ -33,8 +33,6 @@ networks:
 secrets:
   plex_token:
     file: ./secrets/plex_token.txt
-  homarr_encryption_key:
-    file: ./secrets/homarr_encryption_key.txt
 
 # Define shared volumes used across deployments
 volumes:

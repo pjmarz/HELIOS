@@ -5,6 +5,14 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.1] - 2026-05-05
+
+### Changed
+- Removed the unused `homarr_encryption_key` declaration from the root `docker-compose.yml` `secrets:` block. The entry was vestigial — no service referenced it via `secrets: [...]` because Homarr 1.0+ consumes the encryption key as the `SECRET_ENCRYPTION_KEY` env var (interpolated from `${HOMARR_ENCRYPTION_KEY}` in the generated `.env`), not as a mounted file secret. Validated with `docker compose config --quiet` and a `--force-recreate` of the homarr service; web UI returns HTTP 200 on `:7575` with `SECRET_ENCRYPTION_KEY` still populated.
+
+### Fixed
+- **Portainer login-page Mars logo**: Portainer's `LogoURL` was pointing at `https://pngimg.com/d/mars_planet_PNG29.png`, which silently rotted — the path now returns `Content-Type: text/html` instead of `image/png`, so the browser rendered nothing in place of the logo. Repointed via `PUT /api/settings` to a wallpapers.com Mars PNG that still serves a valid `image/png`. Note: `LogoURL` lives in Portainer's BoltDB inside the `helios_portainer_data` volume, not in any repo file — recording here for posterity in case the new third-party host rotates the asset again.
+
 ## [1.20.0] - 2026-05-04
 
 ### Added
