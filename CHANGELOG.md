@@ -5,6 +5,21 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.2] - 2026-06-07
+
+### Security
+- **Dropped `privileged: true` from Homarr and Portainer.** Both containers run as root and reach the Docker socket through the bind mount directly, so privileged mode was never required. Portainer continues to drive Docker through the agent (`-H tcp://agent:9001`). Verified post-change: Homarr's container-discovery cron runs and the Portainer HTTPS API returns 200 — neither management path regressed. A read-scoped socket proxy is the recommended next hardening step.
+- **Rotated the Homarr `SECRET_ENCRYPTION_KEY`.** The previous value had been committed to git history in the initial public commit; it has been replaced with a freshly generated 64-hex key (living only in the git-ignored `secrets/homarr_encryption_key.txt` and the generated `.env`), and integrations were re-authenticated against the new key.
+
+### Fixed
+- **`test-api-connectivity.sh` reported failure on full success.** The trailing `[ $FAILED -gt 0 ] && exit 1` made the bracket test's own non-zero status the script's exit code whenever `FAILED=0`, so an all-green run (11/11) still exited `1` — breaking any automation keying off the exit code. Added an explicit `exit 0` success path.
+- **Recyclarr compose comment corrected.** It described "manual mode," but `CRON_SCHEDULE: "@weekly"` + `restart: unless-stopped` runs the container as a weekly cron daemon; comment now matches behavior.
+
+### Docs
+- `scripts/README.md`: rewrote the `docker-rebuild.sh` row to reflect its non-destructive behavior (pull → recreate only changed containers → prune dangling images only), rather than the inaccurate "prunes unused images, containers, and networks."
+- `README.md`: corrected the Homarr Docker-socket note (runs as root with no privileged flag; socket proxy suggested as the next step).
+- `.gitignore`: broadened `*.bak` to also match timestamped `*.bak*` backups.
+
 ## [1.20.1] - 2026-05-05
 
 ### Changed

@@ -21,7 +21,7 @@ Scripts follow a consistent prefix-based naming pattern:
 | `compose-up.sh` | Starts all Docker Compose services using the root docker-compose.yml |
 | `compose-down.sh` | Stops all Docker Compose services and prunes stopped containers |
 | `compose-refresh.sh` | Refreshes all services by delegating to `compose-down.sh` and `compose-up.sh` |
-| `docker-rebuild.sh` | Rebuilds containers by pulling latest images and prunes unused images, containers, and networks |
+| `docker-rebuild.sh` | Non-destructive image update: pulls latest images, recreates only containers whose image changed (never runs `compose down`), then prunes *dangling* images only. Includes retry/backoff, NVIDIA CDI regen, Plex version-drift check, and a health-check gate with structured exit codes |
 | `docker-restart.sh` | Restarts the Docker service and all containers |
 | `media-clean.sh` | Cleans Usenet download directories and handles SABnzbd stop/start |
 | `system-verify.sh` | Verifies environment configuration, Docker setup, secrets, networking, and security best practices |

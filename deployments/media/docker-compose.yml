@@ -119,8 +119,10 @@ services:
 
 
   # ==== RECYCLARR ====
-  # Automatically syncs TRaSH Guide custom formats and quality profiles
-  # Currently in manual mode — use `${COMPOSE_CMD} run --rm recyclarr sync` to trigger
+  # Automatically syncs TRaSH Guide custom formats and quality profiles.
+  # CRON_SCHEDULE below puts the container in cron/daemon mode: it stays running
+  # and syncs on schedule (@weekly). Trigger an out-of-band sync with:
+  #   docker compose run --rm recyclarr sync
   recyclarr:
     <<: *common-settings
     image: ghcr.io/recyclarr/recyclarr:8

@@ -45,7 +45,6 @@ services:
     <<: *common-settings
     image: portainer/portainer-ce:latest
     container_name: portainer
-    privileged: true  # Required for full management capabilities
     command: -H tcp://agent:9001 --tlsskipverify  # Connect to the agent
     ports:
       - ${PORTAINER_SSL_PORT}:9443  # HTTPS web access
@@ -83,7 +82,9 @@ services:
     <<: *common-settings
     container_name: homarr
     image: ghcr.io/homarr-labs/homarr:latest
-    privileged: true  # Required for reliable Docker socket access
+    # No privileged/group_add needed: the container runs as root, so it can
+    # read /var/run/docker.sock directly. (For tighter security, front the
+    # socket with a read-scoped proxy per Homarr's docs rather than re-adding privileged.)
     environment:
       <<: *common-env
       SECRET_ENCRYPTION_KEY: ${HOMARR_ENCRYPTION_KEY}  # Homarr encryption key (populated via .env by system-verify.sh)

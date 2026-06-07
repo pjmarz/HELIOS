@@ -37,6 +37,7 @@ pids
 
 # Backup files
 *.bak
+*.bak*
 *.backup
 *~
 

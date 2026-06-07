@@ -207,5 +207,10 @@ if [ $FAILED -gt 0 ]; then
 fi
 log_color "$YELLOW" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Exit with failure if any tests failed
-[ $FAILED -gt 0 ] && exit 1
+# Exit with failure if any tests failed (explicit exit 0 on success — otherwise
+# the bracket test's own non-zero status would become the script's exit code).
+if [ "$FAILED" -gt 0 ]; then
+    exit 1
+fi
+
+exit 0
