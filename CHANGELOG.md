@@ -5,6 +5,16 @@ All notable changes to the HELIOS project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.3] - 2026-06-07
+
+### Added
+- **Container healthchecks across the stack.** Introduced a shared `x-healthcheck` anchor (interval 30s / timeout 5s / retries 3 / start_period 30s) in both compose files and attached per-service probes to the nine services that expose a no-auth liveness endpoint:
+  - *arr services (`/ping`), SABnzbd (keyless `/api?mode=version`), Plex (`/identity`, 120s start_period), and Tautulli (`/`) — via `curl` (present in LinuxServer images).
+  - Seerr (`/api/v1/status`) and Homarr (`/`) — via busybox `wget` (Alpine images).
+  - Intentionally excluded: Portainer + agent (minimal image, no shell/curl), Recyclarr (cron daemon, no HTTP surface), and Wizarr + Plex-Auto-Languages (already ship their own healthchecks).
+  - Payoff: `docker-rebuild.sh`'s `health_check()` gate can now actually detect a service that comes up broken, and live status surfaces in Portainer/Homarr. All nine verified `(healthy)` after recreate, with probe exit code 0 against real responses.
+- **`plexautolanguages` now depends on `plex` with `condition: service_healthy`** (was a bare `depends_on`), so it only starts once Plex passes its healthcheck rather than merely existing.
+
 ## [1.20.2] - 2026-06-07
 
 ### Security

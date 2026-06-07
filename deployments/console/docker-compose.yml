@@ -21,6 +21,15 @@ x-common: &common-settings
     TZ: ${TZ}              # Timezone setting for accurate scheduling/logs
     UMASK: ${UMASK}        # Controls default file permissions
 
+# Shared healthcheck timing — each service overrides `test` with its own probe.
+# A failing probe marks the container `unhealthy` (no auto-restart), but feeds the
+# docker-rebuild.sh health gate and Portainer/Homarr status.
+x-healthcheck: &healthcheck-defaults
+  interval: 30s
+  timeout: 5s
+  retries: 3
+  start_period: 30s
+
 services:
   # ==== PORTAINER AGENT ====
   # Provides remote management capabilities to Portainer
@@ -95,6 +104,9 @@ services:
       - homarr_data:/appdata  # Persistent application data (moved from /data to /appdata)
     ports:
       - ${HOMARR_PORT}:7575  # Web UI access port
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:7575/ || exit 1"]
     networks:
       - default
       - proxy
@@ -112,6 +124,9 @@ services:
       - ${CONFIG_DIR}/tautulli:/config  # Persistent configuration storage
     ports:
       - ${TAUTULLI_PORT}:8181  # Web UI access port
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8181/ || exit 1"]
     networks:
       - default
       - proxy

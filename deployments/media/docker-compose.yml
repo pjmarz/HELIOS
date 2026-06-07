@@ -23,6 +23,16 @@ x-common: &common-settings
     TZ: ${TZ} # Timezone setting for accurate scheduling/logs
     UMASK: ${UMASK} # Controls default file permissions
 
+# Shared healthcheck timing — each service overrides `test` with its own probe.
+# Probes hit the container's internal port with no auth. A failing probe marks
+# the container `unhealthy` (Docker won't auto-restart on that), but it feeds the
+# docker-rebuild.sh health gate, depends_on conditions, and Portainer/Homarr status.
+x-healthcheck: &healthcheck-defaults
+  interval: 30s
+  timeout: 5s
+  retries: 3
+  start_period: 30s
+
 services:
   # ==== WIZARR ====
   # User invitation and onboarding portal for Plex (and future Jellyfin/Emby)
@@ -54,6 +64,9 @@ services:
       - ${CONFIG_DIR}/seerr:/app/config # Persistent configuration storage
     ports:
       - ${SEERR_PORT}:5055 # Web UI access port
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:5055/api/v1/status || exit 1"]
 
   # ==== RADARR ====
   # Movie collection manager that works with various download clients
@@ -70,6 +83,9 @@ services:
       - ${DOWNLOADS_DIR}:/usenet # Access to download directory
     ports:
       - ${RADARR_PORT}:7878 # Web UI access port
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7878/ping || exit 1"]
 
   # ==== SONARR ====
   # TV series collection manager that works with various download clients
@@ -86,6 +102,9 @@ services:
       - ${DOWNLOADS_DIR}:/usenet # Access to download directory
     ports:
       - ${SONARR_PORT}:8989 # Web UI access port
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8989/ping || exit 1"]
 
   # ==== BAZARR ====
   # Companion app to Sonarr and Radarr for managing and downloading subtitles
@@ -102,6 +121,9 @@ services:
       - ${TV_DIR}:/tv # Access to TV files for subtitle management
     ports:
       - ${BAZARR_PORT}:6767 # Web UI access port
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "curl -fsS http://localhost:6767/ping || exit 1"]
 
   # ==== PROWLARR ====
   # Indexer manager/proxy that integrates with the *arr stack
@@ -116,6 +138,9 @@ services:
       <<: *common-env
     volumes:
       - ${CONFIG_DIR}/prowlarr:/config # Persistent configuration storage
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9696/ping || exit 1"]
 
 
   # ==== RECYCLARR ====
@@ -148,6 +173,9 @@ services:
       - ${DOWNLOADS_DIR}:/usenet # Download storage location
     ports:
       - ${SABNZBD_PORT}:8080 # Web UI access port
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "curl -fsS 'http://localhost:8080/api?mode=version' || exit 1"]
 
   # ==== PLEX AUTO LANGUAGES ====
   # Automatically sets audio/subtitle preferences based on user language settings
@@ -165,7 +193,8 @@ services:
     secrets:
       - plex_token
     depends_on:
-      - plex
+      plex:
+        condition: service_healthy # Wait for Plex to pass its healthcheck, not just start
 
   # ==== PLEX ====
   # Media server with GPU-accelerated transcoding support
@@ -206,6 +235,10 @@ services:
             - driver: nvidia # NVIDIA GPU acceleration for transcoding
               count: 1
               capabilities: [ gpu ]
+    healthcheck:
+      <<: *healthcheck-defaults
+      start_period: 120s # Plex can be slow on boot (esp. when self-updating)
+      test: ["CMD-SHELL", "curl -fsS http://localhost:32400/identity || exit 1"]
 
 # Persistent volumes for media services
 volumes:
