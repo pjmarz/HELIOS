@@ -40,10 +40,15 @@ services:
     container_name: portaineragent
     environment:
       AGENT_CLUSTER_ADDR: tasks.agent  # Agent discovery service name
+      # Shared secret (2026-08 audit): without it, anything reaching 9001 on the
+      # agent network could drive the agent (root-equivalent via the socket).
+      # Value lives in .env (gitignored, in restic) — must match the server's.
+      AGENT_SECRET: ${PORTAINER_AGENT_SECRET}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for container management
       - /var/lib/docker/volumes:/var/lib/docker/volumes  # Access to Docker volumes
-      - /:/host  # Host filesystem access for management
+      # /:/host bind removed (2026-08 audit): only used by Portainer's host-browser
+      # feature; a whole-VM rw mount is outsized for that. Re-add if ever missed.
     networks:
       - agent_network  # Isolated network for secure agent-portainer communication
 
@@ -52,15 +57,22 @@ services:
   # Provides a web interface to manage containers, images, networks, and volumes
   portainer:
     <<: *common-settings
+    # NOTE (2026-08 audit): :lts was considered and rejected — the running :latest
+    # is ahead of the LTS channel and Portainer DB migrations are forward-only,
+    # so repinning would be a refused downgrade. :latest stays (digest-gated updates).
     image: portainer/portainer-ce:latest
     container_name: portainer
     command: -H tcp://agent:9001 --tlsskipverify  # Connect to the agent
+    environment:
+      AGENT_SECRET: ${PORTAINER_AGENT_SECRET}  # must match the agent's (see agent service)
     ports:
       - ${PORTAINER_SSL_PORT}:9443  # HTTPS web access
-      - ${PORTAINER_PORT}:8000      # HTTP web access
+      # 8000 mapping removed (2026-08 audit): that's the Edge-agent tunnel port and
+      # no Edge agents exist here — it was an open port for an unused feature.
     volumes:
       - portainer_data:/data  # Persistent storage for settings and configurations
-      - /var/run/docker.sock:/var/run/docker.sock  # Direct Docker socket access
+      # docker.sock bind removed (2026-08 audit): the server manages Docker through
+      # the agent (-H tcp://agent:9001); the direct socket was a dead second door.
     networks:
       - agent_network  # Isolated network for secure agent-portainer communication
 
@@ -78,8 +90,13 @@ services:
       CAPTCHA_SOLVER: none           # No automated CAPTCHA solving
     volumes:
       - ${CONFIG_DIR}/flaresolverr:/config  # Persistent configuration storage
-    ports:
-      - ${FLARESOLVERR_PORT}:8191     # API access port
+    # ports mapping removed (2026-08 audit): flaresolverr is unauthenticated; its only
+    # consumer is prowlarr, which resolves it as http://flaresolverr:8191 on the proxy
+    # network. The LAN-wide publish was unused surface.
+    healthcheck:
+      <<: *healthcheck-defaults
+      # image has no curl/wget; python3 probes the liveness endpoint
+      test: [ "CMD", "python3", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8191/health', timeout=4)" ]
     networks:
       - default
       - proxy
