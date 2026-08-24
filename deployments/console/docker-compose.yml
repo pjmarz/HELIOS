@@ -48,7 +48,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for container management
       - /var/lib/docker/volumes:/var/lib/docker/volumes  # Access to Docker volumes
       # /:/host bind removed (2026-08 audit): only used by Portainer's host-browser
-      # feature; a whole-VM rw mount is outsized for that. Re-add if ever missed.
+      # feature; a whole-VM rw mount is outsized for that.
+      # 2026-08-24: it WAS missed (Pete, host-browser broke at the 08-13 recreate) and
+      # the decision was to STAY removed (option A) — occasional file grabs go via SSH
+      # or the charon agent instead. Don't re-add without a new decision.
     networks:
       - agent_network  # Isolated network for secure agent-portainer communication
 

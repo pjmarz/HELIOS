@@ -39,7 +39,11 @@ services:
   # Self-serve invite links with expiry, one-time use, library-tier access, and OIDC SSO
   wizarr:
     <<: *common-settings
-    image: ghcr.io/wizarrrr/wizarr:latest
+    # Pinned by DIGEST (2026-08-24, Codex review): the entitlement pipeline is coupled to
+    # this exact API's quirks (empty-body PUT clears expiry; explicit null 400s; /api/users
+    # response shape). ':latest' let update-docker swap the schema under us daily. Updating
+    # Wizarr is now a DELIBERATE act: verify the pipeline's calls, then move this digest.
+    image: ghcr.io/wizarrrr/wizarr@sha256:606f9b88b0303daae11f595e424756b588d9365021c53dcb4d1369f2efc0543c
     container_name: wizarr
     environment:
       <<: *common-env
