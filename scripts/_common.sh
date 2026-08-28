@@ -8,6 +8,10 @@
 # Optional variables to set BEFORE sourcing:
 #   HELIOS_NO_ERREXIT=1   — use set +e (for scripts that expect failures)
 #   HELIOS_START_MSG="…"  — custom start banner text
+#   NOTIFY_WEBHOOK="…"    — POST a one-line alert here when a script fails.
+#                           Optional; unset means log-only (the default).
+#                           Payload is {"content":"…"}, which Discord accepts
+#                           directly, but any endpoint taking that shape works.
 # ===========================================================================
 
 # --- Shell options ---
@@ -62,11 +66,28 @@ log_color() {
     echo "${timestamp} - ${msg}" >> "$LOG_FILE"
 }
 
+# --- Optional failure notification ---
+# Scripts here are cron/ad-hoc driven, so a failure is usually discovered by
+# noticing something is broken later. Setting NOTIFY_WEBHOOK turns a failure
+# into a push instead. Deliberately fire-and-forget: a webhook that is slow,
+# down, or misconfigured must never change the script's own exit code, and the
+# URL is never written to the log.
+notify_failure() {
+    [[ -n "${NOTIFY_WEBHOOK:-}" ]] || return 0
+    local msg="$1" payload
+    payload=$(printf '%s' "$msg" | python3 -c \
+        'import json,sys; print(json.dumps({"content": sys.stdin.read()[:1900]}))' 2>/dev/null) \
+        || return 0
+    curl -sS -m 10 -X POST -H 'Content-Type: application/json' \
+        -d "$payload" "$NOTIFY_WEBHOOK" >/dev/null 2>&1 || true
+}
+
 # --- Error handling ---
 handle_error() {
     local exit_code=$?
     local line_number=$1
     log_color "$RED" "Error on line $line_number: Exit code $exit_code"
+    notify_failure "HELIOS: $(basename "$0") failed on line ${line_number} (exit ${exit_code}) on $(hostname)"
     exit $exit_code
 }
 

@@ -197,6 +197,70 @@ All scripts log dual-output to console and `logs/<script>.log`.
 
 Follows LinuxServer.io conventions: PUID=1000, PGID=984, UMASK=002. Media libraries, config directories, and download directories are all owned `1000:984` with `755`; UMASK=002 makes new files group-writable for multi-user access.
 
+## 🧠 Operational Notes
+
+Behaviours that cost real debugging time here. Documented because none of them
+are obvious from the upstream projects' docs.
+
+### Wizarr — invite expiry
+
+Wizarr drives Plex access by setting an expiry on a user and letting its own
+scheduler remove them (`expiry_action=delete`, which runs every 15 minutes).
+Three things are worth knowing before automating against its API:
+
+- **Clearing an expiry needs an empty body.** `PUT /api/users/{id}/update-expiry`
+  with `{}` sets *unlimited*. Sending `{"expires": null}` or `{"expires": ""}`
+  both return **400** — `{}` is the only form that works.
+- **The cleanup loop stops after one deletion per cycle.** When several users
+  expire at the same moment, only the first is removed; the rest wait for a
+  later cycle (`delete_user` commits internally, so the surrounding savepoint
+  commit then fails on an already-closed transaction and the loop aborts).
+  If you set expiries in bulk, **stagger them** — ~20 minutes apart keeps it to
+  at most one expiry per cleanup cycle.
+- Removing the Wizarr record does not by itself revoke the Plex share; the
+  scheduler's delete is what removes it. Verify against Plex, not Wizarr.
+
+### Plex — HTTP 400 from a shared host IP
+
+When many services share one host, they also share a cookie origin: **cookies
+ignore the port**, so every service on `http://<host>:<port>` writes into the
+same jar. Once that jar exceeds roughly **4 KB**, Plex starts returning
+**400 Bad Request** to that browser while working fine from every other client.
+
+It presents as "Plex is broken on my laptop only." The fix is clearing cookies
+for the host, or reaching Plex on its own hostname rather than a shared IP.
+When diagnosing, **capture the request on the wire** — reading the browser's
+cookie store under-reports the header actually sent.
+
+### Validate endpoints, not container status
+
+After a host or VM reboot, `docker ps` is not sufficient evidence that a stack
+is healthy:
+
+- Both Plex containers have come back reporting **`Up` while being internally
+  broken** — a `stop` + `start` fixes them, a `restart` does not always.
+- A container can exit **127** in a way `restart: always` will not retry, so it
+  stays down while the stack looks fine.
+
+This is why `test-api-connectivity.sh` exists and why `system-verify.sh` checks
+service endpoints. Treat an HTTP response as the health signal; treat
+`docker ps` as necessary but not sufficient. Some services are simply slow to
+bind (Bazarr routinely needs ~60s), so poll rather than sampling once.
+
+### GPU transcoding
+
+Hardware transcoding needs the NVIDIA driver on the host **and**
+`nvidia-container-toolkit` so the runtime can expose the GPU to the container.
+Two things keep it stable:
+
+- **Pin the driver to the production branch** rather than tracking the newest
+  release. A newer feature-branch driver is not necessarily the one Plex is
+  built against, and the numbering does not tell you which branch a release is
+  on — check the vendor's published branch designations.
+- After a kernel upgrade the kernel module must rebuild for the new kernel
+  (DKMS). Confirm the GPU is actually visible **inside the container**, not just
+  on the host, before assuming transcoding survived a reboot.
+
 ## 📝 Changelog
 
 Full version history in [CHANGELOG.md](CHANGELOG.md).
