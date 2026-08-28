@@ -54,6 +54,19 @@ The library provides (in order):
 | `HELIOS_NO_ERREXIT=1` | Uses `set +e` instead of `set -e`, skips ERR trap. Used by `test-api-connectivity.sh`. |
 | `HELIOS_START_MSG="…"` | Customizes the start banner text. Used by `docker-rebuild.sh`. |
 
+- `NOTIFY_WEBHOOK` — POST a one-line alert to this URL when a script fails.
+  Optional; unset (the default) keeps the current log-only behaviour. The
+  payload is `{"content":"…"}`, which a Discord webhook accepts as-is, but any
+  endpoint expecting that shape works.
+
+  ```bash
+  NOTIFY_WEBHOOK="https://discord.com/api/webhooks/…" ./compose-refresh.sh
+  ```
+
+  Fire-and-forget by design: a webhook that is slow, down, or misconfigured
+  never changes the script's own exit code, and the URL is never written to the
+  log.
+
 ## Usage
 
 All scripts are designed to be run from the project root:
