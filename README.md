@@ -136,7 +136,7 @@ Operational services run alongside the pipeline:
 
 - **Modular Compose**: the root `docker-compose.yml` uses Compose v2 `include` to pull in `deployments/console/docker-compose.yml` and `deployments/media/docker-compose.yml`. Each sub-stack uses `x-common` YAML anchors for DRY service configuration (restart policy, PUID/PGID, TZ, UMASK).
 - **3-network topology**:
-  - `helios_proxy` — external access (Homarr, FlareSolverr, Tautulli)
+  - `helios_proxy` — external access (Homarr, Tautulli); FlareSolverr is on this network but internal-only since the 2026-08 audit (no published port — Prowlarr reaches it over the Docker network)
   - `helios_console_agent_network` — isolated Portainer ↔ Agent channel
   - `helios_default` — main network for all media services
 - **File-based Docker Secrets** stored at `/etc/HELIOS/secrets/` (symlinked into the repo). Keeps credentials out of env files and out of git.
