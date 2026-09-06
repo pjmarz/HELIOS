@@ -39,11 +39,15 @@ services:
   # Self-serve invite links with expiry, one-time use, library-tier access, and OIDC SSO
   wizarr:
     <<: *common-settings
-    # Pinned by DIGEST (2026-08-24, Codex review): the entitlement pipeline is coupled to
-    # this exact API's quirks (empty-body PUT clears expiry; explicit null 400s; /api/users
-    # response shape). ':latest' let update-docker swap the schema under us daily. Updating
-    # Wizarr is now a DELIBERATE act: verify the pipeline's calls, then move this digest.
-    image: ghcr.io/wizarrrr/wizarr@sha256:606f9b88b0303daae11f595e424756b588d9365021c53dcb4d1369f2efc0543c
+    # Floats on ':latest' by Pete's decision (2026-09-04), superseding the 2026-08-24
+    # digest pin. update-docker (virgil, daily 06:00 --upgrade) may therefore move this
+    # image without warning. The coupling that motivated the old pin is still real: the
+    # Stripe entitlement pipeline (homelab-agent scripts/stripe/) depends on this API's
+    # quirks -- empty-body PUT clears expiry, explicit null 400s, /api/users response
+    # shape. That risk is accepted, not overlooked. If invites or entitlements start
+    # failing after a nightly update, suspect a Wizarr schema change first and pin the
+    # last-known-good digest here.
+    image: ghcr.io/wizarrrr/wizarr:latest
     container_name: wizarr
     environment:
       <<: *common-env
