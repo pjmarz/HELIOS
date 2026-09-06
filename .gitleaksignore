@@ -1,0 +1,13 @@
+# gitleaks fingerprints deliberately ignored. One line = one finding at one commit.
+#
+# Prefer a fingerprint over a path allowlist in .gitleaks.toml: a fingerprint pins
+# exactly this finding at exactly this commit, while a path rule would blind the
+# scanner to FUTURE secrets in the same file.
+#
+# Homarr SECRET_ENCRYPTION_KEY, committed 2025-11-09 in the initial compose file.
+# DEAD: rotated out-of-band 2026-06-07 (commit 8fbf007) -- the running container's
+# key differs from this value. History deliberately not rewritten: a force-push on
+# a public repo breaks every clone, and GitHub keeps rewritten commits reachable by
+# SHA until Support collects them, all to remove an already-revoked value. 0 forks.
+# Reviewed 2026-09-06 during the fleet secret-gate rollout.
+e33f3e4183d6a76c6d48914c94e83028e244bd60:docker-compose.yml:generic-api-key:134
