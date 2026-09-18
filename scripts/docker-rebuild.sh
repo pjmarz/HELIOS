@@ -182,6 +182,23 @@ capture_status() {
 }
 
 # ---------------------------------------------------------------------------
+# is_transient_pull_error — does this pull output look like a registry hiccup
+# rather than a real problem with the image or our credentials?
+#
+# Registry throttles are the common case. Docker Hub answers a throttled pull
+# with a Retry-After header, which compose surfaces as
+#   error from registry: retry-after: 478.208µs, allowed: 44000/minute
+# so `retry-after` and the `allowed: N/minute` budget line both count as
+# transient. A wrong tag or a bad credential does not match and is not retried.
+# ---------------------------------------------------------------------------
+is_transient_pull_error() {
+    local output="$1"
+    grep -Eiq \
+        'toomanyrequests|too many requests|rate limit|retry-after|allowed: *[0-9]+/(second|minute|hour)|timeout|timed out|i/o timeout|TLS handshake timeout|temporary failure|connection reset|connection refused|connection aborted|unexpected EOF|server misbehaving|net/http|(^|[^0-9])(500|502|503|504)([^0-9]|$)' \
+        <<< "$output"
+}
+
+# ---------------------------------------------------------------------------
 # pull_images — pull latest images for all services.
 # This happens BEFORE any containers are touched so a pull failure is safe.
 #
@@ -189,11 +206,6 @@ capture_status() {
 # with backoff before the script gives up. Defaults can be overridden for
 # testing, e.g. PULL_RETRY_DELAYS="2 5" PULL_RETRY_JITTER_MAX=0.
 # ---------------------------------------------------------------------------
-is_transient_pull_error() {
-    local output="$1"
-    grep -Eiq         'toomanyrequests|too many requests|rate limit|timeout|timed out|i/o timeout|TLS handshake timeout|temporary failure|connection reset|connection refused|connection aborted|unexpected EOF|server misbehaving|net/http|(^|[^0-9])(500|502|503|504)([^0-9]|$)'         <<< "$output"
-}
-
 pull_images() {
     log "Pulling latest images for all services..."
 
