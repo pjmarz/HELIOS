@@ -190,7 +190,7 @@ services:
   # Enhances Plex experience by ensuring correct language tracks are selected
   plexautolanguages:
     <<: *common-settings
-    image: remirigal/plex-auto-languages:latest
+    image: journeyover/plex-auto-languages:latest  # JourneyDocker fork (stable-release tag); upstream remirigal dormant since 2023-08
     container_name: plexautolanguages
     environment:
       PLEX_URL: http://plex-helios:32400 # Plex server URL (Docker service name for container-to-container communication)
